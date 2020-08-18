@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:petpaws/pages/login_page.dart';
+
 
 class Inicio extends StatefulWidget {
   Inicio({Key key}) : super(key: key);
@@ -9,45 +12,49 @@ class Inicio extends StatefulWidget {
 
 class _InicioState extends State<Inicio> {
   @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds:11), ()=> Navigator.push(context,MaterialPageRoute(builder:(context)=> LoginPage())));
+        
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          imagenFondo(),
-          fondooscuro(),
-          logo(),
-        ]
-      )
-
-       
-    );
+        body: Stack(children: <Widget>[
+          imagen(),
+     
+    ]));
   }
+}
 
-  Widget imagenFondo(){
-    return Container(
-            height: double.infinity,
-            width: double.infinity,
-            
-             child: Image.asset('assets/images/dog.jpg', fit: BoxFit.cover),
-            
-          );
-  }
+Widget imagen(){
+  return Container(
+    height: double.infinity,
+    width: double.infinity,
+    child: Image.asset('assets/images/inicio.gif', fit: BoxFit.cover),
+  );
+}
 
-  Widget fondooscuro() {
-    return Container(
-      color: Color.fromRGBO(102, 0, 255, 90)
-    );
-  }
+Widget imagenFondo() {
+  return Container(
+    height: double.infinity,
+    width: double.infinity,
+    child: Image.asset('assets/images/dog.jpg', fit: BoxFit.cover),
+  );
+}
 
-  Widget logo() {
-    return Column(
+Widget fondooscuro() {
+  return Container(color: Color.fromRGBO(102, 0, 255, 90));
+}
+
+Widget logo() {
+  return Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+    Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Image.asset('assets/images/logoblanco.png', height:250)],
-          )
-      ]
-    );
-  }
+        Image.asset('assets/images/logoblanco.png', height: 250)
+      ],
+    )
+  ]);
 }
