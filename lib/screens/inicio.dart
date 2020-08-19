@@ -36,7 +36,7 @@ Widget imagen(){
   );
 }
 
-Widget imagenFondo() {
+/* Widget imagenFondo() {
   return Container(
     height: double.infinity,
     width: double.infinity,
@@ -57,4 +57,4 @@ Widget logo() {
       ],
     )
   ]);
-}
+} */
