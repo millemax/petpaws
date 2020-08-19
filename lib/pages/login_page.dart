@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -7,8 +9,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   //------declaramos variables para cambio de colores en botones
-  Color left = Colors.white;
-  Color right = Colors.black;
+  Color left = Colors.black;
+  Color right = Colors.white;
+
+  PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +41,28 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 700,
                     child: PageView(
+                      controller: _pageController,
                       //-------funcion para el controlde estados de estados
                       onPageChanged: (i) {
                         if (i == 0) {
                           setState(() {
-                            right = Colors.black;
-                            left = Colors.white;
+                            right = Colors.white;
+                            left = Colors.black;
                           });
                         } else if (i == 1) {
                           setState(() {
-                            right = Colors.white;
-                            left = Colors.black;
+                            right = Colors.black;
+                            left = Colors.white;
                           });
                         }
                       },
                       children: [
-                        ExistentePage(),
-                        NuevoPage(),
+                        ConstrainedBox(
+                            constraints: BoxConstraints.expand(),
+                            child: ExistentePage()),
+                        ConstrainedBox(
+                            constraints: BoxConstraints.expand(),
+                            child: NuevoPage()),
                       ],
                     )),
               ],
@@ -71,45 +92,115 @@ class _LoginPageState extends State<LoginPage> {
 //---------------------botones existente y nuevo-------
   Widget menuBar() {
     return Container(
-      height: 60,
-      width: 300,
-      padding: EdgeInsets.symmetric(horizontal: 4),
+      width: 300.0,
+      height: 50.0,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.all(
-            Radius.circular(30),
-          )),
-      child: Row(
-        children: [
-          Expanded(
-            child: FlatButton(
-              color: Colors.deepPurple,
-              shape: StadiumBorder(),
-              onPressed: () {},
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+        color: Color(0x552B2B2B),
+        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+      ),
+      child: CustomPaint(
+        painter: MyPainter(pageController: _pageController),
+        child: Row(
+          children: [
+            Expanded(
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  if (_pageController.hasClients) {
+                    _pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
+                  child: Text(
+                    "Existente",
+                    style: TextStyle(color: left),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: FlatButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  if (_pageController.hasClients) {
+                    _pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                },
                 child: Text(
-                  "Existente",
-                  style: TextStyle(color: left),
+                  "Nuevo",
+                  style: TextStyle(
+                    color: right,
+                  ),
                 ),
               ),
             ),
-          ),
-          Expanded(
-            child: FlatButton(
-              onPressed: () {},
-              child: Text(
-                "Nuevo",
-                style: TextStyle(
-                  color: right,
-                ),
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+//definimos custom paint para dibujar el cuadro que se va trasladar
+
+class MyPainter extends CustomPainter {
+  Paint painter;
+  final double dxTarget;
+  final double dxEntry;
+  final double radius;
+  final double dy;
+  final PageController pageController;
+
+  MyPainter(
+      {this.dxTarget = 125.0,
+      this.dxEntry = 25.0,
+      this.radius = 21.0,
+      this.dy = 25.0,
+      this.pageController})
+      : super(repaint: pageController) {
+    painter = new Paint()
+      ..color = Color(0xFFFFFFFF)
+      ..style = PaintingStyle.fill;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final pos = pageController.position;
+    double fullExtent =
+        (pos.maxScrollExtent - pos.minScrollExtent + pos.viewportDimension);
+
+    double pageOffset = pos.extentBefore / fullExtent;
+
+    bool left2right = dxEntry < dxTarget;
+    Offset entry = new Offset(left2right ? dxEntry : dxTarget, dy);
+    Offset target = new Offset(left2right ? dxTarget : dxEntry, dy);
+
+    Path path = new Path();
+    path.addArc(
+        new Rect.fromCircle(center: entry, radius: radius), 0.5 * pi, 1 * pi);
+    path.addRect(
+        new Rect.fromLTRB(entry.dx, dy - radius, target.dx, dy + radius));
+    path.addArc(
+        new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
+
+    canvas.translate(size.width * pageOffset, 0.0);
+    canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+    canvas.drawPath(path, painter);
+  }
+
+  @override
+  bool shouldRepaint(MyPainter oldDelegate) => true;
 }
 
 //--------definimos las clases de las paginas ------
@@ -243,7 +334,8 @@ class ExistentePage extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(130),
               image: DecorationImage(
-                  fit: BoxFit.cover, image: AssetImage("assets/images/fb-icon.png"))),
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/images/fb-icon.png"))),
         ),
         SizedBox(width: 20),
         Container(
