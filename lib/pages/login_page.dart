@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                     _pageController.animateToPage(
                       0,
                       duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
+                      curve: Curves.decelerate,
                     );
                   }
                 },
@@ -133,7 +133,7 @@ class _LoginPageState extends State<LoginPage> {
                     _pageController.animateToPage(
                       1,
                       duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
+                      curve: Curves.decelerate,
                     );
                   }
                 },
@@ -195,7 +195,7 @@ class MyPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-    canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+   // canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
     canvas.drawPath(path, painter);
   }
 
@@ -462,7 +462,7 @@ class NuevoPage extends StatelessWidget {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
               prefixIcon: Icon(Icons.lock_outline),
               labelText: "Contraseña",
-              hintText: "Contraseña",
+              hintText: "Confirmar",
             ),
           ),
         ],
