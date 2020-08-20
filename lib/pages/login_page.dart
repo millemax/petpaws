@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:petpaws/bloc/login_bloc.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    //declaramos la referecnia al bloc para la validacion de email, password
+    final bloc = Provider.of<LoginBloc>(context);
+
     return Scaffold(
       backgroundColor: Colors.deepPurple,
       body: SafeArea(
@@ -195,7 +200,6 @@ class MyPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-    canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
     canvas.drawPath(path, painter);
   }
 
@@ -207,13 +211,14 @@ class MyPainter extends CustomPainter {
 class ExistentePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<LoginBloc>(context);
     return Container(
       margin: EdgeInsets.only(top: 30),
       width: double.infinity,
       height: double.infinity,
       child: Column(
         children: [
-          campologin(),
+          campologin(bloc),
           textrecordarcontrasena(),
           lineaOnlogin(),
           iconlogin(),
@@ -222,16 +227,16 @@ class ExistentePage extends StatelessWidget {
     );
   }
 
-  Widget campologin() {
+  Widget campologin(LoginBloc bloc) {
     return Stack(
       children: [
-        login(),
-        botonlogin(),
+        login(bloc),
+        botonlogin(bloc),
       ],
     );
   }
 
-  Widget login() {
+  Widget login(LoginBloc bloc) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 55),
@@ -242,34 +247,45 @@ class ExistentePage extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              prefixIcon: Icon(Icons.email),
-              labelText: "Email",
-              hintText: "Email",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.emailStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changeEmail,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    prefixIcon: Icon(Icons.email),
+                    labelText: "Email",
+                    hintText: "Email",
+                    errorText: snapshot.error,
+                  ),
+                );
+              }),
           SizedBox(height: 10),
-          TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
-              prefixIcon: Icon(Icons.lock),
-              labelText: "Contraseña",
-              hintText: "Contraseña",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.passwordStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changePassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      prefixIcon: Icon(Icons.lock),
+                      labelText: "Contraseña",
+                      hintText: "Contraseña",
+                      errorText: snapshot.error),
+                );
+              }),
         ],
       ),
     );
   }
 
-  Widget botonlogin() {
+  Widget botonlogin(LoginBloc bloc) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.max,
@@ -280,16 +296,20 @@ class ExistentePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MaterialButton(
-              height: 40.0,
-              minWidth: 70.0,
-              color: Colors.red,
-              textColor: Colors.white,
-              child: Text("INICIAR SESIÓN"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              onPressed: () {},
-            )
+            StreamBuilder<bool>(
+                stream: bloc.formValidStream,
+                builder: (context, snapshot) {
+                  return MaterialButton(
+                    height: 40.0,
+                    minWidth: 70.0,
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    child: Text("INICIAR SESIÓN"),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    onPressed: snapshot.hasData ? () {} : null,
+                  );
+                })
           ],
         ),
       ],
