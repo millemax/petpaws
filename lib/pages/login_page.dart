@@ -298,33 +298,24 @@ class ExistentePage extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            StreamBuilder<Object>(
+            StreamBuilder<bool>(
                 stream: bloc.formValidStream,
                 builder: (context, snapshot) {
-                  return RaisedButton(
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        child: Text('INICIAR SESIÓN'),
-                      ),
-                      disabledColor: Colors.red[400],
-                      color: Colors.red,
-                      disabledTextColor: Colors.white,
-                      textColor: Colors.white,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      onPressed:
-                          snapshot.hasData ? () => _loguearse(bloc) : null);
-                }),
+                  return MaterialButton(
+                    height: 40.0,
+                    minWidth: 70.0,
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    child: Text("INICIAR SESIÓN"),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    onPressed: snapshot.hasData ? () {} : null,
+                  );
+                })
           ],
         ),
       ],
     );
-  }
-
-  _loguearse(LoginBloc bloc) {
-    print('Email ${bloc.email}');
-    print('Passwor ${bloc.contrasena}');
   }
 
   Widget textrecordarcontrasena() {
@@ -528,9 +519,8 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  // la funcion para loguearse
+  // la funcion para ko
   void login(){
-    
 
   }
 }
