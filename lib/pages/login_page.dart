@@ -31,9 +31,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //declaramos la referecnia al bloc para la validacion de email, password
-    final bloc = Provider.of<LoginBloc>(context);
-
     return Scaffold(
       backgroundColor: Colors.deepPurple,
       body: SafeArea(
