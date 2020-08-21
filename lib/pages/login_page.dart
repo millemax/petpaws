@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -507,7 +508,7 @@ class NuevoPage extends StatelessWidget {
               minWidth: 70.0,
               color: Colors.red,
               textColor: Colors.white,
-              child: Text("INICIAR SESIÓN"),
+              child: Text("REGISTRARME"),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
               onPressed: () {},
@@ -516,5 +517,11 @@ class NuevoPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  // la funcion para loguearse
+  void login(){
+    
+
   }
 }

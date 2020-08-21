@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "379057175865",
+    "firebase_url": "https://petpaws-bd.firebaseio.com",
+    "project_id": "petpaws-bd",
+    "storage_bucket": "petpaws-bd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:379057175865:android:2b8cdf096abae5f6a7bce8",
+        "android_client_info": {
+          "package_name": "com.example.petpaws"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "379057175865-0apmpfm6a4t0qab1sl1h7sd9caene5ii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJ1Hs5V2JSeTEXJ6Phj6a8URwFR5B53Oc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "379057175865-0apmpfm6a4t0qab1sl1h7sd9caene5ii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
