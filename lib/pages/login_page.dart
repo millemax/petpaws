@@ -519,8 +519,5 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  // la funcion para ko
-  void login(){
-
-  }
+ 
 }
