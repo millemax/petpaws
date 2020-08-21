@@ -298,21 +298,30 @@ class ExistentePage extends StatelessWidget {
             StreamBuilder<bool>(
                 stream: bloc.formValidStream,
                 builder: (context, snapshot) {
-                  return MaterialButton(
-                    height: 40.0,
-                    minWidth: 70.0,
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    child: Text("INICIAR SESIÓN"),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8)),
-                    onPressed: snapshot.hasData ? () {} : null,
-                  );
-                })
+                  return RaisedButton(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                        child: Text('INICIAR SESIÓN'),
+                      ),
+                      disabledColor: Colors.red[400],
+                      color: Colors.red,
+                      disabledTextColor: Colors.white,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      onPressed:
+                          snapshot.hasData ? () => _loguear(bloc) : null);
+                }),
           ],
         ),
       ],
     );
+  }
+
+  _loguear(LoginBloc bloc) {
+    print('Email ${bloc.email}');
+    print('Passwor ${bloc.contrasena}');
   }
 
   Widget textrecordarcontrasena() {
