@@ -52,4 +52,8 @@ class LoginBloc {
       sink.addError('Email no es correcto');
     }
   });
+
+//obtener el ultimo valor ingresado de email y contaraseña
+  String get email => _emailController.value;
+  String get contrasena => _passwordController.value;
 }
