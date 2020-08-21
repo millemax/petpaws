@@ -309,7 +309,7 @@ class ExistentePage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       onPressed:
-                          snapshot.hasData ? () => _loguearse(bloc) : null);
+                          snapshot.hasData ? () => _loguear(bloc) : null);
                 }),
           ],
         ),
@@ -317,7 +317,7 @@ class ExistentePage extends StatelessWidget {
     );
   }
 
-  _loguearse(LoginBloc bloc) {
+  _loguear(LoginBloc bloc) {
     print('Email ${bloc.email}');
     print('Passwor ${bloc.contrasena}');
   }
