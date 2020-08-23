@@ -2,8 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
+import 'package:petpaws/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -311,7 +313,7 @@ class ExistentePage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       onPressed:
-                          snapshot.hasData ? () => _loguear(bloc) : null);
+                          snapshot.hasData ? () => _loguear(bloc,context) : null);
                 }),
           ],
         ),
@@ -319,10 +321,7 @@ class ExistentePage extends StatelessWidget {
     );
   }
 
-  _loguear(LoginBloc bloc) {
-    print('Email ${bloc.email}');
-    print('Passwor ${bloc.contrasena}');
-  }
+  
 
   Widget textrecordarcontrasena() {
     return Column(
@@ -378,9 +377,32 @@ class ExistentePage extends StatelessWidget {
       ],
     );
   }
+
+//-------------funcion para loguearse...............................
+
+  _loguear(LoginBloc bloc,BuildContext context) {    
+
+    FirebaseAuth.instance.signInWithEmailAndPassword(email: bloc.email, password: bloc.contrasena).then((user){
+      Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (_) => HomePage()),
+            (Route<dynamic> route) => false);
+    }).catchError((onError){
+        print('error no pudimos autenticarte !!! :(');
+    });
+
+  }
 }
 
-//Creamos la clase pintlinea para dibujar la linea, hereda de CustomPinter
+
+
+
+
+
+
+
+
+//....................Creamos la clase pintlinea para dibujar la linea, hereda de CustomPinter................................................
 
 class PaintLinea extends CustomPainter {
   @override
@@ -412,7 +434,15 @@ class PaintLinea extends CustomPainter {
   bool shouldRepaint(PaintLinea oldDelegate) => false;
 }
 
-//---------------------creamoa la pagina registro de nuevo ususario----
+
+
+
+
+
+
+
+
+//---------------------creamoa la pagina registro de nuevo usuario----------------------------------
 class NuevoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -517,12 +547,36 @@ class NuevoPage extends StatelessWidget {
               child: Text("REGISTRARME"),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8)),
-              onPressed: () {},
+              onPressed: () {
+                _createuser();
+              },
             )
           ],
         ),
       ],
     );
+  }
+
+  _createuser (){
+    String _email ='Romel@gmail.com';
+    String _password ='ayniayni';
+    String _nombre='Romel Miller Huaraca Pocco';
+    int _telefono=987654321;
+
+    FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password).then((value) {
+
+      
+
+      FirebaseFirestore.instance.collection('users').add({'correo':_email, 'nombre':_nombre, 'telefono':_telefono});
+
+
+
+    } )
+    .catchError((onError){
+      print("error al cargar los datos");
+
+    });
+
   }
 
  
