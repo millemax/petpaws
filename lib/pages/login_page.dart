@@ -595,7 +595,7 @@ class NuevoPage extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       onPressed: snapshot.hasData
-                          ? () => _loguearRegistro(bloc, context)
+                          ? () => _createuser(bloc, context)
                           : null);
                 })
           ],
@@ -604,17 +604,14 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  _createuser (){
-    String _email ='Romel@gmail.com';
-    String _password ='ayniayni';
-    String _nombre='Romel Miller Huaraca Pocco';
-    int _telefono=987654321;
+  _createuser (LoginBloc bloc, BuildContext context){
+    
 
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email: _email, password: _password).then((value) {
-
+    FirebaseAuth.instance.createUserWithEmailAndPassword(email:bloc.email, password:bloc.contrasena).then((value) {
       
+      final String id = FirebaseAuth.instance.currentUser.uid;
 
-      FirebaseFirestore.instance.collection('users').add({'correo':_email, 'nombre':_nombre, 'telefono':_telefono});
+      FirebaseFirestore.instance.collection('users').doc(''+id).set({'correo':bloc.email, 'nombre':bloc.nombre, 'telefono':bloc.celular});
 
 
 
@@ -626,11 +623,12 @@ class NuevoPage extends StatelessWidget {
 
   }
 
- 
+
+ /* 
   _loguearRegistro(LoginBloc bloc, BuildContext context) {
     print('Nombres ${bloc.nombre}');
     print('Email ${bloc.email}');
     print('Password ${bloc.contrasena}');
     print('celular ${bloc.celular}');
-  }
+  } */
 }
