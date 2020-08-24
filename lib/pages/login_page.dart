@@ -389,7 +389,7 @@ class ExistentePage extends StatelessWidget {
             (Route<dynamic> route) => false);
     }).catchError((onError){
         print('error no pudimos autenticarte !!! :(');
-        
+
     });
 
   }
@@ -447,28 +447,29 @@ class PaintLinea extends CustomPainter {
 class NuevoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of<LoginBloc>(context);
     return Container(
       margin: EdgeInsets.only(top: 30),
       width: double.infinity,
       height: double.infinity,
       child: Column(
         children: [
-          campoRegistro(),
+          campoRegistro(bloc),
         ],
       ),
     );
   }
 
-  Widget campoRegistro() {
+  Widget campoRegistro(LoginBloc bloc) {
     return Stack(
       children: [
-        registro(),
-        botonRegistro(),
+        registro(bloc),
+        botonRegistro(bloc),
       ],
     );
   }
 
-  registro() {
+  registro(LoginBloc bloc) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
       padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 55),
@@ -479,79 +480,124 @@ class NuevoPage extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextField(
-            keyboardType: TextInputType.name,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              prefixIcon: Icon(Icons.person_outline),
-              labelText: "Nombre",
-              hintText: "Nombre",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.nombreStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changeNombres,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    prefixIcon: Icon(Icons.person_outline),
+                    labelText: "Nombres",
+                    hintText: "Nombres",
+                    errorText: snapshot.error,
+                  ),
+                );
+              }),
           SizedBox(height: 10),
-          TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
-              prefixIcon: Icon(Icons.email),
-              labelText: "Email",
-              hintText: "Email",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.emailStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changeEmail,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40)),
+                    prefixIcon: Icon(Icons.email),
+                    labelText: "Email",
+                    hintText: "Email",
+                    errorText: snapshot.error,
+                  ),
+                );
+              }),
           SizedBox(height: 10),
-          TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(40),
-              ),
-              prefixIcon: Icon(Icons.lock_outline),
-              labelText: "Contraseña",
-              hintText: "Contraseña",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.passwordStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changePassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      prefixIcon: Icon(Icons.lock_outline),
+                      labelText: "Contraseña",
+                      hintText: "Contraseña",
+                      errorText: snapshot.error),
+                );
+              }),
           SizedBox(height: 10),
-          TextField(
-            obscureText: true,
-            decoration: InputDecoration(
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
-              prefixIcon: Icon(Icons.lock_outline),
-              labelText: "Contraseña",
-              hintText: "Confirmar",
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: bloc.passwordConfirmedStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changeConfirmPassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40)),
+                      prefixIcon: Icon(Icons.lock_outline),
+                      labelText: "Contraseña",
+                      hintText: "Confirmar contraseña",
+                      errorText: snapshot.error),
+                );
+              }),
+          SizedBox(height: 10),
+          StreamBuilder<Object>(
+              stream: bloc.celularStream,
+              builder: (context, snapshot) {
+                return TextField(
+                  onChanged: bloc.changeCelular,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(40)),
+                    prefixIcon: Icon(Icons.smartphone),
+                    labelText: "Celular",
+                    hintText: "Celular",
+                    errorText: snapshot.error,
+                  ),
+                );
+              }),
         ],
       ),
     );
   }
 
-  botonRegistro() {
+  botonRegistro(LoginBloc bloc) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.max,
       children: [
         SizedBox(
-          height: 310,
+          height: 380,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            MaterialButton(
-              height: 40.0,
-              minWidth: 70.0,
-              color: Colors.red,
-              textColor: Colors.white,
-              child: Text("REGISTRARME"),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              onPressed: () {
-                _createuser();
-              },
-            )
+            StreamBuilder<Object>(
+                stream: bloc.registerValidStream,
+                builder: (context, snapshot) {
+                  return RaisedButton(
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                        child: Text('INICIAR SESIÓN'),
+                      ),
+                      disabledColor: Colors.red[400],
+                      color: Colors.red,
+                      disabledTextColor: Colors.white,
+                      textColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8)),
+                      onPressed: snapshot.hasData
+                          ? () => _loguearRegistro(bloc, context)
+                          : null);
+                })
           ],
         ),
       ],
@@ -581,4 +627,10 @@ class NuevoPage extends StatelessWidget {
   }
 
  
+  _loguearRegistro(LoginBloc bloc, BuildContext context) {
+    print('Nombres ${bloc.nombre}');
+    print('Email ${bloc.email}');
+    print('Password ${bloc.contrasena}');
+    print('celular ${bloc.celular}');
+  }
 }
