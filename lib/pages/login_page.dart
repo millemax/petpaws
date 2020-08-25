@@ -6,6 +6,7 @@ import 'package:petpaws/pages/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -200,7 +201,7 @@ class MyPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-   // canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+    // canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
     canvas.drawPath(path, painter);
   }
 
@@ -312,16 +313,15 @@ class ExistentePage extends StatelessWidget {
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
-                      onPressed:
-                          snapshot.hasData ? () => _loguear(bloc,context) : null);
+                      onPressed: snapshot.hasData
+                          ? () => _loguear(bloc, context)
+                          : null);
                 }),
           ],
         ),
       ],
     );
   }
-
-  
 
   Widget textrecordarcontrasena() {
     return Column(
@@ -380,28 +380,34 @@ class ExistentePage extends StatelessWidget {
 
 //-------------funcion para loguearse...............................
 
-  _loguear(LoginBloc bloc,BuildContext context) {    
-
-    FirebaseAuth.instance.signInWithEmailAndPassword(email: bloc.email, password: bloc.contrasena).then((user){
+  _loguear(LoginBloc bloc, BuildContext context) {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: bloc.email, password: bloc.contrasena)
+        .then((user) {
       Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => HomePage()),
-            (Route<dynamic> route) => false);
-    }).catchError((onError){
-        print('error no pudimos autenticarte !!! :(');
-
+          context,
+          MaterialPageRoute(builder: (_) => HomePage()),
+          (Route<dynamic> route) => false);
+    }).catchError((onError) {
+      print('error no pudimos autenticarte !!! :(');
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            ' No pudimos autenticarte ',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        btnOkOnPress: () {},
+      )..show();
     });
-
   }
 }
-
-
-
-
-
-
-
-
 
 //....................Creamos la clase pintlinea para dibujar la linea, hereda de CustomPinter................................................
 
@@ -434,14 +440,6 @@ class PaintLinea extends CustomPainter {
   @override
   bool shouldRepaint(PaintLinea oldDelegate) => false;
 }
-
-
-
-
-
-
-
-
 
 //---------------------creamoa la pagina registro de nuevo usuario----------------------------------
 class NuevoPage extends StatelessWidget {
@@ -586,7 +584,7 @@ class NuevoPage extends StatelessWidget {
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        child: Text('INICIAR SESIÓN'),
+                        child: Text('REGISTRARSE'),
                       ),
                       disabledColor: Colors.red[400],
                       color: Colors.red,
@@ -604,27 +602,61 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  _createuser (LoginBloc bloc, BuildContext context){
-    
-
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email:bloc.email, password:bloc.contrasena).then((value) {
-      
+  //esta funcion es para la creacion del usuario 
+  _createuser(LoginBloc bloc, BuildContext context) {
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: bloc.email, password: bloc.contrasena)
+        .then((value) {
       final String id = FirebaseAuth.instance.currentUser.uid;
 
-      FirebaseFirestore.instance.collection('users').doc(''+id).set({'correo':bloc.email, 'nombre':bloc.nombre, 'telefono':bloc.celular});
+      FirebaseFirestore.instance.collection('users').doc('' + id).set({
+        'correo': bloc.email,
+        'nombre': bloc.nombre,
+        'telefono': bloc.celular
+      }).then((value) {
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.SCALE,
+          dialogType: DialogType.SUCCES,
+          body: Center(
+            child: Text(
+              ' Bienvenido a la comunidad',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+          title: 'This is Ignored',
+          desc: 'This is also Ignored',
 
+          btnOkOnPress: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomePage()),
+                (Route<dynamic> route) => false);
+          },
+        )..show();
+      });
 
-
-    } )
-    .catchError((onError){
+    }).catchError((onError) {
       print("error al cargar los datos");
-
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            ' No pudimos registrarte ',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        btnOkOnPress: () {},
+      )..show();
     });
-
   }
 
-
- /* 
+  /* 
   _loguearRegistro(LoginBloc bloc, BuildContext context) {
     print('Nombres ${bloc.nombre}');
     print('Email ${bloc.email}');
