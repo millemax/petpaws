@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'perfilVeterinarias_page.dart';
+//--
+import './waves.dart';
 
 class HomeVeterinariasPage extends StatefulWidget {
   @override
@@ -170,8 +172,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) =>
-                                          PerfilVeterinariaPage(),
+                                      builder: (context) => WaveDemoHomePage(),
                                     ),
                                   );
                                 },

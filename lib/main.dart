@@ -9,11 +9,13 @@ import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
+// importamos wavesanimaction
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
-} 
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key key}) : super(key: key);
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         //home: LoginScreen(),
         home: Inicio(),
-       // home: LoginPage(),
+        // home: LoginPage(),
       ),
     );
   }
