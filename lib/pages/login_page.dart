@@ -645,12 +645,13 @@ class NuevoPage extends StatelessWidget {
         dialogType: DialogType.ERROR,
         body: Center(
           child: Text(
-            ' No pudimos registrarte ',
+            ' Error en conexion ',
             style: TextStyle(fontStyle: FontStyle.italic),
           ),
         ),
         title: 'This is Ignored',
-        desc: 'This is also Ignored',
+        desc: 'This is also Ignored',        
+        //btnOkColor: Colors.yellow,        
         btnOkOnPress: () {},
       )..show();
     });
