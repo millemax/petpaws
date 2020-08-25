@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
-import 'package:petpaws/pages/home_page.dart';
+import 'package:petpaws/pages/homeVeterinarias_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -200,7 +200,7 @@ class MyPainter extends CustomPainter {
         new Rect.fromCircle(center: target, radius: radius), 1.5 * pi, 1 * pi);
 
     canvas.translate(size.width * pageOffset, 0.0);
-   // canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
+    // canvas.drawShadow(path, Color(0xFFfbab66), 3.0, true);
     canvas.drawPath(path, painter);
   }
 
@@ -312,16 +312,15 @@ class ExistentePage extends StatelessWidget {
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
-                      onPressed:
-                          snapshot.hasData ? () => _loguear(bloc,context) : null);
+                      onPressed: snapshot.hasData
+                          ? () => _loguear(bloc, context)
+                          : null);
                 }),
           ],
         ),
       ],
     );
   }
-
-  
 
   Widget textrecordarcontrasena() {
     return Column(
@@ -380,28 +379,20 @@ class ExistentePage extends StatelessWidget {
 
 //-------------funcion para loguearse...............................
 
-  _loguear(LoginBloc bloc,BuildContext context) {    
-
-    FirebaseAuth.instance.signInWithEmailAndPassword(email: bloc.email, password: bloc.contrasena).then((user){
+  _loguear(LoginBloc bloc, BuildContext context) {
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(
+            email: bloc.email, password: bloc.contrasena)
+        .then((user) {
       Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (_) => HomePage()),
-            (Route<dynamic> route) => false);
-    }).catchError((onError){
-        print('error no pudimos autenticarte !!! :(');
-
+          context,
+          MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+          (Route<dynamic> route) => false);
+    }).catchError((onError) {
+      print('error no pudimos autenticarte !!! :(');
     });
-
   }
 }
-
-
-
-
-
-
-
-
 
 //....................Creamos la clase pintlinea para dibujar la linea, hereda de CustomPinter................................................
 
@@ -434,14 +425,6 @@ class PaintLinea extends CustomPainter {
   @override
   bool shouldRepaint(PaintLinea oldDelegate) => false;
 }
-
-
-
-
-
-
-
-
 
 //---------------------creamoa la pagina registro de nuevo usuario----------------------------------
 class NuevoPage extends StatelessWidget {
@@ -604,27 +587,24 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  _createuser (LoginBloc bloc, BuildContext context){
-    
-
-    FirebaseAuth.instance.createUserWithEmailAndPassword(email:bloc.email, password:bloc.contrasena).then((value) {
-      
+  _createuser(LoginBloc bloc, BuildContext context) {
+    FirebaseAuth.instance
+        .createUserWithEmailAndPassword(
+            email: bloc.email, password: bloc.contrasena)
+        .then((value) {
       final String id = FirebaseAuth.instance.currentUser.uid;
 
-      FirebaseFirestore.instance.collection('users').doc(''+id).set({'correo':bloc.email, 'nombre':bloc.nombre, 'telefono':bloc.celular});
-
-
-
-    } )
-    .catchError((onError){
+      FirebaseFirestore.instance.collection('users').doc('' + id).set({
+        'correo': bloc.email,
+        'nombre': bloc.nombre,
+        'telefono': bloc.celular
+      });
+    }).catchError((onError) {
       print("error al cargar los datos");
-
     });
-
   }
 
-
- /* 
+  /* 
   _loguearRegistro(LoginBloc bloc, BuildContext context) {
     print('Nombres ${bloc.nombre}');
     print('Email ${bloc.email}');
