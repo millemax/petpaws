@@ -6,6 +6,7 @@ import 'package:petpaws/pages/homeVeterinarias_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -390,6 +391,20 @@ class ExistentePage extends StatelessWidget {
           (Route<dynamic> route) => false);
     }).catchError((onError) {
       print('error no pudimos autenticarte !!! :(');
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            ' No pudimos autenticarte ',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        btnOkOnPress: () {},
+      )..show();
     });
   }
 }
@@ -569,7 +584,7 @@ class NuevoPage extends StatelessWidget {
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        child: Text('INICIAR SESIÓN'),
+                        child: Text('REGISTRARSE'),
                       ),
                       disabledColor: Colors.red[400],
                       color: Colors.red,
@@ -587,6 +602,7 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
+  //esta funcion es para la creacion del usuario
   _createuser(LoginBloc bloc, BuildContext context) {
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -598,9 +614,44 @@ class NuevoPage extends StatelessWidget {
         'correo': bloc.email,
         'nombre': bloc.nombre,
         'telefono': bloc.celular
+      }).then((value) {
+        AwesomeDialog(
+          context: context,
+          animType: AnimType.SCALE,
+          dialogType: DialogType.SUCCES,
+          body: Center(
+            child: Text(
+              ' Bienvenido a la comunidad',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          ),
+          title: 'This is Ignored',
+          desc: 'This is also Ignored',
+          btnOkOnPress: () {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+                (Route<dynamic> route) => false);
+          },
+        )..show();
       });
     }).catchError((onError) {
       print("error al cargar los datos");
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            ' Error en conexion ',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        //btnOkColor: Colors.yellow,
+        btnOkOnPress: () {},
+      )..show();
     });
   }
 
