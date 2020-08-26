@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
-import 'package:petpaws/pages/home_page.dart';
+import 'package:petpaws/pages/homeVeterinarias_page.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -387,7 +387,7 @@ class ExistentePage extends StatelessWidget {
         .then((user) {
       Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (_) => HomePage()),
+          MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
           (Route<dynamic> route) => false);
     }).catchError((onError) {
       print('error no pudimos autenticarte !!! :(');
@@ -602,7 +602,7 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  //esta funcion es para la creacion del usuario 
+  //esta funcion es para la creacion del usuario
   _createuser(LoginBloc bloc, BuildContext context) {
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(
@@ -627,16 +627,14 @@ class NuevoPage extends StatelessWidget {
           ),
           title: 'This is Ignored',
           desc: 'This is also Ignored',
-
           btnOkOnPress: () {
             Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (_) => HomePage()),
+                MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
                 (Route<dynamic> route) => false);
           },
         )..show();
       });
-
     }).catchError((onError) {
       print("error al cargar los datos");
       AwesomeDialog(
@@ -650,8 +648,8 @@ class NuevoPage extends StatelessWidget {
           ),
         ),
         title: 'This is Ignored',
-        desc: 'This is also Ignored',        
-        //btnOkColor: Colors.yellow,        
+        desc: 'This is also Ignored',
+        //btnOkColor: Colors.yellow,
         btnOkOnPress: () {},
       )..show();
     });
