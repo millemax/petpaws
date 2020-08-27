@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'perfilVeterinarias_page.dart';
@@ -20,7 +21,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             Column(
               children: [
                 titulo(),
-                listaVeterinarias(),
+                lista(),
               ],
             )
           ],
@@ -60,355 +61,136 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
     );
   }
 
-//---------------cuerpo donde va a estar las veterianrias--------
-
-  Widget listaVeterinarias() {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        /* borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(75.0),
-        ), */
-      ),
-      child: ListView(
-        children: [
-          Column(
-            children: [
-              SizedBox(height: 18.0),
-              //--------------------contenedor de una veterinaria------
-              veterinaria(),
-              veterinaria1(),
-              veterinaria2(),
-            ],
-          )
-        ],
-      ),
-    );
+  //-----------------prueba con firestore.......................
+  Widget lista() {
+    return StreamBuilder(
+        stream:
+            FirebaseFirestore.instance.collection('veterinarias').snapshots(),
+        builder: (_, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                color: Colors.white,               
+              ),
+              child: ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  DocumentSnapshot data = snapshot.data.documents[index];
+                  return veterinarys(data);
+                },
+              ),
+            );
+          }
+        });
   }
 
-  //------------------veterinaria-------
-  Widget veterinaria() {
+  Widget veterinarys(DocumentSnapshot data) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      height: 240,
-      child: Row(
-        children: [
-          //---contenedor de descripcion de veterinarias--
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 60, bottom: 20),
+      margin: EdgeInsets.all(5),
+      child: Card(
+        shadowColor: Theme.of(context).primaryColor,
+        elevation: 7,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        clipBehavior: Clip.antiAlias,
+        color: Theme.of(context).primaryColor,
+        child: Stack(
+          children: [
+            Image.asset(
+              'assets/images/veterinario.jpg',
+              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: Colors.deepPurple[100],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  topLeft: Radius.circular(20),
+                  gradient: LinearGradient(
+                      colors: [
+                    Color.fromRGBO(0, 0, 0, 0.6),
+                    Color.fromRGBO(0, 0, 0, 0.3),
+                  ],
+                      stops: [
+                    0.2,
+                    0.5
+                  ],
+                      begin: FractionalOffset.bottomCenter,
+                      end: FractionalOffset.topCenter)),
+            ),
+            Container(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      'Veterinaria',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text('"San Marcos"',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: Colors.white)),
+                  ],
                 ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Veterinaria",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    "LOAYZA",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(Icons.location_on),
-                      Text(
-                        "Av. Lazaro Carrillo",
-                      )
-                    ],
-                  )
-                ],
               ),
             ),
-          ),
-          //---contenedor de imagen de veterinarias----
-          Expanded(
-              child: Container(
-            child: Stack(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Container(
-                  margin: EdgeInsets.only(top: 40),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple[50],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                Positioned(
-                  //--------------------imagen de la veterinaria----
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          "assets/images/perros2.png",
-                          fit: BoxFit.contain,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 170),
-                              child: FlatButton(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                color: Color.fromRGBO(107, 27, 154, 60),
-                                textColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0)),
-                                //-----funcion push hacia los perfiles
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => WaveDemoHomePage(),
-                                    ),
-                                  );
-                                },
-                                child: Text("Ver perfil"),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                    //----boton para ir al perfil de veteerinaria--
-                  ),
-                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: AssetImage('assets/images/logo2.png')),
+                )
               ],
             ),
-          )),
-        ],
-      ),
-    );
-  }
-
-  //------------------veterinaria-------
-  Widget veterinaria1() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 5),
-      height: 240,
-      child: Row(
-        children: [
-          //---contenedor de descripcion de veterinarias--
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 60, bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.deepPurple[100],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  topLeft: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Veterinaria",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    "LOAYZA",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(Icons.location_on),
-                      Text(
-                        "Av. Lazaro Carrillo",
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          //---contenedor de imagen de veterinarias----
-          Expanded(
-            child: Container(
-              child: Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 40),
-                    decoration: BoxDecoration(
-                      color: Colors.deepPurple[50],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  Positioned(
-                    //--------------------imagen de la veterinaria----
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 2),
-                      child: Stack(
-                        children: [
-                          Image.asset(
-                            "assets/images/boxers.png",
-                            fit: BoxFit.contain,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 170),
-                                child: FlatButton(
-                                  padding: EdgeInsets.symmetric(horizontal: 20),
-                                  color: Color.fromRGBO(107, 27, 154, 60),
-                                  textColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(15.0)),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            PerfilVeterinariaPage(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text("Ver perfil"),
-                                ),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                      //----boton para ir al perfil de veteerinaria--
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  //------------------veterinaria-------
-  Widget veterinaria2() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 100, right: 5, left: 5),
-      height: 240,
-      child: Row(
-        children: [
-          //---contenedor de descripcion de veterinarias--
-          Expanded(
-            child: Container(
-              margin: EdgeInsets.only(top: 60, bottom: 20),
-              decoration: BoxDecoration(
-                color: Colors.deepPurple[100],
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  topLeft: Radius.circular(20),
-                ),
-              ),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    "Veterinaria",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                  Text(
-                    "CAN & NINOS",
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(
-                    height: 70,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Icon(Icons.location_on),
-                      Text(
-                        "Av. Lazaro Carrillo",
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
-          //---contenedor de imagen de veterinarias----
-          Expanded(
-              child: Container(
-            child: Stack(
+            Column(
               children: [
-                Container(
-                  margin: EdgeInsets.only(top: 40),
-                  decoration: BoxDecoration(
-                    color: Colors.deepPurple[50],
-                    borderRadius: BorderRadius.circular(20),
-                  ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
                 ),
-                Positioned(
-                  //--------------------imagen de la veterinaria----
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 2),
-                    child: Stack(
-                      children: [
-                        Image.asset(
-                          "assets/images/perro-1.png",
-                          fit: BoxFit.contain,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 170),
-                              child: FlatButton(
-                                padding: EdgeInsets.symmetric(horizontal: 20),
-                                color: Color.fromRGBO(107, 27, 154, 60),
-                                textColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15.0)),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          PerfilVeterinariaPage(),
-                                    ),
-                                  );
-                                },
-                                child: Text("Ver perfil"),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
                     ),
-                    //----boton para ir al perfil de veteerinaria--
-                  ),
+                    Icon(
+                      Icons.access_alarm,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      '1:00PM-10:00PM',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    )
+                  ],
                 ),
               ],
-            ),
-          )),
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
+
+  
+  
 
   //---------------------no-------
 }
