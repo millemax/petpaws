@@ -14,7 +14,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFAB47BC),
+        backgroundColor: Color(0xFF6600FF),
         body: ListView(
           children: [
             Column(
@@ -67,9 +67,9 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
+        /* borderRadius: BorderRadius.only(
           topLeft: Radius.circular(75.0),
-        ),
+        ), */
       ),
       child: ListView(
         children: [

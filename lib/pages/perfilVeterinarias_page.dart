@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petpaws/pages/reservation-page.dart';
 
 class PerfilVeterinariaPage extends StatefulWidget {
   @override
@@ -46,12 +47,22 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
 
   Widget imagenFondo() {
     return Container(
+      padding: EdgeInsets.only(bottom:500),
       height: double.infinity,
       width: double.infinity,
-      child: Image.asset(
-        'assets/images/perro-1.png',
-        fit: BoxFit.contain,
+      
+      child: Stack(
+        children: [
+          Image.asset('assets/images/fotoveterinaria.jpg', fit: BoxFit.cover, width: double.infinity,),
+          Container(
+            color: Color.fromRGBO(0, 0, 0, 0.3),           
+
+
+          ),
+
+        ],
       ),
+      
     );
   }
 
@@ -59,11 +70,11 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     return ListView(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 150),
+          padding: EdgeInsets.only(top: 200),
           child: Container(
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              color: Colors.deepPurple[100],
+              color: Colors.white,
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(60),
                 topRight: Radius.circular(60),
@@ -77,17 +88,22 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                       const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
                   child: Column(
                     children: [
+                      SizedBox(height:10),
                       Text(
                         "VETERINARIA LOAYZA",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: 20,
                         ),
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       Text(
-                          "Nuestar veterianaria esta comprometido contigo por eso, trabajamos con 3 profesionales Médicos Veterinarios y 3 personas certificadas en grooming."),
+                          "Nuestar veterinaria esta comprometido contigo por eso, trabajamos con 3 profesionales Médicos Veterinarios y 3 personas certificadas en grooming.",
+                           textAlign: TextAlign.center,
+
+                          ),
                       Padding(
                         padding: EdgeInsets.only(
                           top: 20,
@@ -99,7 +115,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                             Text(
                               "SERVICIOS",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: Colors.yellow,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -112,7 +128,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                 ),
                 //----------------los cards
                 servicios(),
-                servicios(),
+               // servicios(),
               ],
             ),
           ),
@@ -132,6 +148,48 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
               Container(
                 height: 200,
                 margin: EdgeInsets.all(5),
+                child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Reservation(),
+                                    ),
+                                  );
+
+                    },
+                    child: Card(
+                    color: Colors.yellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    elevation: 10,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        //----------titulo del servicio----
+                        Text("Desparacitacion",style: TextStyle(color: Colors.white, fontSize: 20),),
+                        //------------------Icono o imagen del servicio---
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10, top: 10),
+                          child: Icon(
+                            Icons.beach_access,
+                            size: 80,
+                            color: Colors.white,
+                          ),
+                        ),
+                    
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              //-------------------
+              Container(
+                height: 200,
+                margin: EdgeInsets.all(5),
                 child: Card(
                   color: Colors.yellow,
                   shape: RoundedRectangleBorder(
@@ -143,80 +201,25 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       //----------titulo del servicio----
-                      Text("Desparacitacion"),
+                      Text("Desparacitacion", style: TextStyle(color: Colors.white,fontSize: 20),),
                       //------------------Icono o imagen del servicio---
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10, top: 10),
                         child: Icon(
                           Icons.beach_access,
                           size: 80,
-                          color: Colors.amber,
+                          color: Colors.white,
                         ),
                       ),
-                      //------------------footer del card ------------
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.black,
-                                width: 1.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
+                      
+                    
                     ],
                   ),
                 ),
-              ),
+              ),          
 
-              //-------------------
-              Container(
-                height: 200,
-                margin: EdgeInsets.all(5),
-                child: Card(
-                  color: Colors.red,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  elevation: 10,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //----------titulo del servicio----
-                      Text("Desparacitacion"),
-                      //------------------Icono o imagen del servicio---
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10, top: 10),
-                        child: Icon(
-                          Icons.beach_access,
-                          size: 80,
-                          color: Colors.amber,
-                        ),
-                      ),
-                      //------------------footer del card ------------
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            border: Border(
-                              top: BorderSide(
-                                color: Colors.black,
-                                width: 1.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
+
+
             ],
           ),
         ],

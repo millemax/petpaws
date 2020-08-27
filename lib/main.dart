@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
     return Provider(
       create: (context) => LoginBloc(),
       child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: Color(0xFF6600FF),
+        ),
         title: 'login iu',
         debugShowCheckedModeBanner: false,
         //home: LoginScreen(),
