@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'perfilVeterinarias_page.dart';
@@ -20,7 +21,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             Column(
               children: [
                 titulo(),
-                listaVeterinarias(),
+                lista(),
               ],
             )
           ],
@@ -60,6 +61,211 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
     );
   }
 
+  //-----------------prueba con firestore.......................
+  Widget lista() {
+    return StreamBuilder(
+        stream:
+            FirebaseFirestore.instance.collection('veterinarias').snapshots(),
+        builder: (_, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else {
+            return Container(
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(75.0),
+                ),
+              ),
+              child: ListView.builder(
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  DocumentSnapshot data = snapshot.data.documents[index];
+                  return veterinarys(data);
+                },
+              ),
+            );
+          }
+        });
+  }
+
+  Widget veterinarys(DocumentSnapshot data) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Card(
+        shadowColor: Theme.of(context).primaryColor,
+        elevation: 7,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        clipBehavior: Clip.antiAlias,
+        color: Theme.of(context).primaryColor,
+        child: Stack(
+          children: [
+            Image.asset(
+              'assets/images/veterinario.jpg',
+              fit: BoxFit.cover,
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width,
+            ),
+            Container(
+              height: MediaQuery.of(context).size.height * 0.25,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                      colors: [
+                    Color.fromRGBO(0, 0, 0, 0.6),
+                    Color.fromRGBO(0, 0, 0, 0.3),
+                  ],
+                      stops: [
+                    0.2,
+                    0.5
+                  ],
+                      begin: FractionalOffset.bottomCenter,
+                      end: FractionalOffset.topCenter)),
+            ),
+            Container(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      'Veterinaria',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text('"San Marcos"',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircleAvatar(
+                      radius: 40,
+                      backgroundImage: AssetImage('assets/images/logo2.png')),
+                )
+              ],
+            ),
+            Column(
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.2,
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Icon(
+                      Icons.access_alarm,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      '1:00PM-10:00PM',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    )
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget veterinary(DocumentSnapshot data) {
+    return Container(
+      margin: EdgeInsets.all(5),
+      child: Card(
+        shadowColor: Color.fromRGBO(128, 0, 128, 1),
+        elevation: 7,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        clipBehavior: Clip.antiAlias,
+        color: Colors.white,
+        child: Stack(
+          children: [
+            Image.asset(
+              'assets/images/veterinario.jpg',
+              height: 170,
+              fit: BoxFit.cover,
+            ),
+            Container(
+              height: 170,
+              width: 400,
+              decoration: BoxDecoration(),
+            ),
+            Container(
+              child: Center(
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 30,
+                    ),
+                    Text(
+                      'Veterinaria',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Colors.white),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text('"San Marcos"',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22,
+                            color: Colors.white)),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+                top: 20,
+                left: 260,
+                child: CircleAvatar(
+                    radius: 40,
+                    backgroundImage: AssetImage('assets/images/logo2.png'))),
+            Positioned(
+                top: 130,
+                left: 10,
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.access_alarm,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      '1PM-10PM',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    )
+                  ],
+                ))
+          ],
+        ),
+      ),
+    );
+  }
+
 //---------------cuerpo donde va a estar las veterianrias--------
 
   Widget listaVeterinarias() {
@@ -77,7 +283,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             children: [
               SizedBox(height: 18.0),
               //--------------------contenedor de una veterinaria------
-              veterinaria(),
+              //veterinaria(),
               veterinaria1(),
               veterinaria2(),
             ],
@@ -88,7 +294,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   }
 
   //------------------veterinaria-------
-  Widget veterinaria() {
+  Widget veterinaria(DocumentSnapshot data) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 5),
       height: 240,
@@ -115,18 +321,29 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     style: TextStyle(fontSize: 12),
                   ),
                   Text(
-                    "LOAYZA",
+                    data.data()['nombre'],
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
-                    height: 70,
+                    height: 40,
+                  ),
+                  Text(
+                    "Horario",
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    data.data()['horario'],
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Icon(Icons.location_on),
                       Text(
-                        "Av. Lazaro Carrillo",
+                        data.data()['direccion'],
                       )
                     ],
                   )
@@ -152,8 +369,8 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     padding: EdgeInsets.symmetric(horizontal: 2),
                     child: Stack(
                       children: [
-                        Image.asset(
-                          "assets/images/perros2.png",
+                        Image.network(
+                          data.data()['imagen'],
                           fit: BoxFit.contain,
                         ),
                         Row(
