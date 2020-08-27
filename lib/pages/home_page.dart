@@ -32,12 +32,7 @@ class HomePage extends StatelessWidget {
 
     });
     
-   /*  await dbref.collection('TUT').getDocuments().then((data){
-      data.documents.forEach((doc) {
-        print(doc.data);
-      });
-    });
-  } */
+   
 
   }
 

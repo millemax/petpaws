@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PerfilVeterinariaPage extends StatefulWidget {
   @override
@@ -6,6 +7,29 @@ class PerfilVeterinariaPage extends StatefulWidget {
 }
 
 class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
+
+// con esta funcion estamos recuperando los servicios de la veterinaria
+  _getdata() async{
+    await FirebaseFirestore.instance.collection('veterinarias').get().then((data){
+      print('estos son los datos $data');
+      data.docs.forEach((document){
+        print(document.data());
+        print(document.id);
+
+      });
+
+    });
+    
+   
+
+  }
+  @override
+  void initState() {
+    super.initState();
+    _getdata();
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -109,7 +133,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                 height: 200,
                 margin: EdgeInsets.all(5),
                 child: Card(
-                  color: Colors.white,
+                  color: Colors.yellow,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -154,7 +178,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                 height: 200,
                 margin: EdgeInsets.all(5),
                 child: Card(
-                  color: Colors.white,
+                  color: Colors.red,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
