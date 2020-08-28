@@ -1,5 +1,8 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
+import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
 //import 'package:petpaws/screens/login_screen.dart';
@@ -31,8 +34,14 @@ class MyApp extends StatelessWidget {
         title: 'login iu',
         debugShowCheckedModeBanner: false,
         //home: LoginScreen(),
-        home: Inicio(),
+       // home: Inicio(),
+       initialRoute: '/',
         // home: LoginPage(),
+        routes: {
+          '/':(context)=>Inicio(),
+          'perfilveterinarias':(context)=>PerfilVeterinariaPage(),
+
+        },
       ),
     );
   }

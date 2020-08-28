@@ -34,6 +34,23 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: Column(
+        children: [
+          SizedBox(height: 50),
+          Row(
+            children: [
+              SizedBox(width: 25,),
+              FloatingActionButton(
+                onPressed:(){
+                  Navigator.pop(context);
+                },
+                backgroundColor: Color(0xFF6600FF),
+                child: Icon(Icons.chevron_left, color: Colors.white, size: 50),
+              ),
+            ],
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Stack(
           children: [
@@ -47,18 +64,20 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
 
   Widget imagenFondo() {
     return Container(
-      padding: EdgeInsets.only(bottom:500),
+      padding: EdgeInsets.only(bottom:480),
       height: double.infinity,
       width: double.infinity,
       
       child: Stack(
         children: [
+          
           Image.asset('assets/images/fotoveterinaria.jpg', fit: BoxFit.cover, width: double.infinity,),
           Container(
             color: Color.fromRGBO(0, 0, 0, 0.3),           
 
 
           ),
+          
 
         ],
       ),
@@ -113,9 +132,9 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "SERVICIOS",
+                              "NUESTROS SERVICIOS",
                               style: TextStyle(
-                                color: Colors.yellow,
+                                color: Colors.black,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -159,7 +178,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
 
                     },
                     child: Card(
-                    color: Colors.yellow,
+                    color: Color(0xFFFDD400),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
@@ -191,7 +210,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                 height: 200,
                 margin: EdgeInsets.all(5),
                 child: Card(
-                  color: Colors.yellow,
+                  color: Color(0xFFFDD400),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
@@ -201,7 +220,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       //----------titulo del servicio----
-                      Text("Desparacitacion", style: TextStyle(color: Colors.white,fontSize: 20),),
+                      Text("Desparasitacion", style: TextStyle(color: Colors.white,fontSize: 20),),
                       //------------------Icono o imagen del servicio---
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10, top: 10),

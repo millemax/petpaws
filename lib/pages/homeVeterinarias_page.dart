@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import 'perfilVeterinarias_page.dart';
-//--
-import './waves.dart';
+
 
 class HomeVeterinariasPage extends StatefulWidget {
   @override
@@ -94,96 +92,109 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   Widget veterinarys(DocumentSnapshot data) {
     return Container(
       margin: EdgeInsets.all(5),
-      child: Card(
-        shadowColor: Theme.of(context).primaryColor,
-        elevation: 7,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        clipBehavior: Clip.antiAlias,
-        color: Theme.of(context).primaryColor,
-        child: Stack(
-          children: [
-            Image.asset(
-              'assets/images/veterinario.jpg',
-              fit: BoxFit.cover,
-              height: MediaQuery.of(context).size.height * 0.25,
-              width: MediaQuery.of(context).size.width,
-            ),
-            Container(
-              height: MediaQuery.of(context).size.height * 0.25,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                    Color.fromRGBO(0, 0, 0, 0.6),
-                    Color.fromRGBO(0, 0, 0, 0.3),
-                  ],
-                      stops: [
-                    0.2,
-                    0.5
-                  ],
-                      begin: FractionalOffset.bottomCenter,
-                      end: FractionalOffset.topCenter)),
-            ),
-            Container(
-              child: Center(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 30,
-                    ),
-                    Text(
-                      'Veterinaria',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.white),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    Text('"San Marcos"',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22,
-                            color: Colors.white)),
-                  ],
+      child: GestureDetector(
+          onTap: (){
+            Navigator.pushNamed(context, 'perfilveterinarias');
+
+          },
+          child: Card(
+          shadowColor: Colors.black,
+          elevation: 7,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          clipBehavior: Clip.antiAlias,
+          color: Theme.of(context).primaryColor,
+          child: Stack(
+            children: [
+              Image.network(
+                data.data()['imagen'],
+                fit: BoxFit.cover,
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.width,
+
+              ),
+            
+              Container(
+                height: MediaQuery.of(context).size.height * 0.25,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [
+                      Color.fromRGBO(0, 0, 0, 0.6),
+                      Color.fromRGBO(0, 0, 0, 0.3),
+                    ],
+                        stops: [
+                      0.2,
+                      0.5
+                    ],
+                        begin: FractionalOffset.bottomCenter,
+                        end: FractionalOffset.topCenter)),
+              ),
+              Container(
+                child: Center(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 30,
+                      ),                   
+                      Container(
+                        
+                        width:200,
+                        child: Text(data.data()['nombre'],
+                            maxLines: 2,
+                            textAlign:TextAlign.center,
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                color: Colors.white,)),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: CircleAvatar(
-                      radius: 40,
-                      backgroundImage: AssetImage('assets/images/logo2.png')),
-                )
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.2,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 10,
-                    ),
-                    Icon(
-                      Icons.access_alarm,
-                      color: Colors.white,
-                    ),
-                    Text(
-                      '1:00PM-10:00PM',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    )
-                  ],
-                ),
-              ],
-            )
-          ],
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: CircleAvatar(
+                        radius: 40,
+                        backgroundImage: NetworkImage(data.data()['logo']) ),
+                  )
+                ],
+              ),
+              Column(
+                
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.17,
+                  ),
+                  Row(                  
+                    children: [
+                      SizedBox(width:15),
+                      Text(data.data()['horario'], style: TextStyle(fontSize: 15, color: Color(0xFFFDD400))),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Icon(
+                        Icons.access_alarm,
+                        color: Colors.white,
+                      ),
+                      Text(
+                        data.data()['horarioatencion'],
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      )
+                    ],
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
