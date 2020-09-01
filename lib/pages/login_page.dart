@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
+import 'package:petpaws/page_administrador/menu.dart';
 import 'package:petpaws/pages/homeVeterinarias_page.dart';
+import 'package:petpaws/pages_veterinaria/reservas.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -385,10 +387,61 @@ class ExistentePage extends StatelessWidget {
         .signInWithEmailAndPassword(
             email: bloc.email, password: bloc.contrasena)
         .then((user) {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
-          (Route<dynamic> route) => false);
+
+          //recuperamos el rol que tiene el usuario para la navegacion de las pantallas
+          final String id = FirebaseAuth.instance.currentUser.uid;
+          FirebaseFirestore.instance.collection('users').doc(''+id).get().then((data){
+            final String rol= data.data()['rol'];
+            
+            switch (rol) {
+              case 'usuario':{
+
+                  //redirigimos en la pantalla
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+                      (Route<dynamic> route) => false);
+
+              }
+              break;
+
+              case 'veterinario':{
+                //redirigimos en la pantalla
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => ReservasPage()),
+                      (Route<dynamic> route) => false);
+
+                
+              }
+              break;
+
+              case 'administrador':{
+                
+                //redirigimos en la pantalla
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (_) => MenuAdministrador()),
+                      (Route<dynamic> route) => false);
+
+                
+              }
+              break;
+                
+                
+              default:{
+                print('datos invalidos');
+              }
+              break;
+
+            }
+
+            
+          
+
+          });
+
+          
     }).catchError((onError) {
       print('error no pudimos autenticarte !!! :(');
       AwesomeDialog(
@@ -613,7 +666,8 @@ class NuevoPage extends StatelessWidget {
       FirebaseFirestore.instance.collection('users').doc('' + id).set({
         'correo': bloc.email,
         'nombre': bloc.nombre,
-        'telefono': bloc.celular
+        'telefono': bloc.celular,
+        'rol':'usuario',
       }).then((value) {
         AwesomeDialog(
           context: context,
