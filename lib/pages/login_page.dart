@@ -392,6 +392,7 @@ class ExistentePage extends StatelessWidget {
           final String id = FirebaseAuth.instance.currentUser.uid;
           FirebaseFirestore.instance.collection('users').doc(''+id).get().then((data){
             final String rol= data.data()['rol'];
+            print('este es el rol'+rol);
             
             switch (rol) {
               case 'usuario':{
