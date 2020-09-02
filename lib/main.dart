@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
@@ -12,6 +10,8 @@ import 'package:provider/provider.dart';
 //import 'package:petpaws/screens/inicio.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+
+import 'pages/reservaServicio_page.dart';
 
 // importamos wavesanimaction
 
@@ -31,19 +31,18 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(
           primaryColor: Color(0xFF6600FF),
-          
         ),
         title: 'login iu',
         debugShowCheckedModeBanner: false,
         //home: LoginScreen(),
-       // home: Inicio(),
-       initialRoute: '/',
+        // home: Inicio(),
+        initialRoute: '/',
         // home: LoginPage(),
         routes: {
-          '/':(context)=>Inicio(),
-          'perfilveterinarias':(context)=>PerfilVeterinariaPage(),
-          'crearservico':(context)=>CreateServices(),
-
+          '/': (context) => Inicio(),
+          'perfilveterinarias': (context) => PerfilVeterinariaPage(),
+          'crearservico': (context) => CreateServices(),
+          'reservar': (context) => Reservation(),
         },
       ),
     );
