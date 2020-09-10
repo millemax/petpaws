@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
+import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
 //import 'package:petpaws/screens/login_screen.dart';
@@ -41,8 +42,9 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => Inicio(),
           'perfilveterinarias': (context) => PerfilVeterinariaPage(),
-          'crearservico': (context) => CreateServices(),
+          'crearservico': (context) => CreateServices(), //este es la pagina en el perfil de veterninarias
           'reservar': (context) => Reservation(),
+          'horariosatencion': (context) =>HorarioAtencion(),
         },
       ),
     );
