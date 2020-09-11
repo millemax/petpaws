@@ -206,7 +206,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
   Widget card(DocumentSnapshot data) {
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, 'reservar');
+          Navigator.pushNamed(context, 'Reservas');
         },
         child: Card(
             color: Color(0XFFFDD400),
