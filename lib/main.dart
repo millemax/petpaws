@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
+import 'package:petpaws/pages/reservaService_page.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
 import 'package:petpaws/screens/inicio.dart';
@@ -13,7 +14,6 @@ import 'package:provider/provider.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
-import 'pages/reservaServicio_page.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 // importamos wavesanimaction
@@ -33,25 +33,25 @@ class MyApp extends StatelessWidget {
     return Provider(
       create: (context) => LoginBloc(),
       child: MaterialApp(
-        theme: ThemeData(
-          primaryColor: Color(0xFF6600FF),
-        ),
-        title: 'login iu',
-        debugShowCheckedModeBanner: false,
-        //home: LoginScreen(),
-        // home: Inicio(),
-        initialRoute: '/',
-        // home: LoginPage(),
-        routes: {
-          '/': (context) => Inicio(),
-          'perfilveterinarias': (context) => PerfilVeterinariaPage(),
-          'crearservico': (context) =>
-              CreateServices(), //este es la pagina en el perfil de veterninarias
-          'reservar': (context) => Reservation(),
-          'calendarPage': (context) => CalendarPage(),
-          'horariosatencion': (context) => HorarioAtencion(),
-        },
-      ),
+          theme: ThemeData(
+            primaryColor: Color(0xFF6600FF),
+          ),
+          title: 'login iu',
+          debugShowCheckedModeBanner: false,
+          //home: LoginScreen(),
+          // home: Inicio(),
+          initialRoute: '/',
+          // home: LoginPage(),
+          routes: {
+            '/': (context) => Inicio(),
+            'perfilveterinarias': (context) => PerfilVeterinariaPage(),
+            'crearservico': (context) =>
+                CreateServices(), //este es la pagina en el perfil de veterninarias
+            'calendarPage': (context) => CalendarPage(),
+            'horariosatencion': (context) => HorarioAtencion(),
+            'ReservaService': (context) =>
+                ReservaService(), //la pagina donde se llena el formulario para reservar cita
+          }),
     );
   }
 }

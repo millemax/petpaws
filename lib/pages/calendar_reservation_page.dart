@@ -27,6 +27,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final prodData = ModalRoute.of(context).settings.arguments;
     var fechaSeleccionada;
     var date = DateTime.now();
     var horas = DateFormat(DateFormat.YEAR_MONTH_DAY, 'es_ES').format(date);
@@ -125,6 +126,12 @@ class _CalendarPageState extends State<CalendarPage> {
                               }
                               print(fechaSeleccionada);
                               print(days[index]);
+                              Navigator.pushNamed(context, 'ReservaService',
+                                  arguments: [
+                                    prodData,
+                                    days[index],
+                                    fechaSeleccionada
+                                  ]);
                             },
                             child: Container(
                               child: Center(
@@ -154,7 +161,8 @@ class _CalendarPageState extends State<CalendarPage> {
   void _ondaySelected(DateTime day, List events) {
     setState(() {
       daySelected = day;
-      fecha = DateFormat(DateFormat.YEAR_MONTH_DAY, 'es_ES').format(day);
+      fecha = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(day);
+      //fecha = DateFormat(DateFormat.YEAR_MONTH_DAY, 'es_ES').format(day);
     });
   }
 }

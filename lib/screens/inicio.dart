@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:petpaws/pages/login_page.dart';
 
-
 class Inicio extends StatefulWidget {
   Inicio({Key key}) : super(key: key);
 
@@ -14,21 +13,22 @@ class _InicioState extends State<Inicio> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds:11), ()=> Navigator.push(context,MaterialPageRoute(builder:(context)=> LoginPage())));
-        
+    Timer(
+        Duration(seconds: 11),
+        () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage())));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(children: <Widget>[
-          imagen(),
-     
+      imagen(),
     ]));
   }
 }
 
-Widget imagen(){
+Widget imagen() {
   return Container(
     height: double.infinity,
     width: double.infinity,
