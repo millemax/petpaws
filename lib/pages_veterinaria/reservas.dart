@@ -19,7 +19,7 @@ class _ReservasPageState extends State<ReservasPage> {
       body: cards(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, 'horariosatencion');
+          Navigator.pushNamed(context, 'crearservico');
         },
         child: Icon(Icons.add),
         backgroundColor: Color(0xFF6600FF),
