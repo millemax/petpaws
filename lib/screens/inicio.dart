@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:petpaws/pages/login_page.dart';
-import 'package:petpaws/pages/reservaService_page.dart';
-
-import '../pages_veterinaria/reservas.dart';
 
 class Inicio extends StatefulWidget {
   Inicio({Key key}) : super(key: key);
@@ -18,8 +15,8 @@ class _InicioState extends State<Inicio> {
     super.initState();
     Timer(
         Duration(seconds: 11),
-        () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ReservaService())));
+        () => Navigator.push(
+            context, MaterialPageRoute(builder: (context) => LoginPage())));
   }
 
   @override

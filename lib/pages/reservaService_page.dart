@@ -38,6 +38,11 @@ class _ReservaServiceState extends State<ReservaService> {
 
   @override
   Widget build(BuildContext context) {
+    final List prodData = ModalRoute.of(context).settings.arguments;
+    final servicio = prodData[0];
+    final hora = prodData[1];
+    final fecha = prodData[2];
+
     return Scaffold(
       /* appBar: AppBar(
         title: Text(
@@ -108,7 +113,7 @@ class _ReservaServiceState extends State<ReservaService> {
                             mainAxisSize: MainAxisSize.max,
                             children: [
                               Text(
-                                "BAÑOS Y PELUQUERIA",
+                                servicio,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 25),
                               ),
@@ -142,8 +147,10 @@ class _ReservaServiceState extends State<ReservaService> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Viernes, 11 de septiembre de 2020",
-                                style: TextStyle(fontSize: 20),
+                                fecha.toString(),
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
                               ),
                               SizedBox(
                                 height: 5,
@@ -175,7 +182,7 @@ class _ReservaServiceState extends State<ReservaService> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "11:26",
+                                hora,
                                 style: TextStyle(fontSize: 20),
                               ),
                               SizedBox(
