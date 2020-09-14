@@ -25,7 +25,8 @@ dependencies:
     sdk: flutter
 # waves flutter
   wave: ^0.0.8
-
+# phone internacinal
+  international_phone_input: ^1.0.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   
@@ -40,7 +41,7 @@ dependencies:
   image_picker: ^0.6.7+7
   date_format: ^1.0.8
   intl: ^0.16.1
-  
+  table_calendar: ^2.2.3
 
 dev_dependencies:
   flutter_test:

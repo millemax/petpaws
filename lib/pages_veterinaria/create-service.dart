@@ -46,16 +46,11 @@ Future getImage() async {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Crear Servicio')
-
-      ),
-
+      appBar: AppBar(title: Text('Crear Servicio')),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal:20),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: formulario(),
       ),
-       
     );
   }
 
@@ -328,6 +323,7 @@ Future getImage() async {
                    print('nombre ${precioCtrl.text}');
                    print('nombre ${descripCtrl.text}');
                    print('tiempo de cita ${_value+_value1} minutos');
+                   Navigator.pushNamed(context,'horariosatencion');
                    
 
                   
