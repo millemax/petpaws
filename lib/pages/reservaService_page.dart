@@ -424,7 +424,7 @@ class _ReservaServiceState extends State<ReservaService> {
                               borderRadius: BorderRadius.circular(10)),
                           color: Color(0xFFED278A),
                           onPressed: () {},
-                          child: Text('Siguiente',
+                          child: Text('Solicitar cita',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 18)),
                         ),
