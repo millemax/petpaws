@@ -73,24 +73,30 @@ class _ReservasPageState extends State<ReservasPage> {
 
   Widget card(DocumentSnapshot data){
 
-    return Card(  
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,       
-      child: Column(
-        children: [
-          SizedBox(height: 10),
-          Text(      
-            data.data()['nombre'], 
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.white, fontSize:18, fontWeight: FontWeight.bold)
-            ),
+    return GestureDetector(
+          child: Card(  
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 5,       
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Text(      
+              data.data()['nombre'], 
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white, fontSize:18, fontWeight: FontWeight.bold)
+              ),
 
-            SizedBox(height: 20),
-          
-          Image.network(data.data()['icono'], height:80),
-        ],
-      ),      
-      color: Color(0xFFFDD400) ,
+              SizedBox(height: 20),
+            
+            Image.network(data.data()['icono'], height:80, color: Colors.white),
+          ],
+        ),      
+        color: Color(0xFFFDD400) ,
+      ),
+
+      onTap: () {
+        Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
+      },
     );
 
   }
