@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:international_phone_input/international_phone_input.dart';
+import 'package:petpaws/pages/calendar_reservation_page.dart';
 
 class ReservaService extends StatefulWidget {
   ReservaService({Key key}) : super(key: key);
@@ -9,9 +11,18 @@ class ReservaService extends StatefulWidget {
 }
 
 class _ReservaServiceState extends State<ReservaService> {
+  //---pop on tap para volver--
+  void pushRoute(BuildContext context) {
+    Navigator.pop(
+      context,
+      CupertinoPageRoute(builder: (BuildContext context) => CalendarPage()),
+    );
+  }
+
+  //-------
   //-----------DropdownButton-------------
+  String dropdownValue = 'Canino';
   int _value = 1;
-  int _valor = 1;
   //-----------------NUMERO TELEFONICO-----
   String phoneNumber;
   String phoneIsoCode;
@@ -87,9 +98,12 @@ class _ReservaServiceState extends State<ReservaService> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(right: 130),
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: Color(0xffFFFFFF),
+                              child: GestureDetector(
+                                child: Icon(
+                                  Icons.arrow_back,
+                                  color: Color(0xffFFFFFF),
+                                ),
+                                onTap: () => pushRoute(context),
                               ),
                             ),
                             Text(
@@ -294,7 +308,7 @@ class _ReservaServiceState extends State<ReservaService> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(bottom: 5, right: 25),
-                                child: Text("Nro. Mascotas:"),
+                                child: Text("Especie de Mascota:"),
                               ),
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -302,52 +316,27 @@ class _ReservaServiceState extends State<ReservaService> {
                                   border: Border.all(color: Colors.black),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: DropdownButton(
-                                  iconEnabledColor:
-                                      Theme.of(context).primaryColor,
-                                  iconSize: 40,
-                                  value: _value,
-                                  items: [
-                                    DropdownMenuItem(
-                                      child: Text(
-                                        'Canino',
-                                      ),
-                                      value: 0,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Felino'),
-                                      value: 1,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('equino'),
-                                      value: 2,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Bovino'),
-                                      value: 3,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Aves'),
-                                      value: 4,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Porcino'),
-                                      value: 5,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Caprino'),
-                                      value: 6,
-                                    ),
-                                    DropdownMenuItem(
-                                      child: Text('Ovino'),
-                                      value: 7,
-                                    ),
-                                  ],
-                                  onChanged: (value) {
+                                child: DropdownButton<String>(
+                                  value: dropdownValue,
+                                  onChanged: (String newValue) {
                                     setState(() {
-                                      _value = value;
+                                      dropdownValue = newValue;
                                     });
                                   },
+                                  items: <String>[
+                                    'Canino',
+                                    'Felino',
+                                    'Aves',
+                                    'Equino',
+                                    'Bovino',
+                                    'Porcino',
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
                             ],
@@ -360,7 +349,7 @@ class _ReservaServiceState extends State<ReservaService> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 25, bottom: 5),
-                                child: Text("Especie Mascota:"),
+                                child: Text("Nro. de Mascotas:"),
                               ),
                               Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8),
@@ -372,7 +361,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                   iconEnabledColor:
                                       Theme.of(context).primaryColor,
                                   iconSize: 40,
-                                  value: _valor,
+                                  value: _value,
                                   items: [
                                     DropdownMenuItem(
                                       child: Text('1'),
