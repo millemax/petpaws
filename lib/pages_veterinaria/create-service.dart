@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CreateServices extends StatefulWidget {
   CreateServices({Key key}) : super(key: key);
@@ -15,6 +19,8 @@ class _CreateServicesState extends State<CreateServices> {
   TextEditingController precioCtrl= new TextEditingController();
   TextEditingController descripCtrl= new TextEditingController();
 
+  
+
 
   //creamos la llave para el control de formulario
   final _formKey = GlobalKey<FormState>();
@@ -27,6 +33,7 @@ final servicearray= new List();
 
  //variables para la camara 
 File _image;
+
 final picker = ImagePicker();
 
 
@@ -308,6 +315,15 @@ Future getImage() async {
                     
                ),
                 ),
+                SizedBox(width: 20),
+
+                GestureDetector(
+                  child: Text('Buscar Icono', style: TextStyle(decoration:TextDecoration.underline, color: Colors.blue)),
+                  onTap:(){
+                    launch('https://www.flaticon.com/search?search-type=icons&word=veterinary');
+
+                  }
+                ),
                 
               ],
             ),
@@ -319,22 +335,14 @@ Future getImage() async {
                color: Color(0xFFED278A),
                onPressed: (){
                  if (_formKey.currentState.validate()) {
-                   print('nombre ${nameCtrl.text}');
-                   print('nombre ${precioCtrl.text}');
-                   print('nombre ${descripCtrl.text}');
-                   print('tiempo de cita ${_value+_value1} minutos');
-                   Navigator.pushNamed(context,'horariosatencion');
+                   uploadImage();                  
                    
-
-                  
-
-
-                      
-                   
-                 }
+                 }                
                  
-               },
-               child:Text('Crear Servicio', style: TextStyle(color: Colors.white, fontSize:18)),
+               }, 
+
+
+               child:Text('Siguiente', style: TextStyle(color: Colors.white, fontSize:18)),
               ),
 
 
@@ -345,4 +353,46 @@ Future getImage() async {
       ),
     );
   }
+
+//funcion para cargar la imagen a firestore y recuerar la url
+  uploadImage() async{
+
+    final StorageReference postImgRef= FirebaseStorage.instance.ref().child('icons');
+    var timeKey= DateTime.now();
+
+    //carguemos a storage
+    final StorageUploadTask uploadTask= postImgRef.child(timeKey.toString()+".png").putFile(_image);
+
+    // recuperamos la  url esperamos que termine de cargar
+    var imageUrl= await (await uploadTask.onComplete).ref.getDownloadURL();
+
+    final String url= imageUrl.toString();
+
+    saveDatabase(url);
+    
+
+  }
+
+  
+  saveDatabase(String url){
+    //guardar en la bd(nombre, precio, descripcion, duracion de cita, cupo, urlicono)
+    final int duracion= _value +_value1;
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(nameCtrl.text).set({
+      'nombre': nameCtrl.text,
+      'icono': url,
+      'descripcion':descripCtrl.text,
+      'duracioncita': duracion,
+      'cupo':_aforo,
+      'precio': int.parse(precioCtrl.text) ,
+    }).then((value){
+      Navigator.pushNamed(context,'horariosatencion',arguments: nameCtrl.text);
+
+    }); 
+
+
+
+  }
+
+
 }

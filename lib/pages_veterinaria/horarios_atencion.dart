@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -20,13 +21,45 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
   bool _sabado=false;
   bool _domingo=false;
 
-  int _value = 1;
+  
+  //valores de horarios de Lunes
+  int _value1 =8;
+  int _value2 = 17;
 
-  var horarios = new List();
+  //valores de horariso para Martes
+  int _value3=8;
+  int _value4=17;
+
+  //valores de horarios de miercoles
+  int _value5=8;
+  int _value6=17;
+
+  //valores de horarios de jueves
+  int _value7=8;
+  int _value8=17;
+
+  //valores de horarios de viernes
+  int _value9=8;
+  int _value10=17;
+
+  //valores de horarios de sabado
+  int _value11=8;
+  int _value12=17;
+
+  //valores de horarios de domingo
+  int _value13=8;
+  int _value14=17;
+
+
+
+
+
+  var horarios = {};
 
 
   @override
   Widget build(BuildContext context) {
+    final nombreService= ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text('Horarios de atencion'),
@@ -46,7 +79,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _lunes = resp;
                        if (_lunes==true) {
-                         horarios.add('lunes');                         
+                         horarios['lunes']={'inicio': _value1, 'final':_value2};                         
+                       }else{
+                         if(_lunes==false){
+                            
+                            horarios.remove('lunes');
+
+                         }
                        }
                      });
 
@@ -66,7 +105,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value1,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -167,7 +206,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value1=value;
+                            horarios['lunes']['inicio']=_value1;
                           });
                         },
                        ),
@@ -185,7 +225,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value2,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -286,7 +326,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value2=value;
+                            horarios['lunes']['final']=_value2;
                           });
                         },
                        ),
@@ -309,7 +350,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _martes = resp;
                        if (_martes==true) {
-                         horarios.add('martes');                         
+                         horarios['martes']={'inicio':_value3,'final':_value4};                         
+                       }else{
+                         if(_martes==false){
+                            
+                            horarios.remove('martes');
+
+                         }
                        }
                      });
 
@@ -328,7 +375,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value3,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -429,7 +476,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value3=value;
+                            horarios['martes']['inicio']=_value3;
                           });
                         },
                        ),
@@ -446,7 +494,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value4,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -547,7 +595,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value4=value;
+                            horarios['martes']['final']=_value4;
                           });
                         },
                        ),
@@ -569,7 +618,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _miercoles = resp;
                        if (_miercoles==true) {
-                         horarios.add('miercoles');                         
+                         horarios['miercoles']={'inicio':_value5,'final':_value6};                         
+                       }else{
+                         if(_miercoles==false){
+                            
+                            horarios.remove('miercoles');
+
+                         }
                        }
                      });
 
@@ -588,7 +643,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value5,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -689,7 +744,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value5=value;
+                            horarios['miercoles']['inicio']=_value5;
                           });
                         },
                        ),
@@ -706,7 +762,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value6,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -807,7 +863,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value6=value;
+                            horarios['miercoles']['final']=_value6;
                           });
                         },
                        ),
@@ -825,7 +882,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _jueves = resp;
                        if (_jueves==true) {
-                         horarios.add('jueves');                         
+                         horarios['jueves']={'inicio':_value7,'final':_value8};                        
+                       }else{
+                         if(_jueves==false){
+                            
+                            horarios.remove('jueves');
+
+                         }
                        }
                      });
 
@@ -844,7 +907,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value7,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -945,7 +1008,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value7=value;
+                            horarios['jueves']['inicio']=_value7;
                           });
                         },
                        ),
@@ -962,7 +1026,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value8,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1063,7 +1127,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value8=value;
+                            horarios['jueves']['final']=_value8;
                           });
                         },
                        ),
@@ -1083,8 +1148,14 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _viernes = resp;
 
-                       if (_viernes==true) {
-                         horarios.add('viernes');                         
+                       if (_viernes==true) {                         
+                         horarios['viernes']={'inicio':_value9,'final':_value10};                         
+                       }else{
+                         if(_viernes==false){
+                            
+                            horarios.remove('viernes');
+
+                         }
                        }
                      });
 
@@ -1103,7 +1174,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value9,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1204,7 +1275,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value9=value;
+                            horarios['viernes']['inicio']=_value9;
                           });
                         },
                        ),
@@ -1221,7 +1293,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value10,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1322,7 +1394,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value10=value;
+                            horarios['viernes']['final']=_value10;
                           });
                         },
                        ),
@@ -1331,7 +1404,6 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
 
                ],
             ),
-
             Divider(color:Colors.black38),
 
             Row(
@@ -1342,7 +1414,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _sabado = resp;
                        if (_sabado==true) {
-                         horarios.add('sabado');                         
+                         horarios['sabado']={'inicio':_value11,'final':_value12};                         
+                       }else{
+                         if(_sabado==false){
+                            
+                            horarios.remove('sabado');
+
+                         }
                        }
                      });
 
@@ -1361,7 +1439,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value11,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1462,7 +1540,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value11=value;
+                            horarios['sabado']['inicio']=_value11;
                           });
                         },
                        ),
@@ -1479,7 +1558,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value12,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1580,7 +1659,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value12=value;
+                            horarios['sabado']['final']=_value12;
                           });
                         },
                        ),
@@ -1599,7 +1679,13 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _domingo = resp;
                        if (_domingo==true) {
-                         horarios.add('domingo');                         
+                         horarios['domingo']={'inicio':_value13,'final':_value14};                         
+                       }else{
+                         if(_domingo==false){
+                            
+                            horarios.remove('domingo');
+
+                         }
                        }
                      });
 
@@ -1618,7 +1704,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value13,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1719,7 +1805,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value13=value;
+                            horarios['domingo']['inicio']=_value13;
                           });
                         },
                        ),
@@ -1736,7 +1823,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      padding: const EdgeInsets.only(left: 10),
                      child: DropdownButton(                     
                        iconSize: 40,                   
-                       value: _value,
+                       value: _value14,
                        items: [
                           DropdownMenuItem(
                             child: Text('00:00'), 
@@ -1837,7 +1924,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                        ],
                         onChanged: (value){
                           setState(() {
-                            _value=value;
+                            _value14=value;
+                            horarios['domingo']['final']=_value14;
                           });
                         },
                        ),
@@ -1852,7 +1940,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
              color: Color(0xFFED278A),
              onPressed: (){
-               guardarservicio();
+               guardarservicio(nombreService);
              },
              child:Text('Siguiente', style: TextStyle(color: Colors.white, fontSize:18)),
             ),
@@ -1865,21 +1953,30 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
     );
   }
 
-  guardarservicio(){
+  guardarservicio(nombreService){
 
     print(horarios);
    
-    
-    
+   
+
+     
     final String id = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc('masajesitos').set({
-      'dias': horarios,
-      'nombre': 'duchitacaliente',
+    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(nombreService).update({
+      'horarios':horarios 
+    
+      }    
 
-    }).then((value) => {
-       Navigator.pushNamed(context,'crearservico')
+    ).then((value) => {
+                CupertinoAlertDialog(
+              title: Text("En hora buena !"),
+              content: Text("Acabas de crear un nuevo servicio verificalo en la seccion de servicios"),
+              actions: [
+                CupertinoDialogAction(child: Text('no')),
+                CupertinoDialogAction(child: Text('yes'))
+              ],
+            )      
 
-    });
+    });   
     
 
 

@@ -412,7 +412,8 @@ class ExistentePage extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => ReservasPage()),
                       (Route<dynamic> route) => false);
-
+                    
+                     //MaterialPageRoute(builder: (_) => HorarioAtencion()),
                 
               }
               break;
@@ -717,4 +718,6 @@ class NuevoPage extends StatelessWidget {
     print('Password ${bloc.contrasena}');
     print('celular ${bloc.celular}');
   } */
+
+
 }
