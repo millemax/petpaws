@@ -3,6 +3,7 @@ import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
+import 'package:petpaws/pages_veterinaria/calendar-events.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
 import 'package:petpaws/screens/inicio.dart';
@@ -49,8 +50,8 @@ class MyApp extends StatelessWidget {
                 CreateServices(), //este es la pagina en el perfil de veterninarias
             'calendarPage': (context) => CalendarPage(),
             'horariosatencion': (context) => HorarioAtencion(),
-            'ReservaService': (context) =>
-                ReservaService(), //la pagina donde se llena el formulario para reservar cita
+            'ReservaService': (context) =>ReservaService(), //la pagina donde se llena el formulario para reservar cita
+            'calendarevents': (context) =>MyCalendar(),
           }),
     );
   }
