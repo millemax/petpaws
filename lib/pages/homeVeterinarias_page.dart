@@ -174,24 +174,19 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         children: [
           Text(
             "VETERINARIAS",
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 1),
           ),
           //----campo de busqueda-a
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-              child: Row(
-                children: [
-                  Icon(Icons.search),
-                  Text("Busca las veterinarias"),
-                ],
-              ),
-            ),
-          ),
+          Padding(
+              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+              child: Image.asset(
+                "assets/images/reserva.png",
+                scale: 17,
+              ))
         ],
       ),
     );

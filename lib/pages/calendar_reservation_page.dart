@@ -33,6 +33,8 @@ class _CalendarPageState extends State<CalendarPage> {
     String nombreServicio = prodData[0];
     int duracionCita = prodData[1];
     Map horarios = prodData[2];
+    final idservicio = prodData[3];
+    final idveterinaria = prodData[4];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -198,7 +200,10 @@ class _CalendarPageState extends State<CalendarPage> {
                                 arguments: [
                                   nombreServicio,
                                   daysHora[index],
-                                  daysFecha[index]
+                                  daysFecha[index],
+                                  duracionCita,
+                                  idservicio,
+                                  idveterinaria,
                                 ]);
                           } else {
                             return showDialog(

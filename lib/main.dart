@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/pages/calendar_reservation_page.dart';
+import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
@@ -15,6 +16,8 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'pages/homeVeterinarias_page.dart';
 
 // importamos wavesanimaction
 
@@ -45,12 +48,14 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => Inicio(),
             'perfilveterinarias': (context) => PerfilVeterinariaPage(),
+            'HomeVeterinarias': (context) => HomeVeterinariasPage(),
             'crearservico': (context) =>
                 CreateServices(), //este es la pagina en el perfil de veterninarias
             'calendarPage': (context) => CalendarPage(),
             'horariosatencion': (context) => HorarioAtencion(),
             'ReservaService': (context) =>
                 ReservaService(), //la pagina donde se llena el formulario para reservar cita
+            'PerfilUsuario': (context) => MisReservas(),
           }),
     );
   }
