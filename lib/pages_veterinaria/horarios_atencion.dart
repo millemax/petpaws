@@ -618,11 +618,11 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _miercoles = resp;
                        if (_miercoles==true) {
-                         horarios['miercoles']={'inicio':_value5,'final':_value6};                         
+                         horarios['miércoles']={'inicio':_value5,'final':_value6};                         
                        }else{
                          if(_miercoles==false){
                             
-                            horarios.remove('miercoles');
+                            horarios.remove('miércoles');
 
                          }
                        }
@@ -745,7 +745,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         onChanged: (value){
                           setState(() {
                             _value5=value;
-                            horarios['miercoles']['inicio']=_value5;
+                            horarios['miércoles']['inicio']=_value5;
                           });
                         },
                        ),
@@ -864,7 +864,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         onChanged: (value){
                           setState(() {
                             _value6=value;
-                            horarios['miercoles']['final']=_value6;
+                            horarios['miércoles']['final']=_value6;
                           });
                         },
                        ),
@@ -1414,11 +1414,11 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                      setState(() {
                        _sabado = resp;
                        if (_sabado==true) {
-                         horarios['sabado']={'inicio':_value11,'final':_value12};                         
+                         horarios['sábado']={'inicio':_value11,'final':_value12};                         
                        }else{
                          if(_sabado==false){
                             
-                            horarios.remove('sabado');
+                            horarios.remove('sábado');
 
                          }
                        }
@@ -1541,7 +1541,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         onChanged: (value){
                           setState(() {
                             _value11=value;
-                            horarios['sabado']['inicio']=_value11;
+                            horarios['sábado']['inicio']=_value11;
                           });
                         },
                        ),
@@ -1660,7 +1660,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         onChanged: (value){
                           setState(() {
                             _value12=value;
-                            horarios['sabado']['final']=_value12;
+                            horarios['sábado']['final']=_value12;
                           });
                         },
                        ),

@@ -28,6 +28,7 @@ class _ReservasPageState extends State<ReservasPage> {
     );
   }
 
+//recuperamos los servicios de la base de datos de firebase
   Widget cards(){
     final String id = FirebaseAuth.instance.currentUser.uid;
 
@@ -45,7 +46,7 @@ class _ReservasPageState extends State<ReservasPage> {
         } else {
           return Center(
             child: Container(
-              
+                            
               width: MediaQuery.of(context).size.width*0.93,
               height: MediaQuery.of(context).size.height * 0.85,
               
