@@ -108,7 +108,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot data = snapshot.data.documents[index];
 
-                    return card(data);
+                    return card(data, prodData);
                   },
                 ));
           }
@@ -203,11 +203,16 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     );
   }
 
-  Widget card(DocumentSnapshot data) {
+  Widget card(DocumentSnapshot data, prodData) {
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, 'calendarPage',
-              arguments: data.data()['nombre']);
+          Navigator.pushNamed(context, 'calendarPage', arguments: [
+            data.data()['nombre'],
+            data.data()['duracioncita'],
+            data.data()['horarios'],
+            data.id,
+            prodData
+          ]);
         },
         child: Card(
             color: Color(0XFFFDD400),
@@ -236,6 +241,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                   data.data()['icono'],
                   width: 80,
                   height: 80,
+                  color: Colors.white,
                 ),
                 SizedBox(
                   height: 5,
