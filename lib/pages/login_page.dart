@@ -387,63 +387,58 @@ class ExistentePage extends StatelessWidget {
         .signInWithEmailAndPassword(
             email: bloc.email, password: bloc.contrasena)
         .then((user) {
+      //recuperamos el rol que tiene el usuario para la navegacion de las pantallas
+      final String id = FirebaseAuth.instance.currentUser.uid;
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc('' + id)
+          .get()
+          .then((data) {
+        final String rol = data.data()['rol'];
+        print('este es el rol' + rol);
 
-          //recuperamos el rol que tiene el usuario para la navegacion de las pantallas
-          final String id = FirebaseAuth.instance.currentUser.uid;
-          FirebaseFirestore.instance.collection('users').doc(''+id).get().then((data){
-            final String rol= data.data()['rol'];
-            print('este es el rol'+rol);
-            
-            switch (rol) {
-              case 'usuario':{
+        switch (rol) {
+          case 'usuario':
+            {
+              //redirigimos en la pantalla
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+                (Route<dynamic> route) => false,
+              );
+            }
+            break;
 
-                  //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
-                      (Route<dynamic> route) => false);
+          case 'veterinario':
+            {
+              //redirigimos en la pantalla
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => ReservasPage()),
+                  (Route<dynamic> route) => false);
 
-              }
-              break;
-
-              case 'veterinario':{
-                //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => ReservasPage()),
-                      (Route<dynamic> route) => false);
-                    
-                     //MaterialPageRoute(builder: (_) => HorarioAtencion()),
-                
-              }
-              break;
-
-              case 'administrador':{
-                
-                //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (_) => MenuAdministrador()),
-                      (Route<dynamic> route) => false);
-
-                
-              }
-              break;
-                
-                
-              default:{
-                print('datos invalidos');
-              }
-              break;
+              //MaterialPageRoute(builder: (_) => HorarioAtencion()),
 
             }
+            break;
 
-            
-          
+          case 'administrador':
+            {
+              //redirigimos en la pantalla
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => MenuAdministrador()),
+                  (Route<dynamic> route) => false);
+            }
+            break;
 
-          });
-
-          
+          default:
+            {
+              print('datos invalidos');
+            }
+            break;
+        }
+      });
     }).catchError((onError) {
       print('error no pudimos autenticarte !!! :(');
       AwesomeDialog(
@@ -669,7 +664,7 @@ class NuevoPage extends StatelessWidget {
         'correo': bloc.email,
         'nombre': bloc.nombre,
         'telefono': bloc.celular,
-        'rol':'usuario',
+        'rol': 'usuario',
       }).then((value) {
         AwesomeDialog(
           context: context,
@@ -718,6 +713,5 @@ class NuevoPage extends StatelessWidget {
     print('Password ${bloc.contrasena}');
     print('celular ${bloc.celular}');
   } */
-
 
 }

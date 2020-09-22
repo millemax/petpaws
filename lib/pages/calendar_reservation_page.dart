@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //------table calendar--
@@ -14,6 +15,8 @@ class _CalendarPageState extends State<CalendarPage> {
   //.....fecha cuando selecciona en duro y formateado
   DateTime daySelected;
   String fechaSelected;
+  //-----id del servicio
+  var idServicio;
 
   @override
   void initState() {
@@ -29,6 +32,8 @@ class _CalendarPageState extends State<CalendarPage> {
     String nombreServicio = prodData[0];
     int duracionCita = prodData[1];
     Map horarios = prodData[2];
+    idServicio = prodData[3];
+    final idVeterinaria = prodData[4];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -73,6 +78,10 @@ class _CalendarPageState extends State<CalendarPage> {
     print(_anoFinal);
     print(_mesFinal);
     print(_diaFinal);
+
+    print('----veterinaria y servicio');
+    print(idServicio);
+    print(idVeterinaria);
 
     //lista para ir almacenando los tiempos sumado al intervalo
     List daysHora = [];
