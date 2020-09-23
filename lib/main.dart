@@ -4,6 +4,7 @@ import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
+import 'package:petpaws/pages/waves.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
 import 'package:petpaws/screens/inicio.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           // home: LoginPage(),
           routes: {
-            '/': (context) => Inicio(),
+            '/': (context) => HomeVeterinariasPage(),
             'perfilveterinarias': (context) => PerfilVeterinariaPage(),
             'HomeVeterinarias': (context) => HomeVeterinariasPage(),
             'crearservico': (context) =>
@@ -55,7 +56,9 @@ class MyApp extends StatelessWidget {
             'horariosatencion': (context) => HorarioAtencion(),
             'ReservaService': (context) =>
                 ReservaService(), //la pagina donde se llena el formulario para reservar cita
-            'PerfilUsuario': (context) => MisReservas(),
+
+            'MisReservas': (context) =>
+                MisReservas(), // pagina donde vemos nuestro historial de reservas
           }),
     );
   }

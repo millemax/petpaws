@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:petpaws/pages/reservaService_page.dart';
+
 //------table calendar--
 import 'package:table_calendar/table_calendar.dart';
-//-------------bottom modal sheet--
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+
 import 'package:flutter/cupertino.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 class CalendarPage extends StatefulWidget {
   @override
@@ -13,6 +14,23 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  //---------wavess-------
+  _buildCard({
+    Config config,
+    Color backgroundColor = Colors.transparent,
+  }) {
+    return WaveWidget(
+      config: config,
+      backgroundColor: backgroundColor,
+      size: Size(
+        double.infinity,
+        150.0,
+      ),
+      waveAmplitude: 0,
+    );
+  }
+  //-----fin   waves------
+
   //-----controlodaor para calendartable--
   CalendarController _controller;
   //.....fecha cuando selecciona en duro y formateado
@@ -107,148 +125,154 @@ class _CalendarPageState extends State<CalendarPage> {
 
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text('Seleccionar fecha y hora',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
-        ),
-        body: ListView(
+        backgroundColor: Color(0xffffffff),
+        body: Stack(
           children: [
-            Container(
-              margin: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Color(0XFFED278A), width: 2)),
-              child: TableCalendar(
-                initialSelectedDay: DateTime.now(),
-                onDaySelected: _onDaySelected,
-                initialCalendarFormat: CalendarFormat.week,
-                availableCalendarFormats: {CalendarFormat.week: 'Semana'},
-                locale: 'es_ES',
-                calendarController: _controller,
-                calendarStyle: CalendarStyle(
-                  todayColor: Theme.of(context).primaryColor,
-                  todayStyle: TextStyle(
-                      //-----actual fecha------
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white),
-                  //-----seleccion fecha----
-                  selectedColor: Color(0xFFFDD400),
-                  selectedStyle: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
-                ),
-                headerStyle: HeaderStyle(
-                  centerHeaderTitle: true,
-                ),
-                startingDayOfWeek: StartingDayOfWeek.monday,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              children: [
-                Container(
-                    padding: EdgeInsets.only(left: 20, bottom: 20),
-                    child: daySelected == null
-                        ? Text(
-                            '$fechaHoy',
-                            style: TextStyle(fontSize: 20),
-                          )
-                        : Text('$fechaSelected',
-                            style: TextStyle(fontSize: 20)))
-              ],
-            ),
-            Stack(
-              children: [
-                Container(
-                  height: 330,
-                  padding: EdgeInsets.only(right: 20, left: 20),
-                  child: GridView.builder(
-                    shrinkWrap: true,
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 15,
-                      mainAxisSpacing: 15,
-                      childAspectRatio: 3,
-                    ),
-                    itemCount: daysHora.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return GestureDetector(
-                        onTap: () {
-                          if (daySelected == null) {
-                            fechaFinal = today;
-                          } else {
-                            fechaFinal = daySelected;
-                          }
-                          print('esta es la fecha');
-                          print(fechaFinal);
-                          print(daysHora[index]);
-                          print('----horas finales.....');
-                          print(_anoFinal);
-                          print(_mesFinal);
-                          print(_diaFinal);
-                          print(daysFecha[index]);
-                          DateTime oneDaysAgo =
-                              today.subtract(new Duration(days: 1));
-                          print(oneDaysAgo);
-
-                          if (fechaFinal.isAfter(oneDaysAgo)) {
-                            Navigator.pushNamed(context, 'ReservaService',
-                                arguments: [
-                                  nombreServicio,
-                                  daysHora[index],
-                                  daysFecha[index],
-                                  duracionCita,
-                                  idservicio,
-                                  idveterinaria,
-                                ]);
-                          } else {
-                            return showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    title: Text(
-                                      'Error en la Fecha',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Text(
-                                        'No puede reservar en una \nfecha anterior al de hoy'),
-                                    actions: [
-                                      FlatButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('Okay'))
-                                    ],
-                                  );
-                                });
-                          }
-                        },
-                        child: Container(
-                          child: Center(
-                              child: Text(daysHora[index],
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold))),
-                          decoration: BoxDecoration(
-                              color: Color(0XFFED278A),
-                              borderRadius: BorderRadius.circular(20)),
+            titulo(),
+            Padding(
+              padding: EdgeInsets.only(top: 80.0),
+              child: ListView(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Color(0XFFED278A), width: 2)),
+                    child: TableCalendar(
+                      initialSelectedDay: DateTime.now(),
+                      onDaySelected: _onDaySelected,
+                      initialCalendarFormat: CalendarFormat.week,
+                      availableCalendarFormats: {CalendarFormat.week: 'Semana'},
+                      locale: 'es_ES',
+                      calendarController: _controller,
+                      calendarStyle: CalendarStyle(
+                        todayColor: Theme.of(context).primaryColor,
+                        todayStyle: TextStyle(
+                            //-----actual fecha------
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: Colors.white),
+                        //-----seleccion fecha----
+                        selectedColor: Color(0xFFFDD400),
+                        selectedStyle: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
                         ),
-                      );
-                    },
+                      ),
+                      headerStyle: HeaderStyle(
+                        centerHeaderTitle: true,
+                      ),
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                    ),
                   ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 100,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                          padding: EdgeInsets.only(left: 20, bottom: 20),
+                          child: daySelected == null
+                              ? Text(
+                                  '$fechaHoy',
+                                  style: TextStyle(fontSize: 20),
+                                )
+                              : Text('$fechaSelected',
+                                  style: TextStyle(fontSize: 20)))
+                    ],
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        height: 330,
+                        padding: EdgeInsets.only(right: 20, left: 20),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: 15,
+                            mainAxisSpacing: 15,
+                            childAspectRatio: 3,
+                          ),
+                          itemCount: daysHora.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return GestureDetector(
+                              onTap: () {
+                                if (daySelected == null) {
+                                  fechaFinal = today;
+                                } else {
+                                  fechaFinal = daySelected;
+                                }
+                                print('esta es la fecha');
+                                print(fechaFinal);
+                                print(daysHora[index]);
+                                print('----horas finales.....');
+                                print(_anoFinal);
+                                print(_mesFinal);
+                                print(_diaFinal);
+                                print(daysFecha[index]);
+                                DateTime oneDaysAgo =
+                                    today.subtract(new Duration(days: 1));
+                                print(oneDaysAgo);
+
+                                if (fechaFinal.isAfter(oneDaysAgo)) {
+                                  Navigator.pushNamed(context, 'ReservaService',
+                                      arguments: [
+                                        nombreServicio,
+                                        daysHora[index],
+                                        daysFecha[index],
+                                        duracionCita,
+                                        idservicio,
+                                        idveterinaria,
+                                      ]);
+                                } else {
+                                  return showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          title: Text(
+                                            'Error en la Fecha',
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          content: Text(
+                                              'No puede reservar en una \nfecha anterior al de hoy'),
+                                          actions: [
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('Okay'))
+                                          ],
+                                        );
+                                      });
+                                }
+                              },
+                              child: Container(
+                                child: Center(
+                                    child: Text(daysHora[index],
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold))),
+                                decoration: BoxDecoration(
+                                    color: Color(0XFFED278A),
+                                    borderRadius: BorderRadius.circular(20)),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 100,
+                  )
+                ],
+              ),
             )
           ],
         ),
@@ -256,12 +280,77 @@ class _CalendarPageState extends State<CalendarPage> {
     );
   }
 
-//cuando selecciona la fecha
+  //cuando selecciona la fecha
   void _onDaySelected(DateTime day, List events) {
     setState(() {
       daySelected = day;
       fechaSelected = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(day);
       print(fechaSelected);
     });
+  }
+
+  Widget titulo() {
+    return Container(
+      child: Stack(
+        children: [
+          _buildCard(
+            config: CustomConfig(
+              colors: [
+                Colors.white70,
+                Colors.white54,
+                Colors.white30,
+                Colors.white,
+              ],
+              durations: [32000, 21000, 18000, 5000],
+              heightPercentages: [0.31, 0.35, 0.40, 0.41],
+            ),
+            backgroundColor: Colors.deepPurpleAccent[400],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              //----WIDGET REGRESO A PERFIL VETERINARIA---
+              Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                runSpacing: 1.0,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 20,
+                      left: 18,
+                    ),
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              //----TITULO DE LA SECCION---
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 15.0,
+                  right: 100,
+                ),
+                child: Text(
+                  "Elíge una fecha y una hora",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
