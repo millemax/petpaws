@@ -60,40 +60,41 @@ class _ReservasPageState extends State<ReservasPage> {
     final String id = FirebaseAuth.instance.currentUser.uid;
 
     return StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('veterinarias')
-            .doc(id)
-            .collection('servicios')
-            .snapshots(),
-        builder: (_, snapshot) {
-          if (!snapshot.hasData) {
-            return Container(
+      stream: FirebaseFirestore.instance
+          .collection('veterinarias')
+          .doc(id)
+          .collection('servicios')
+          .snapshots(),
+      builder: (_, snapshot) {
+        if (!snapshot.hasData) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.93,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return Center(
+            child: Container(
               width: MediaQuery.of(context).size.width * 0.93,
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else {
-            return Center(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height * 0.85,
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                  ),
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    DocumentSnapshot data = snapshot.data.documents[index];
-                    return card(data);
-                  },
+              height: MediaQuery.of(context).size.height * 0.85,
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
                 ),
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  DocumentSnapshot data = snapshot.data.documents[index];
+                  return card(data);
+                },
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
+      },
+    );
   }
 
   Widget card(DocumentSnapshot data) {
