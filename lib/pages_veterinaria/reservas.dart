@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 class ReservasPage extends StatefulWidget {
   ReservasPage({Key key}) : super(key: key);
@@ -10,21 +12,46 @@ class ReservasPage extends StatefulWidget {
 }
 
 class _ReservasPageState extends State<ReservasPage> {
+  //---------wavess-------
+  _buildCard({
+    Config config,
+    Color backgroundColor = Colors.transparent,
+  }) {
+    return WaveWidget(
+      config: config,
+      backgroundColor: backgroundColor,
+      size: Size(
+        double.infinity,
+        150.0,
+      ),
+      waveAmplitude: 0,
+    );
+  }
+
+  //-----fin   waves------
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Reservas')
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Color(0xffffffff),
+        /* appBar: AppBar(title: Text('Reservas')), */
+        body: Stack(
+          children: [
+            titulo(),
+            Padding(
+              padding: EdgeInsets.only(top: 80.0),
+              child: cards(),
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, 'crearservico');
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Color(0xFF6600FF),
+        ),
       ),
-      body: cards(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, 'crearservico');
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFF6600FF),
-      ),
-       
     );
   }
 
@@ -58,18 +85,19 @@ class _ReservasPageState extends State<ReservasPage> {
                 ),
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index){
-                  DocumentSnapshot data= snapshot.data.documents[index];
+                  DocumentSnapshot data = snapshot.data.documents[index];
                   return card(data);
-
                 },
-                 ),
+              ),
             ),
-          );
-        }
 
-      }
-    
-    );
+          );
+            
+          }
+        }
+          
+        
+      );
   }
 
   Widget card(DocumentSnapshot data){
@@ -99,7 +127,48 @@ class _ReservasPageState extends State<ReservasPage> {
         Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
       },
     );
+  }
 
+  //----encabezado de la pagina ---
+  Widget titulo() {
+    return Container(
+      child: Stack(
+        children: [
+          _buildCard(
+            config: CustomConfig(
+              colors: [
+                Colors.white70,
+                Colors.white54,
+                Colors.white30,
+                Colors.white,
+              ],
+              durations: [32000, 21000, 18000, 5000],
+              heightPercentages: [0.31, 0.35, 0.40, 0.41],
+            ),
+            backgroundColor: Colors.deepPurpleAccent[400],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              //----TITULO DE LA SECCION---
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 15.0,
+                ),
+                child: Text(
+                  "Reservas",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 19.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
 

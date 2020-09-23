@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:wave/config.dart';
+import 'package:wave/wave.dart';
 
 class HomeVeterinariasPage extends StatefulWidget {
   @override
@@ -7,14 +9,35 @@ class HomeVeterinariasPage extends StatefulWidget {
 }
 
 class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
+  //---------wavess-------
+  _buildCard({
+    Config config,
+    Color backgroundColor = Colors.transparent,
+  }) {
+    return WaveWidget(
+      config: config,
+      backgroundColor: backgroundColor,
+      size: Size(
+        double.infinity,
+        150.0,
+      ),
+      waveAmplitude: 0,
+    );
+  }
+  //-----fin   waves------
+
+  //------------------------
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: Column(
+      body: Stack(
         children: [
           titulo(),
-          listas(),
+          Padding(
+            padding: const EdgeInsets.only(top: 80.0),
+            child: listas(),
+          ),
         ],
       ),
     ));
@@ -34,10 +57,10 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             );
           } else {
             return Container(
-              width: MediaQuery.of(context).size.width * 0.93,
+              width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.85,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: Colors.transparent,
               ),
               child: ListView.builder(
                 itemCount: snapshot.data.docs.length,
@@ -48,7 +71,12 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                         Navigator.pushNamed(context, 'perfilveterinarias',
                             arguments: data.id);
                       },
-                      child: cards(data));
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          cards(data),
+                        ],
+                      ));
                 },
               ),
             );
@@ -63,7 +91,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       height: MediaQuery.of(context).size.height * 0.25,
       width: MediaQuery.of(context).size.width * 0.93,
       decoration: BoxDecoration(
-          color: Colors.amber,
+          color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
               fit: BoxFit.cover, image: NetworkImage(data.data()['imagen']))),
@@ -167,26 +195,67 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
 
   Widget titulo() {
     return Container(
-      color: Color(0xFF6600FF),
-      padding: EdgeInsets.only(top: 10.0, bottom: 10.0, right: 15, left: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+      child: Stack(
         children: [
-          Text(
-            "VETERINARIAS",
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1),
+          _buildCard(
+            config: CustomConfig(
+              colors: [
+                Colors.white70,
+                Colors.white54,
+                Colors.white30,
+                Colors.white,
+              ],
+              durations: [32000, 21000, 18000, 5000],
+              heightPercentages: [0.31, 0.35, 0.40, 0.41],
+            ),
+            backgroundColor: Colors.deepPurpleAccent[400],
           ),
-          //----campo de busqueda-a
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-              child: Image.asset(
-                "assets/images/reserva.png",
-                scale: 17,
-              ))
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 15.0,
+                ),
+                child: Text(
+                  "VETERINARIAS",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 19.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1),
+                ),
+              ),
+
+              //----campo de busqueda-a
+              Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                runSpacing: 1.0,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 10,
+                      left: 18,
+                    ),
+                    child: GestureDetector(
+                      child: Image.asset(
+                        "assets/images/calen.png",
+                        scale: 17,
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, 'MisReservas');
+                      },
+                    ),
+                  ),
+                  Text(
+                    "Mis reservas",
+                    style: TextStyle(color: Colors.white, fontSize: 13),
+                  )
+                ],
+              )
+            ],
+          ),
         ],
       ),
     );
