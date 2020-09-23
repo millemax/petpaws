@@ -4,9 +4,10 @@ import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
-import 'package:petpaws/pages/waves.dart';
+
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
+
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
 //import 'package:petpaws/screens/login_screen.dart';
@@ -47,7 +48,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           // home: LoginPage(),
           routes: {
-            '/': (context) => HomeVeterinariasPage(),
+            '/': (context) => Inicio(),
             'perfilveterinarias': (context) => PerfilVeterinariaPage(),
             'HomeVeterinarias': (context) => HomeVeterinariasPage(),
             'crearservico': (context) =>
