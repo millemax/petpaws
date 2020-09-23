@@ -55,7 +55,7 @@ class _MyCalendarState extends State<MyCalendar> {
                 onDaySelected: (date, events){
                   print(date.toIso8601String());
                   print("EL ID SERVICE : "+serviceId);
-                  getData(serviceId);
+                  //getData(serviceId);
 
                 },
                 initialCalendarFormat: CalendarFormat.week,
@@ -63,20 +63,25 @@ class _MyCalendarState extends State<MyCalendar> {
                 
               
               ),
-            )
+            ),
+            
           ],
         ),
       ),
+
     );     
     
   }
 
   //funcion para recuperar todas las reservas 
- Widget getData(String serviceId){    
+
+  Widget getData(String serviceId){    
+
+   print('obteniendo a la bd');
 
     final String id = FirebaseAuth.instance.currentUser.uid;
     return  StreamBuilder(     
-      stream: FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: serviceId).snapshots(),
+      stream: FirebaseFirestore.instance.collection('reservas').snapshots(),
       builder: (_ , snapshot){
         if (!snapshot.hasData) {
           return Container(
@@ -118,7 +123,7 @@ class _MyCalendarState extends State<MyCalendar> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         leading: Icon(Icons.access_alarm),
-        title: Text(data.data()['nombredueno'])
+        title: Text(data.data()['nombredueno'], style: TextStyle(color: Colors.black))
 
 
 
@@ -128,7 +133,7 @@ class _MyCalendarState extends State<MyCalendar> {
   }
 
 
-
+ 
 
 }
 
