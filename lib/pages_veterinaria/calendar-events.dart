@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 
 
 class MyCalendar extends StatefulWidget {
@@ -14,6 +16,9 @@ class MyCalendar extends StatefulWidget {
 class _MyCalendarState extends State<MyCalendar> {
 
   CalendarController _controller;
+
+  //variable para obtener la fecha actual
+  String _fecha;
   @override
   void initState() {
     // TODO: implement initState
@@ -21,6 +26,24 @@ class _MyCalendarState extends State<MyCalendar> {
 
     //inicalizamos el calendario
     _controller = CalendarController();
+
+    var fecha= DateTime.now();
+
+     print(DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha));
+    
+      
+     setState(() {
+
+       _fecha=DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
+
+     });
+
+
+
+   
+    
+
+  
   }
 
 
@@ -53,9 +76,15 @@ class _MyCalendarState extends State<MyCalendar> {
 
                 ),
                 onDaySelected: (date, events){
-                  print(date.toIso8601String());
-                  print("EL ID SERVICE : "+serviceId);
-                  //getData(serviceId);
+                  var fechaselect= DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(date);               
+                  setState(() {
+                    _fecha= fechaselect;                    
+                     
+                     getData(serviceId, _fecha);
+                     
+
+                  });
+                 
 
                 },
                 initialCalendarFormat: CalendarFormat.week,
@@ -64,9 +93,14 @@ class _MyCalendarState extends State<MyCalendar> {
               
               ),
             ),
-            
+
+            Container(
+              child: getData(serviceId, _fecha),
+            ),
+
           ],
         ),
+        
       ),
 
     );     
@@ -75,13 +109,14 @@ class _MyCalendarState extends State<MyCalendar> {
 
   //funcion para recuperar todas las reservas 
 
-  Widget getData(String serviceId){    
+  Widget getData(String serviceId , date){    
+   
 
    print('obteniendo a la bd');
 
     final String id = FirebaseAuth.instance.currentUser.uid;
     return  StreamBuilder(     
-      stream: FirebaseFirestore.instance.collection('reservas').snapshots(),
+      stream: FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: serviceId).where('fechainicioreserva', isEqualTo: date).orderBy('fechareservaunix',descending:false).snapshots(),
       builder: (_ , snapshot){
         if (!snapshot.hasData) {
           return Container(
@@ -122,7 +157,7 @@ class _MyCalendarState extends State<MyCalendar> {
       elevation: 10,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
-        leading: Icon(Icons.access_alarm),
+        leading: Text(data.data()['horainicioreserva']),
         title: Text(data.data()['nombredueno'], style: TextStyle(color: Colors.black))
 
 
@@ -131,6 +166,8 @@ class _MyCalendarState extends State<MyCalendar> {
     );
 
   }
+
+  
 
 
  
