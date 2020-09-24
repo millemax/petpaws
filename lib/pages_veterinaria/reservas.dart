@@ -58,6 +58,7 @@ class _ReservasPageState extends State<ReservasPage> {
 //recuperamos los servicios de la base de datos de firebase
   Widget cards() {
     final String id = FirebaseAuth.instance.currentUser.uid;
+    print('el id de san marcos'+ id);
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
