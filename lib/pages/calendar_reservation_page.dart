@@ -114,8 +114,8 @@ class _CalendarPageState extends State<CalendarPage> {
       } while (DateTime(tmp.year, tmp.month, tmp.day, tmp.hour, tmp.minute) !=
           endDate);
     } else {}
-    print('*********************************');
-    print(daysFecha);
+    print('********************************');
+    print(":creo es la fecha: $daysFecha");
     print(daysHora);
     print(duracionCita);
     print(horarios);
@@ -133,8 +133,9 @@ class _CalendarPageState extends State<CalendarPage> {
                   Container(
                     margin: EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: Color(0XFFED278A), width: 2)),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: Color(0XFFED278A), width: 2),
+                    ),
                     child: TableCalendar(
                       initialSelectedDay: DateTime.now(),
                       onDaySelected: _onDaySelected,

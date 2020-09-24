@@ -55,9 +55,10 @@ class MyApp extends StatelessWidget {
                 CreateServices(), //este es la pagina en el perfil de veterninarias
             'calendarPage': (context) => CalendarPage(),
             'horariosatencion': (context) => HorarioAtencion(),
-            'ReservaService': (context) =>ReservaService(), //la pagina donde se llena el formulario para reservar cita
-            'calendarevents': (context) =>MyCalendar(),            
-            'PerfilUsuario': (context) => MisReservas(),           
+            'ReservaService': (context) =>
+                ReservaService(), //la pagina donde se llena el formulario para reservar cita
+            'calendarevents': (context) => MyCalendar(),
+            'PerfilUsuario': (context) => MisReservas(),
 
             'MisReservas': (context) =>
                 MisReservas(), // pagina donde vemos nuestro historial de reservas

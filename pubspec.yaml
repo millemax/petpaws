@@ -51,6 +51,8 @@ dependencies:
   call_number: ^0.0.1
   #--slimy-card
   slimy_card: ^1.0.4
+  #expansion card
+  expansion_card: ^0.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

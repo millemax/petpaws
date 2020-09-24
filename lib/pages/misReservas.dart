@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 //--waves---
 import 'package:wave/config.dart';
@@ -38,19 +40,66 @@ class _MisReservasState extends State<MisReservas> {
           children: [
             titulo(),
             Padding(
-              padding: EdgeInsets.only(top: 80.0),
-              child: ListView(
-                children: <Widget>[
-                  SlimyCard(
-                    topCardWidget: ContainerTop(),
-                    bottomCardWidget: ContainerBottom(),
-                  ),
-                ],
-              ),
+              padding: EdgeInsets.only(top: 90.0),
+              child: reservaCards(),
             )
           ],
         ),
       ),
+    );
+  }
+
+  //recuperamos los servicios de la base de datos de firebase
+  Widget reservaCards() {
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection('reservas')
+          .doc(id)
+          /*
+            .collection('s') */
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const Text("Loanding");
+        } else {
+          return ListView.builder(
+            itemCount: snapshot.data.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot data = snapshot.data.documents[index];
+              return slimyCard(data);
+            },
+          );
+        }
+      },
+    );
+  }
+
+  //-------SlimyCard
+  Widget slimyCard(DocumentSnapshot data) {
+    return ListView(
+      children: <Widget>[
+        SizedBox(height: 10),
+        SlimyCard(
+          topCardHeight: 195,
+          bottomCardHeight: 150,
+          width: 380,
+          color: Color(0xffed278a),
+          /* color: Theme.of(context).primaryColor, */
+          topCardWidget: ContainerTop(),
+          bottomCardWidget: ContainerBottom(),
+        ),
+        SizedBox(height: 5),
+        SlimyCard(
+          topCardHeight: 195,
+          bottomCardHeight: 150,
+          width: 380,
+          color: Color(0xffed278a),
+          /* color: Theme.of(context).primaryColor, */
+          topCardWidget: ContainerTop(),
+          bottomCardWidget: ContainerBottom(),
+        ),
+      ],
     );
   }
 
@@ -127,8 +176,289 @@ class ContainerTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("hola windito"),
-    );
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Color(0xffffffff), width: 0.8),
+        ),
+        child: Stack(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 105,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  //-----------------container circular --
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Color(0xfffdd400),
+                      //---widget para convertir en circulo
+                      shape: BoxShape.circle,
+                    ),
+                    height: 62,
+                    width: 80,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "S/.",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                            color: Color(0xffed278a),
+                          ),
+                        ),
+                        Text(
+                          "99.00",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 22.0,
+                            color: Color(0xffed278a),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 3, left: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Fecha de reserva:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 15,
+                      ),
+                      Text(
+                        "Miercoles,12 de setiembre 2020",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //------------servicio----
+                SizedBox(
+                  height: 5,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Servicio:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 105,
+                      ),
+                      Text(
+                        "Cirugía",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                      SizedBox(
+                        width: 20,
+                      ),
+                    ],
+                  ),
+                ),
+                //---------duracion de servicio----
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Duración de servicio:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 35,
+                      ),
+                      Text(
+                        "30 minutos",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //-----------hora de servicio -----
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Hora de inicio del servicio:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "08:00 AM",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //------------celular------
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Celular del dueño:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 53,
+                      ),
+                      Text(
+                        "925927885",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //-------------nombre del dueño
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Nombre del dueño:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 48,
+                      ),
+                      Text(
+                        "Jesus mondalgo torres",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //-------------Nombre de la mascota
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Nombre de mascota:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 38,
+                      ),
+                      Text(
+                        "Firulais",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //-------------especie de la mascota
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Especie de mascota:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 38,
+                      ),
+                      Text(
+                        "Felino",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+                //-------------correo
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Número de mascotas:",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 15),
+                      ),
+                      SizedBox(
+                        width: 30,
+                      ),
+                      Text(
+                        "1",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 15,
+                            color: Colors.white,
+                            letterSpacing: 1),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
   }
 }
 
@@ -138,7 +468,29 @@ class ContainerBottom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("como estas"),
+      height: MediaQuery.of(context).size.height,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: Color(0xffffffff), width: 0.8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          RaisedButton(
+            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            color: Color(0xfffdd400),
+            onPressed: () {},
+            child: Row(
+              children: [
+                Text('Cancelar Reserva',
+                    style: TextStyle(color: Color(0xffed278a), fontSize: 18)),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
