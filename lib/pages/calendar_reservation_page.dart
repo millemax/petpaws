@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -9,6 +10,8 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  //recuperar la lista de reservas
+  List reservasRecuperado = [];
   //-----controlodaor para calendartable--
   CalendarController _controller;
   //.....fecha cuando selecciona en duro y formateado
@@ -31,6 +34,7 @@ class _CalendarPageState extends State<CalendarPage> {
     Map horarios = prodData[2];
     final idservicio = prodData[3];
     final idveterinaria = prodData[4];
+    int cupo = prodData[5];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -174,58 +178,60 @@ class _CalendarPageState extends State<CalendarPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          if (daySelected == null) {
-                            fechaFinal = today;
-                          } else {
-                            fechaFinal = daySelected;
-                          }
-                          print('esta es la fecha');
-                          print(fechaFinal);
-                          print(daysHora[index]);
-                          print('----horas finales.....');
-                          print(_anoFinal);
-                          print(_mesFinal);
-                          print(_diaFinal);
-                          print(daysFecha[index]);
-                          DateTime oneDaysAgo =
-                              today.subtract(new Duration(days: 1));
-                          print(oneDaysAgo);
+                          setState(() {
+                            getData(
+                                daysFecha[index], idveterinaria, idservicio);
 
-                          if (fechaFinal.isAfter(oneDaysAgo)) {
-                            Navigator.pushNamed(context, 'ReservaService',
-                                arguments: [
-                                  nombreServicio,
-                                  daysHora[index],
-                                  daysFecha[index],
-                                  duracionCita,
-                                  idservicio,
-                                  idveterinaria,
-                                ]);
-                          } else {
-                            return showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    title: Text(
-                                      'Error en la Fecha',
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    content: Text(
-                                        'No puede reservar en una \nfecha anterior al de hoy'),
-                                    actions: [
-                                      FlatButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: Text('Okay'))
-                                    ],
-                                  );
-                                });
-                          }
+                            if (daySelected == null) {
+                              fechaFinal = today;
+                            } else {
+                              fechaFinal = daySelected;
+                            }
+
+                            DateTime oneDaysAgo =
+                                today.subtract(new Duration(days: 1));
+
+                            print('numero de cupo $cupo');
+                            var numReserva = reservasRecuperado.length;
+                            print('numreo de reserva $numReserva');
+
+                            if (fechaFinal.isAfter(oneDaysAgo) &&
+                                numReserva <= 2) {
+                              Navigator.pushNamed(context, 'ReservaService',
+                                  arguments: [
+                                    nombreServicio,
+                                    daysHora[index],
+                                    daysFecha[index],
+                                    duracionCita,
+                                    idservicio,
+                                    idveterinaria,
+                                  ]);
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      title: Text(
+                                        'Cupos llenos',
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      content: Text(
+                                          'lo sentimos a esta hora los cupos stan saturados'),
+                                      actions: [
+                                        FlatButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Text('Okay'))
+                                      ],
+                                    );
+                                  });
+                            }
+                          });
                         },
                         child: Container(
                           child: Center(
@@ -258,6 +264,21 @@ class _CalendarPageState extends State<CalendarPage> {
       daySelected = day;
       fechaSelected = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(day);
       print(fechaSelected);
+    });
+  }
+//consulta para saber el cupo
+
+  getData(DateTime fecha, idVeterinaria, idServicio) async {
+    await FirebaseFirestore.instance
+        .collection('reservas')
+        .where("fechareserva", isEqualTo: fecha)
+        .where("veterinaria", isEqualTo: idVeterinaria)
+        .where("servicio", isEqualTo: idServicio)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        reservasRecuperado.add(element.data());
+      });
     });
   }
 }
