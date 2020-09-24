@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           // home: LoginPage(),
           routes: {
-            '/': (context) => HomeVeterinariasPage(),
+            '/': (context) => Inicio(),
             'perfilveterinarias': (context) => PerfilVeterinariaPage(),
             'HomeVeterinarias': (context) => HomeVeterinariasPage(),
             'crearservico': (context) =>

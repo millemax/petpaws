@@ -61,8 +61,9 @@ class _ReservasPageState extends State<ReservasPage> {
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('reservas')
-            .where('usuario', isEqualTo: id)
+            .collection('veterinarias')
+            .doc(id)
+            .collection('servicios')
             .snapshots(),
         builder: (_, snapshot) {
           if (!snapshot.hasData) {
