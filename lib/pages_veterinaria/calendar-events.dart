@@ -1,9 +1,11 @@
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
+import 'package:call_number/call_number.dart';
 
 
 class MyCalendar extends StatefulWidget {
@@ -15,19 +17,27 @@ class MyCalendar extends StatefulWidget {
 
 class _MyCalendarState extends State<MyCalendar> {
 
+  final GlobalKey<ExpansionTileCardState> cardA = new GlobalKey();
+  final GlobalKey<ExpansionTileCardState> cardB = new GlobalKey();
+
   CalendarController _controller;
 
-  //variable para obtener la fecha actual
+  //variable para obtener la fecha hora actual
   String _fecha;
+  int _timeunix;
+
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
 
     //inicalizamos el calendario
     _controller = CalendarController();
 
+    //variables de fecha y hora actual
     var fecha= DateTime.now();
+    var horaactual=fecha.toUtc().millisecondsSinceEpoch;
+
 
      print(DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha));
     
@@ -35,6 +45,7 @@ class _MyCalendarState extends State<MyCalendar> {
      setState(() {
 
        _fecha=DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
+       _timeunix= horaactual;
 
      });
 
@@ -76,11 +87,14 @@ class _MyCalendarState extends State<MyCalendar> {
 
                 ),
                 onDaySelected: (date, events){
-                  var fechaselect= DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(date);               
+                  var fechaselect= DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(date);    
+                  
+
                   setState(() {
                     _fecha= fechaselect;                    
                      
-                     getData(serviceId, _fecha);
+                     getData(serviceId, _fecha,_timeunix);
+                  
                      
 
                   });
@@ -95,7 +109,7 @@ class _MyCalendarState extends State<MyCalendar> {
             ),
 
             Container(
-              child: getData(serviceId, _fecha),
+              child: getData(serviceId, _fecha,_timeunix),
             ),
 
           ],
@@ -109,7 +123,7 @@ class _MyCalendarState extends State<MyCalendar> {
 
   //funcion para recuperar todas las reservas 
 
-  Widget getData(String serviceId , date){    
+  Widget getData(String serviceId , date, int timeunix){    
    
 
    print('obteniendo a la bd');
@@ -135,7 +149,9 @@ class _MyCalendarState extends State<MyCalendar> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder:(BuildContext context, int index){
                   DocumentSnapshot data= snapshot.data.documents[index];
-                  return card(data);
+                  return cardprueba(data);
+                  //tilecard(data);
+                  
                 }, 
 
                 ),
@@ -167,6 +183,139 @@ class _MyCalendarState extends State<MyCalendar> {
 
   }
 
+    Widget cardprueba(data){
+    return Card(
+      elevation: 10,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: ExpansionTile(
+        title: ListTile(
+          leading: Text(data.data()['horainicioreserva'], style: TextStyle(fontWeight: FontWeight.bold,color: Color(0xFFED278A)) ),
+          title: Text(data.data()['nombredueno'], style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('Mascota : ${data.data()['nombremascota']}'),
+          ),
+        children:[
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal:40, vertical: 15),
+              child: Column(
+                children: [
+
+                  Row(
+                    children: [
+                      Text.rich(
+                            TextSpan(
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              text: 'Fecha :  ', // default text style
+                              children: <TextSpan>[                                
+                                TextSpan(text: '${data.data()['fechainicioreserva']}', style: TextStyle(fontWeight: FontWeight.normal)),
+                              ],
+                            ),
+                          )
+                    ],
+                  ),
+
+                  Row(
+                    children: [
+                      Text.rich(
+                            TextSpan(
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              text: 'Mascota :  ', // default text style
+                              children: <TextSpan>[                                
+                                TextSpan(text: '${data.data()['nombremascota']}', style: TextStyle(fontWeight: FontWeight.normal)),
+                              ],
+                            ),
+                          )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text.rich(
+                            TextSpan(
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              text: 'Especie :  ', // default text style
+                              children: <TextSpan>[                                
+                                TextSpan(text: '${data.data()['especie']}', style: TextStyle(fontWeight: FontWeight.normal)),
+                              ],
+                            ),
+                          )
+                    ],
+                  ),
+
+                  Row(
+                    children: [
+                      Text.rich(
+                            TextSpan(
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                              text: 'Telefono :  ', // default text style
+                              children: <TextSpan>[                                
+                                TextSpan(text: '${data.data()['celular']}', style: TextStyle(fontWeight: FontWeight.normal)),
+                              ],
+                            ),
+                          )
+                    ],
+                  ),
+
+                  SizedBox(height: 10),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      RaisedButton(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        color: Color(0xFFED278A),                      
+                        onPressed: (){
+                          llamadas(data.data()['celular']);
+                        }, 
+                        child: Row(
+                          children: [
+                            Icon(Icons.call, color: Colors.white  ),
+                            SizedBox(width:5),
+                            Text('Llamar', style: TextStyle(color: Colors.white) ),
+
+                          ],
+                        ),
+
+                      
+                      ),
+                    ],
+                  ),
+
+                ],
+
+
+              ),
+
+            ),
+
+            
+
+
+        ],
+        
+      )
+    );
+
+  }
+
+
+  //funcion par hacer las llamadas
+  llamadas(String numero) async {
+
+    await new CallNumber().callNumber('+51'+numero);
+
+    
+
+
+
+  }
+
+
+
+   
+      
+
+
+  
   
 
 

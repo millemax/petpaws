@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
+  call_number:
+    dependency: "direct main"
+    description:
+      name: call_number
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.1"
   characters:
     dependency: transitive
     description:

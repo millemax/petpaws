@@ -48,6 +48,7 @@ dependencies:
   table_calendar: ^2.2.3
   url_launcher: ^5.6.0
   expansion_tile_card: ^1.1.0
+  call_number: ^0.0.1
   #--slimy-card
   slimy_card: ^1.0.4
 dev_dependencies:
