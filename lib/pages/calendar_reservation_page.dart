@@ -178,60 +178,58 @@ class _CalendarPageState extends State<CalendarPage> {
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         onTap: () {
-                          setState(() {
-                            getData(
-                                daysFecha[index], idveterinaria, idservicio);
+                          setState(() {});
+                          getData(daysFecha[index], idveterinaria, idservicio);
 
-                            if (daySelected == null) {
-                              fechaFinal = today;
-                            } else {
-                              fechaFinal = daySelected;
-                            }
+                          if (daySelected == null) {
+                            fechaFinal = today;
+                          } else {
+                            fechaFinal = daySelected;
+                          }
 
-                            DateTime oneDaysAgo =
-                                today.subtract(new Duration(days: 1));
+                          DateTime oneDaysAgo =
+                              today.subtract(new Duration(days: 1));
 
-                            print('numero de cupo $cupo');
-                            var numReserva = reservasRecuperado.length;
-                            print('numreo de reserva $numReserva');
+                          print('numero de cupo $cupo');
+                          var numReserva = reservasRecuperado.length;
+                          print('numreo de reserva $numReserva');
 
-                            if (fechaFinal.isAfter(oneDaysAgo) &&
-                                numReserva <= 2) {
-                              Navigator.pushNamed(context, 'ReservaService',
-                                  arguments: [
-                                    nombreServicio,
-                                    daysHora[index],
-                                    daysFecha[index],
-                                    duracionCita,
-                                    idservicio,
-                                    idveterinaria,
-                                  ]);
-                            } else {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      title: Text(
-                                        'Cupos llenos',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: Text(
-                                          'lo sentimos a esta hora los cupos stan saturados'),
-                                      actions: [
-                                        FlatButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Text('Okay'))
-                                      ],
-                                    );
-                                  });
-                            }
-                          });
+                          if (fechaFinal.isAfter(oneDaysAgo) &&
+                              numReserva <= 2) {
+                            Navigator.pushNamed(context, 'ReservaService',
+                                arguments: [
+                                  nombreServicio,
+                                  daysHora[index],
+                                  daysFecha[index],
+                                  duracionCita,
+                                  idservicio,
+                                  idveterinaria,
+                                ]);
+                          } else {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    title: Text(
+                                      'Cupos llenos',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    content: Text(
+                                        'lo sentimos a esta hora los cupos stan saturados'),
+                                    actions: [
+                                      FlatButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text('Okay'))
+                                    ],
+                                  );
+                                });
+                          }
                         },
                         child: Container(
                           child: Center(
