@@ -62,7 +62,7 @@ class _ReservasPageState extends State<ReservasPage> {
     return StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('reservas')
-            .where("usuario", "==", id)
+            .where('usuario', isEqualTo: id)
             .snapshots(),
         builder: (_, snapshot) {
           if (!snapshot.hasData) {
