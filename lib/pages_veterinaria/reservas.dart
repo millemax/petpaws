@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petpaws/pages_veterinaria/reservas.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -56,65 +55,70 @@ class _ReservasPageState extends State<ReservasPage> {
     );
   }
 
+//recuperamos los servicios de la base de datos de firebase
   Widget cards() {
     final String id = FirebaseAuth.instance.currentUser.uid;
 
     return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('veterinarias')
-          .doc(id)
-          .collection('servicios')
-          .snapshots(),
-      builder: (_, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(
-            width: MediaQuery.of(context).size.width * 0.93,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        } else {
-          return Center(
-            child: Container(
+        stream: FirebaseFirestore.instance
+            .collection('reservas')
+            .where("usuario", "==", id)
+            .snapshots(),
+        builder: (_, snapshot) {
+          if (!snapshot.hasData) {
+            return Container(
               width: MediaQuery.of(context).size.width * 0.93,
-              height: MediaQuery.of(context).size.height * 0.85,
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                ),
-                itemCount: snapshot.data.docs.length,
-                itemBuilder: (BuildContext context, int index) {
-                  DocumentSnapshot data = snapshot.data.documents[index];
-                  return card(data);
-                },
+              child: Center(
+                child: CircularProgressIndicator(),
               ),
-            ),
-          );
-        }
-      },
-    );
+            );
+          } else {
+            return Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.93,
+                height: MediaQuery.of(context).size.height * 0.85,
+                child: GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 15,
+                    mainAxisSpacing: 15,
+                  ),
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    DocumentSnapshot data = snapshot.data.documents[index];
+                    return card(data);
+                  },
+                ),
+              ),
+            );
+          }
+        });
   }
 
   Widget card(DocumentSnapshot data) {
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      elevation: 5,
-      child: Column(
-        children: [
-          SizedBox(height: 10),
-          Text(data.data()['nombre'],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold)),
-          SizedBox(height: 20),
-          Image.network(data.data()['icono'], height: 80),
-        ],
+    return GestureDetector(
+      child: Card(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        elevation: 5,
+        child: Column(
+          children: [
+            SizedBox(height: 10),
+            Text(data.data()['nombre'],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Image.network(data.data()['icono'],
+                height: 80, color: Colors.white),
+          ],
+        ),
+        color: Color(0xFFFDD400),
       ),
-      color: Color(0xFFFDD400),
+      onTap: () {
+        Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
+      },
     );
   }
 

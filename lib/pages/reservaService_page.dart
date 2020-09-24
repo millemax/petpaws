@@ -44,7 +44,11 @@ class _ReservaServiceState extends State<ReservaService> {
   }
 
   //----------variables importantes para reserva
-  var fecha;
+  //--fecha de reserva/hora inicio de reserva
+  var fechaReserva;
+  var horaInicio;
+
+  DateTime fecha;
 
   var idservicio;
   var idveterinaria;
@@ -143,11 +147,11 @@ class _ReservaServiceState extends State<ReservaService> {
     //--funcion recibir datos enviados de perfilveterinarai veterinaria
     final List prodData = ModalRoute.of(context).settings.arguments;
     final nombreServicio = prodData[0];
-    final horaInicio = prodData[1];
+    horaInicio = prodData[1];
 
     fecha = prodData[2];
-    var fechaReserva =
-        DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
+    //--convetir fecha datetime a formato general d/m/a
+    fechaReserva = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
 
     final durationCita = prodData[3];
     idservicio = prodData[4];
@@ -159,6 +163,8 @@ class _ReservaServiceState extends State<ReservaService> {
     print("correo:$correo");
     print("correo:$celular");
     print("correo:$nombres");
+    print("la fecha:$fecha");
+    print("fechareserva:$fechaReserva");
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
@@ -177,41 +183,6 @@ class _ReservaServiceState extends State<ReservaService> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      /* //------------------container de cabecera---
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20.0),
-                        topRight: Radius.circular(20.0),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 20.0),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(right: 130),
-                            child: GestureDetector(
-                              child: Icon(
-                                Icons.arrow_back,
-                                color: Color(0xffFFFFFF),
-                              ),
-                              onTap: () => pushRoute(context),
-                            ),
-                          ),
-                          Text(
-                            "Solicitar cita",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Color(0xffFFFFFF)),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ), */
                       //---------Nombre del servicio
                       Padding(
                         padding: EdgeInsets.only(top: 20, left: 15),
@@ -506,7 +477,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                 solicitarcita();
                               }
                             },
-                            child: Text('Solicitar',
+                            child: Text('Reservar',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18)),
                           ),
@@ -527,13 +498,18 @@ class _ReservaServiceState extends State<ReservaService> {
   }
 
   void solicitarcita() {
+    //--convitiendo a fecha datetime a formato unix
+    var fechaunix = fecha.toUtc().millisecondsSinceEpoch;
+
     if (_formKey.currentState.validate()) {
       final String id = FirebaseAuth.instance.currentUser.uid;
       FirebaseFirestore.instance.collection('reservas').add({
         'usuario': id,
         'veterinaria': idveterinaria,
         'servicio': idservicio,
-        'fechareserva': fecha,
+        'fechareservaunix': fechaunix,
+        'fechainicioreserva': fechaReserva,
+        'horainicioreserva': horaInicio,
         'celular': celularCtrl.text,
         'correo': emailCtrl.text,
         'nombredueno': nameduenoCtrl.text,

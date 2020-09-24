@@ -91,6 +91,14 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       height: MediaQuery.of(context).size.height * 0.25,
       width: MediaQuery.of(context).size.width * 0.93,
       decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black38.withOpacity(0.5),
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: Offset(0, 3),
+            )
+          ],
           color: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(

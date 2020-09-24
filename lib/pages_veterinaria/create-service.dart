@@ -352,22 +352,21 @@ class _CreateServicesState extends State<CreateServices> {
     //guardar en la bd(nombre, precio, descripcion, duracion de cita, cupo, urlicono)
     final int duracion = _value + _value1;
     final String id = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance
-        .collection('veterinarias')
-        .doc(id)
-        .collection('servicios')
-        .doc(nameCtrl.text)
-        .set({
+    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').add({
       'nombre': nameCtrl.text,
       'icono': url,
       'descripcion': descripCtrl.text,
       'duracioncita': duracion,
-      'cupo': _aforo,
-      'precio': int.parse(precioCtrl.text),
-    }).then((value) {
-      Navigator.pushNamed(context, 'horariosatencion',
-          arguments: nameCtrl.text);
-    });
+      'cupo':_aforo,
+      'precio': int.parse(precioCtrl.text) ,
+    }).then((value){
+      print('el id del nuevo servicio'+ value.id);
+      Navigator.pushNamed(context,'horariosatencion',arguments: value.id);
+
+    }); 
+
+
+
   }
 
   //----encabezado de la pagina ---

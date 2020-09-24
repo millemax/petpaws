@@ -607,55 +607,59 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                             horarios['martes']['final'] = _value4;
                           });
                         },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                       ),
+                   ),
+                 ),
+                 
 
-              Divider(color: Colors.black38),
+               ],
+            ),
+            
+            Divider(color:Colors.black38),
 
-              Row(
-                children: [
-                  Checkbox(
-                    value: _miercoles,
-                    onChanged: (bool resp) {
-                      setState(() {
-                        _miercoles = resp;
-                        if (_miercoles == true) {
-                          horarios['miercoles'] = {
-                            'inicio': _value5,
-                            'final': _value6
-                          };
-                        } else {
-                          if (_miercoles == false) {
-                            horarios.remove('miercoles');
-                          }
-                        }
-                      });
-                    },
-                    activeColor: Color(0xFFFDD400),
-                  ),
-                  Text('Miercoles', style: TextStyle(fontSize: 20)),
-                  SizedBox(width: 67),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: DropdownButton(
-                        iconSize: 40,
-                        value: _value5,
-                        items: [
+
+            Row(
+               children: [
+                 Checkbox(
+                   value: _miercoles, 
+                   onChanged: (bool resp){
+                     setState(() {
+                       _miercoles = resp;
+                       if (_miercoles==true) {
+                         horarios['miércoles']={'inicio':_value5,'final':_value6};                         
+                       }else{
+                         if(_miercoles==false){
+                            
+                            horarios.remove('miércoles');
+
+                         }
+                       }
+                     });
+
+                   },
+                  activeColor: Color(0xFFFDD400),
+                 ),
+                 Text('Miercoles',style: TextStyle(fontSize:20)),
+                 SizedBox(width: 67),
+                 Container(                  
+
+                   decoration: BoxDecoration(
+                     border: Border.all(color: Colors.black),
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                   child: Padding(
+                     padding: const EdgeInsets.only(left: 10),
+                     child: DropdownButton(                     
+                       iconSize: 40,                   
+                       value: _value5,
+                       items: [
                           DropdownMenuItem(
-                            child: Text('00:00'),
-                            value: 0,
+                            child: Text('00:00'), 
+                            value:0,                    
                           ),
                           DropdownMenuItem(
-                            child: Text('01:00'),
-                            value: 1,
+                            child: Text('01:00'),  
+                            value:1,                   
                           ),
                           DropdownMenuItem(
                             child: Text('02:00'),
@@ -748,8 +752,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _value5 = value;
-                            horarios['miercoles']['inicio'] = _value5;
+                            _value5=value;
+                            horarios['miércoles']['inicio']=_value5;
                           });
                         },
                       ),
@@ -866,8 +870,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _value6 = value;
-                            horarios['miercoles']['final'] = _value6;
+                            _value6=value;
+                            horarios['miércoles']['final']=_value6;
                           });
                         },
                       ),
@@ -1395,54 +1399,56 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                             horarios['viernes']['final'] = _value10;
                           });
                         },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Divider(color: Colors.black38),
+                       ),
+                   ),
+                 ),
 
-              Row(
-                children: [
-                  Checkbox(
-                    value: _sabado,
-                    onChanged: (bool resp) {
-                      setState(() {
-                        _sabado = resp;
-                        if (_sabado == true) {
-                          horarios['sabado'] = {
-                            'inicio': _value11,
-                            'final': _value12
-                          };
-                        } else {
-                          if (_sabado == false) {
-                            horarios.remove('sabado');
-                          }
-                        }
-                      });
-                    },
-                    activeColor: Color(0xFFFDD400),
-                  ),
-                  Text('Sabado', style: TextStyle(fontSize: 20)),
-                  SizedBox(width: 90),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.black),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: DropdownButton(
-                        iconSize: 40,
-                        value: _value11,
-                        items: [
+               ],
+            ),
+            Divider(color:Colors.black38),
+
+            Row(
+               children: [
+                 Checkbox(
+                   value: _sabado, 
+                   onChanged: (bool resp){
+                     setState(() {
+                       _sabado = resp;
+                       if (_sabado==true) {
+                         horarios['sábado']={'inicio':_value11,'final':_value12};                         
+                       }else{
+                         if(_sabado==false){
+                            
+                            horarios.remove('sábado');
+
+                         }
+                       }
+                     });
+
+                   },
+                  activeColor: Color(0xFFFDD400),
+                 ),
+                 Text('Sabado',style: TextStyle(fontSize:20)),
+                 SizedBox(width: 90),
+                 Container(                  
+
+                   decoration: BoxDecoration(
+                     border: Border.all(color: Colors.black),
+                     borderRadius: BorderRadius.circular(10),
+                   ),
+                   child: Padding(
+                     padding: const EdgeInsets.only(left: 10),
+                     child: DropdownButton(                     
+                       iconSize: 40,                   
+                       value: _value11,
+                       items: [
                           DropdownMenuItem(
-                            child: Text('00:00'),
-                            value: 0,
+                            child: Text('00:00'), 
+                            value:0,                    
                           ),
                           DropdownMenuItem(
-                            child: Text('01:00'),
-                            value: 1,
+                            child: Text('01:00'),  
+                            value:1,                   
                           ),
                           DropdownMenuItem(
                             child: Text('02:00'),
@@ -1535,8 +1541,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _value11 = value;
-                            horarios['sabado']['inicio'] = _value11;
+                            _value11=value;
+                            horarios['sábado']['inicio']=_value11;
                           });
                         },
                       ),
@@ -1653,8 +1659,8 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                         ],
                         onChanged: (value) {
                           setState(() {
-                            _value12 = value;
-                            horarios['sabado']['final'] = _value12;
+                            _value12=value;
+                            horarios['sábado']['final']=_value12;
                           });
                         },
                       ),
