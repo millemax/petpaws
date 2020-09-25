@@ -7,6 +7,7 @@ class PerfilVeterinariaPage extends StatefulWidget {
 }
 
 class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
+  var veterinaria;
   @override
   Widget build(BuildContext context) {
     final prodData = ModalRoute.of(context).settings.arguments;
@@ -37,16 +38,6 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
         ),
       ),
     );
-  }
-
-  getData() async {
-    await FirebaseFirestore.instance
-        .collection('veterinarias')
-        .doc('Z9Pk1RL7ZyPcuHWZDcbW')
-        .get()
-        .then((value) {
-      print(value.data()['nombre']);
-    });
   }
 
   Widget cuerpoServicios(prodData) {
@@ -94,7 +85,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
           } else {
             return Container(
                 width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height * 0.73,
+                height: MediaQuery.of(context).size.height * 0.785,
                 decoration: BoxDecoration(
                   color: Colors.white,
                 ),
@@ -122,6 +113,10 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             .snapshots(),
         builder: (_, snapshot) {
           DocumentSnapshot data = snapshot.data;
+          veterinaria = data.data()['nombre'];
+          print('************************************');
+          print(veterinaria);
+
           if (!snapshot.hasData) {
             return Container(
               width: MediaQuery.of(context).size.width * 0.93,
@@ -133,7 +128,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             return ListView(
               children: [
                 Padding(
-                  padding: EdgeInsets.only(top: 200),
+                  padding: EdgeInsets.only(top: 170),
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     decoration: BoxDecoration(
@@ -147,11 +142,15 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                       children: [
                         //-----------------titulo de veterinaria ----
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 7),
+                          padding: const EdgeInsets.only(
+                              right: 10, left: 10, bottom: 7),
                           child: Column(
                             children: [
-                              SizedBox(height: 10),
+                              Icon(
+                                Icons.arrow_drop_up,
+                                color: Theme.of(context).primaryColor,
+                                size: 35,
+                              ),
                               Text(
                                 data.data()['nombre'],
                                 style: TextStyle(
@@ -204,50 +203,108 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
   }
 
   Widget card(DocumentSnapshot data, prodData) {
+    var precioservicio = data.data()['precio'].toString();
+    print("*+++++++++++++++++++");
+    print("$precioservicio");
+
     return GestureDetector(
-        onTap: () {
-          Navigator.pushNamed(context, 'calendarPage', arguments: [
-            data.data()['nombre'],
-            data.data()['duracioncita'],
-            data.data()['horarios'],
-            data.id,
-            prodData,
-            data.data()['cupo'],
-          ]);
-        },
-        child: Card(
-            color: Color(0XFFFDD400),
-            elevation: 4,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  height: 5,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.4,
-                  child: Text(
-                    data.data()['nombre'],
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+      onTap: () {
+        print("esta es la veterinaria: $veterinaria");
+        Navigator.pushNamed(context, 'calendarPage', arguments: [
+          data.data()['nombre'],
+          data.data()['duracioncita'],
+          data.data()['horarios'],
+          data.id,
+          prodData,
+          data.data()['precio'],
+          veterinaria,
+        ]);
+      },
+      child: Card(
+          color: Color(0XFFFDD400),
+          elevation: 4,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 6.5, bottom: 10),
+                        child: Container(
+                          height: 40,
+                          width: 48,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            /* color: Theme.of(context).primaryColor, */
+                            border: Border.all(
+                                color: Color(0xffed278a), width: 0.8),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "S/.",
+                                style: TextStyle(
+                                    color: Color(0xffed278a),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10),
+                              ),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 1),
+                                child: Text(
+                                  '$precioservicio.00',
+                                  style: TextStyle(
+                                      color: Color(0xffed278a),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                Image.network(
-                  data.data()['icono'],
-                  width: 80,
-                  height: 80,
-                  color: Colors.white,
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-              ],
-            )));
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Text(
+                      data.data()['nombre'],
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Image.network(
+                    data.data()['icono'],
+                    width: 80,
+                    height: 80,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }
