@@ -40,16 +40,6 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     );
   }
 
-  getData() async {
-    await FirebaseFirestore.instance
-        .collection('veterinarias')
-        .doc('Z9Pk1RL7ZyPcuHWZDcbW')
-        .get()
-        .then((value) {
-      print(value.data()['nombre']);
-    });
-  }
-
   Widget cuerpoServicios(prodData) {
     //para recibir la iagen de portada de firebase
     var portada = StreamBuilder(
