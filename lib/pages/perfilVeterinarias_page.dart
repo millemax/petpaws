@@ -216,6 +216,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
           data.data()['horarios'],
           data.id,
           prodData,
+          data.data()['cupo'],
           data.data()['precio'],
           veterinaria,
         ]);

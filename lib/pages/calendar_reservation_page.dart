@@ -63,6 +63,7 @@ class _CalendarPageState extends State<CalendarPage> {
     final idveterinaria = prodData[4];
     int cupo = prodData[5];
     var precio = prodData[6];
+    var veterinaria = prodData[7];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -248,6 +249,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                           idservicio,
                                           idveterinaria,
                                           precio,
+                                          veterinaria,
                                         ]);
                                   } else {
                                     return showDialog(
@@ -502,7 +504,4 @@ class _CalendarPageState extends State<CalendarPage> {
       ),
     );
   }
-
-
-  
 }

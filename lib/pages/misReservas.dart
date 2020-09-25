@@ -219,7 +219,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 89,
                       ),
                       Text(
-                        recupera(data.data()['veterinaria']),
+                        data.data()['nombreveterinaria'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -478,17 +478,6 @@ class _MisReservasState extends State<MisReservas> {
         ],
       ),
     );
-  }
-
-  recupera(data) async {
-    await FirebaseFirestore.instance
-        .collection('veterinarias')
-        .doc(data)
-        .get()
-        .then((value) {
-      print('veterinarias');
-      print(value.data()['nombre']);
-    });
   }
 }
 
