@@ -211,7 +211,8 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             data.data()['duracioncita'],
             data.data()['horarios'],
             data.id,
-            prodData
+            prodData,
+            data.data()['cupo'],
           ]);
         },
         child: Card(
