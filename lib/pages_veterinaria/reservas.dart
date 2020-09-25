@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:badges/badges.dart';
 
 class ReservasPage extends StatefulWidget {
   ReservasPage({Key key}) : super(key: key);
@@ -102,78 +103,82 @@ class _ReservasPageState extends State<ReservasPage> {
   Widget card(DocumentSnapshot data) { 
 
     return GestureDetector(
-      child: Card(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        elevation: 5,
-        child: Column(
+      child: Badge(
+          badgeContent: Text('2'),
+          badgeColor: Colors.red,
+          child: Card(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          elevation: 5,
+          child: Column(
 
-          children: [
-            SizedBox(height: 10),
-            Text(data.data()['nombre'],
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-            Image.network(data.data()['icono'],
-                height: 75, color: Colors.white),
-           // SizedBox(height: 15),
-            Row(
-              children:[
-                 PopupMenuButton<int>(
-                  icon: Icon(Icons.more_vert, color: Colors.white),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  elevation: 10,
-                  onSelected: (value){
-                  print("es el valor "+ value.toString());
-                  switch (value) {
-                    case 1:{
-                        print('Actualizar');
-                        Navigator.pushNamed(context, 'actualizarservicio');
-                    }                
-                    break;
-                    case 2:{
-                      //con esta funcion se va eliminar servicio de base de datos
-                      
-                      
-                      final String iud = data.id;
-                      deleteservice(iud);
+            children: [
+              SizedBox(height: 10),
+              Text(data.data()['nombre'],
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold)),
+              SizedBox(height: 20),
+              Image.network(data.data()['icono'],
+                  height: 75, color: Colors.white),
+             // SizedBox(height: 15),
+              Row(
+                children:[
+                   PopupMenuButton<int>(
+                    icon: Icon(Icons.more_vert, color: Colors.white),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    elevation: 10,
+                    onSelected: (value){
+                    print("es el valor "+ value.toString());
+                    switch (value) {
+                      case 1:{
+                          print('Actualizar');
+                          Navigator.pushNamed(context, 'actualizarservicio');
+                      }                
+                      break;
+                      case 2:{
+                        //con esta funcion se va eliminar servicio de base de datos
+                        
+                        
+                        final String iud = data.id;
+                        deleteservice(iud);
 
-                       
-                    }                
-                    break;
+                         
+                      }                
+                      break;
 
 
-                    default:{
-                      print('no coonozco este numero');
+                      default:{
+                        print('no coonozco este numero');
+                      }
+                      break;
+
                     }
-                    break;
 
-                  }
+                  },
 
-                },
+                  itemBuilder: (context) => [
+                        PopupMenuItem(
+                          value: 1,
+                          child: Text("Actualizar"),
+                        ),
+                        PopupMenuItem(
+                          value: 2,
+                          child: Text("Eliminar"),
+                        ),
+                      ],
+                )
+                  
 
-                itemBuilder: (context) => [
-                      PopupMenuItem(
-                        value: 1,
-                        child: Text("Actualizar"),
-                      ),
-                      PopupMenuItem(
-                        value: 2,
-                        child: Text("Eliminar"),
-                      ),
-                    ],
+                ]
               )
-                
-
-              ]
-            )
 
 
-          ],
+            ],
+          ),
+          color: Color(0xFFFDD400),
         ),
-        color: Color(0xFFFDD400),
       ),
       onTap: () {
         Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
@@ -245,5 +250,5 @@ deleteservice(String idService)  {
   }
 
 
-  
+
 }
