@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -28,6 +29,9 @@ class _CalendarPageState extends State<CalendarPage> {
   }
   //-----fin   waves------
 
+  //recuperar la lista de reservas
+  var reservasRecuperado = [];
+
   //-----controlodaor para calendartable--
   CalendarController _controller;
   //.....fecha cuando selecciona en duro y formateado
@@ -38,7 +42,14 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     //-----inicializar el controlador para usar el calendario--
     super.initState();
+
     _controller = CalendarController();
+  }
+
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -50,6 +61,7 @@ class _CalendarPageState extends State<CalendarPage> {
     Map horarios = prodData[2];
     final idservicio = prodData[3];
     final idveterinaria = prodData[4];
+    int cupo = prodData[5];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -97,7 +109,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
     //lista para ir almacenando los tiempos sumado al intervalo
     List daysHora = [];
-    List daysFecha = [];
+    List<DateTime> daysFecha = [];
     if (_horainicio != null && _horafinal != null) {
       DateTime startDate =
           new DateTime(_anoFinal, _mesFinal, _diaFinal, _horainicio, 00);
@@ -196,55 +208,172 @@ class _CalendarPageState extends State<CalendarPage> {
                           itemCount: daysHora.length,
                           itemBuilder: (BuildContext context, int index) {
                             return GestureDetector(
-                              onTap: () {
+                              onTap: () async {
+                                int fecha1 = daysFecha[index]
+                                    .toUtc()
+                                    .millisecondsSinceEpoch;
+
+                                await getData(
+                                    fecha1, idveterinaria, idservicio);
+                                print('citas existentes');
+                                print(reservasRecuperado.length);
+                                print('este es de la base de datos cupos$cupo');
+
                                 if (daySelected == null) {
                                   fechaFinal = today;
                                 } else {
                                   fechaFinal = daySelected;
                                 }
-                                print('esta es la fecha');
-                                print(fechaFinal);
-                                print(daysHora[index]);
-                                print('----horas finales.....');
-                                print(_anoFinal);
-                                print(_mesFinal);
-                                print(_diaFinal);
-                                print(daysFecha[index]);
+
                                 DateTime oneDaysAgo =
                                     today.subtract(new Duration(days: 1));
-                                print(oneDaysAgo);
 
-                                if (fechaFinal.isAfter(oneDaysAgo)) {
-                                  Navigator.pushNamed(context, 'ReservaService',
-                                      arguments: [
-                                        nombreServicio,
-                                        daysHora[index],
-                                        daysFecha[index],
-                                        duracionCita,
-                                        idservicio,
-                                        idveterinaria,
-                                      ]);
+                                int horahoy =
+                                    today.toUtc().millisecondsSinceEpoch;
+
+                                if (fechaFinal.isAfter(oneDaysAgo) &&
+                                    fecha1 >= horahoy) {
+                                  if (reservasRecuperado.length != cupo) {
+                                    Navigator.pushNamed(
+                                        context, 'ReservaService',
+                                        arguments: [
+                                          nombreServicio,
+                                          daysHora[index],
+                                          daysFecha[index],
+                                          duracionCita,
+                                          idservicio,
+                                          idveterinaria,
+                                        ]);
+                                  } else {
+                                    return showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            contentPadding:
+                                                EdgeInsets.only(top: 10.0),
+                                            elevation: 10,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20)),
+                                            content: Container(
+                                              width: 300.0,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    width: double.infinity,
+                                                    child: Text(
+                                                      'Cupos LLenos',
+                                                      style: TextStyle(
+                                                          color:
+                                                              Color(0xffed278a),
+                                                          fontSize: 25,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: 5.0,
+                                                  ),
+                                                  Divider(
+                                                    color: Color(0xffed278a),
+                                                    height: 4.0,
+                                                  ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 15,
+                                                            left: 15,
+                                                            top: 10),
+                                                    child: Text(
+                                                      'Lo sentimos a esta hora los $cupo cupos estan llenos.',
+                                                      style: TextStyle(
+                                                          fontSize: 20),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            actions: [
+                                              FlatButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: Text('OK',
+                                                      style: TextStyle(
+                                                        color:
+                                                            Color(0xffed278a),
+                                                        fontSize: 22,
+                                                      )))
+                                            ],
+                                          );
+                                        });
+                                  }
                                 } else {
                                   return showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (context) {
                                         return AlertDialog(
+                                          contentPadding:
+                                              EdgeInsets.only(top: 10.0),
+                                          elevation: 10,
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(20)),
-                                          title: Text(
-                                            'Error en la Fecha',
-                                            textAlign: TextAlign.center,
+                                          content: Container(
+                                            width: 300.0,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: double.infinity,
+                                                  child: Text(
+                                                    'Horario no Disponible',
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xffed278a),
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Divider(
+                                                  color: Color(0xffed278a),
+                                                  height: 4.0,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 15,
+                                                          left: 15,
+                                                          top: 10),
+                                                  child: Text(
+                                                    'No puede reservar en un horario pasada a la fecha  y hora actual.',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          content: Text(
-                                              'No puede reservar en una \nfecha anterior al de hoy'),
                                           actions: [
                                             FlatButton(
                                                 onPressed: () {
                                                   Navigator.of(context).pop();
                                                 },
-                                                child: Text('Okay'))
+                                                child: Text('OK',
+                                                    style: TextStyle(
+                                                      color: Color(0xffed278a),
+                                                      fontSize: 22,
+                                                    )))
                                           ],
                                         );
                                       });
@@ -276,6 +405,23 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       ),
     );
+  }
+
+  getData(int fecha, idVeterinaria, idServicio) async {
+    await FirebaseFirestore.instance
+        .collection('reservas')
+        .where("fechareservaunix", isEqualTo: fecha)
+        .where("veterinaria", isEqualTo: idVeterinaria)
+        .where("servicio", isEqualTo: idServicio)
+        .get()
+        .then((value) {
+      if (value != null) {
+        reservasRecuperado.clear();
+        value.docs.forEach((element) {
+          reservasRecuperado.add(element.data());
+        });
+      }
+    });
   }
 
   //cuando selecciona la fecha
