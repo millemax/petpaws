@@ -28,6 +28,8 @@ class _ReservasPageState extends State<ReservasPage> {
     );
   }
 
+ 
+
   //-----fin   waves------
   @override
   Widget build(BuildContext context) {
@@ -62,8 +64,9 @@ class _ReservasPageState extends State<ReservasPage> {
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
-            .collection('reservas')
-            .where('usuario', isEqualTo: id)
+            .collection('veterinarias')
+            .doc(id)
+            .collection('servicios')
             .snapshots(),
         builder: (_, snapshot) {
           if (!snapshot.hasData) {
@@ -96,12 +99,14 @@ class _ReservasPageState extends State<ReservasPage> {
         });
   }
 
-  Widget card(DocumentSnapshot data) {
+  Widget card(DocumentSnapshot data) { 
+
     return GestureDetector(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 5,
         child: Column(
+
           children: [
             SizedBox(height: 10),
             Text(data.data()['nombre'],
@@ -112,7 +117,60 @@ class _ReservasPageState extends State<ReservasPage> {
                     fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             Image.network(data.data()['icono'],
-                height: 80, color: Colors.white),
+                height: 75, color: Colors.white),
+           // SizedBox(height: 15),
+            Row(
+              children:[
+                 PopupMenuButton<int>(
+                  icon: Icon(Icons.more_vert, color: Colors.white),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  elevation: 10,
+                  onSelected: (value){
+                  print("es el valor "+ value.toString());
+                  switch (value) {
+                    case 1:{
+                        print('Actualizar');
+                        Navigator.pushNamed(context, 'actualizarservicio');
+                    }                
+                    break;
+                    case 2:{
+                      //con esta funcion se va eliminar servicio de base de datos
+                      
+                      
+                      final String iud = data.id;
+                      deleteservice(iud);
+
+                       
+                    }                
+                    break;
+
+
+                    default:{
+                      print('no coonozco este numero');
+                    }
+                    break;
+
+                  }
+
+                },
+
+                itemBuilder: (context) => [
+                      PopupMenuItem(
+                        value: 1,
+                        child: Text("Actualizar"),
+                      ),
+                      PopupMenuItem(
+                        value: 2,
+                        child: Text("Eliminar"),
+                      ),
+                    ],
+              )
+                
+
+              ]
+            )
+
+
           ],
         ),
         color: Color(0xFFFDD400),
@@ -122,6 +180,27 @@ class _ReservasPageState extends State<ReservasPage> {
       },
     );
   }
+
+ //esta es una funcion para borrar en la base de datos
+deleteservice(String idService)  {
+        final String id = FirebaseAuth.instance.currentUser.uid;
+           
+        
+        FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(idService).delete().then((value){
+           print("eliminado en la red");
+        }).catchError((error){
+          print('Ha ocurrido un error');
+        });
+        
+          
+        
+      
+
+        
+
+    }
+
+
 
   //----encabezado de la pagina ---
   Widget titulo() {
@@ -164,4 +243,7 @@ class _ReservasPageState extends State<ReservasPage> {
       ),
     );
   }
+
+
+  
 }

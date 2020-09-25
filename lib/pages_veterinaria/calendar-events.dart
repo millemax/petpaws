@@ -52,10 +52,7 @@ class _MyCalendarState extends State<MyCalendar> {
 
     //variables de fecha y hora actual
     var fecha= DateTime.now();
-    var horaactual=fecha.toUtc().millisecondsSinceEpoch;
-
-
-     print(DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha));
+    var horaactual=fecha.toUtc().millisecondsSinceEpoch;    
     
       
      setState(() {
@@ -140,12 +137,11 @@ class _MyCalendarState extends State<MyCalendar> {
   
    
 
-  Widget getData(String serviceId, date, int timeunxi) {
-    print('obteniendo a la bd');
+  Widget getData(String serviceId, date, int timeunix) {    
 
     final String id = FirebaseAuth.instance.currentUser.uid;
     return  StreamBuilder(     
-      stream: FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: serviceId).where('fechainicioreserva', isEqualTo: date).orderBy('fechareservaunix',descending:false).snapshots(),
+      stream: FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: serviceId).where('fechainicioreserva', isEqualTo: date).where('fechareservaunix',isGreaterThanOrEqualTo:timeunix).orderBy('fechareservaunix',descending:false).snapshots(),
       builder: (_ , snapshot){
         if (!snapshot.hasData) {
           return Container(

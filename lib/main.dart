@@ -4,9 +4,11 @@ import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
+import 'package:petpaws/pages_veterinaria/actualizar-service.dart';
 import 'package:petpaws/pages_veterinaria/calendar-events.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
+import 'package:petpaws/pages_veterinaria/reservas.dart';
 
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
@@ -62,6 +64,9 @@ class MyApp extends StatelessWidget {
 
             'MisReservas': (context) =>
                 MisReservas(), // pagina donde vemos nuestro historial de reservas
+
+            'reservasveterinario': (context) =>ReservasPage(),
+            'actualizarservicio': (context) =>ActualizarService(),
           }),
     );
   }

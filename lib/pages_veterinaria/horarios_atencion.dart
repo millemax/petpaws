@@ -1953,7 +1953,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
   }
 
   guardarservicio(nombreService) {
-    print(horarios);
+  
 
     final String id = FirebaseAuth.instance.currentUser.uid;
     FirebaseFirestore.instance
@@ -1961,18 +1961,35 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
         .doc(id)
         .collection('servicios')
         .doc(nombreService)
-        .update({'horarios': horarios}).then((value) => {
-              CupertinoAlertDialog(
-                title: Text("En hora buena !"),
-                content: Text(
-                    "Acabas de crear un nuevo servicio verificalo en la seccion de servicios"),
-                actions: [
-                  CupertinoDialogAction(child: Text('no')),
-                  CupertinoDialogAction(child: Text('yes'))
-                ],
-              )
+        .update({'horarios': horarios}).then((value){
+              print('Servicio cargado correctamente');
+              _showMaterialDialog();
+
+
             });
   }
+
+  //show alert dialog para las notificaciones
+   _showMaterialDialog() {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              title: new Text("Excelente !!"),
+              content: new Text("El nuevo servicio a sido creado correctamente"),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, 'reservasveterinario');
+                  },
+                )
+              ],
+            ));
+  }
+
+
+
   //----encabezado de la pagina ---
   Widget titulo() {
     return Container(
