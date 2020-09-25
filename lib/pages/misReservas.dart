@@ -59,7 +59,12 @@ class _MisReservasState extends State<MisReservas> {
           .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return const Text("Loanding");
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.93,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else {
           return ListView.builder(
             itemCount: snapshot.data.docs.length,
@@ -92,6 +97,7 @@ class _MisReservasState extends State<MisReservas> {
 
 //------------contenedor de la parte superior---
   Widget _containerTop() {
+    var precioservicio = data.data()['precio'].toString();
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -127,7 +133,8 @@ class _MisReservasState extends State<MisReservas> {
                           ),
                         ),
                         Text(
-                          "99.00",
+                          '$precioservicio.00',
+                          /*  data.data()['precio'], */
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 22.0,
@@ -212,7 +219,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 89,
                       ),
                       Text(
-                        "San pedro",
+                        recupera(data.data()['veterinaria']),
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -471,6 +478,17 @@ class _MisReservasState extends State<MisReservas> {
         ],
       ),
     );
+  }
+
+  recupera(data) async {
+    await FirebaseFirestore.instance
+        .collection('veterinarias')
+        .doc(data)
+        .get()
+        .then((value) {
+      print('veterinarias');
+      print(value.data()['nombre']);
+    });
   }
 }
 

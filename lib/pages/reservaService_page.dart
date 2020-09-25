@@ -53,6 +53,7 @@ class _ReservaServiceState extends State<ReservaService> {
   var idservicio;
   var idveterinaria;
   var nombreServicio;
+  var precio;
 
   TextEditingController nameduenoCtrl = new TextEditingController();
   TextEditingController emailCtrl = new TextEditingController();
@@ -157,7 +158,7 @@ class _ReservaServiceState extends State<ReservaService> {
     final durationCita = prodData[3];
     idservicio = prodData[4];
     idveterinaria = prodData[5];
-
+    precio = prodData[6];
     //----metodo recuperar datos de usuario nombre/correo/telefono
 
     print("-------------------------");
@@ -166,6 +167,8 @@ class _ReservaServiceState extends State<ReservaService> {
     print("correo:$nombres");
     print("la fecha:$fecha");
     print("fechareserva:$fechaReserva");
+    print("precioservicio:$precio");
+
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
@@ -518,6 +521,7 @@ class _ReservaServiceState extends State<ReservaService> {
         'especie': _especie,
         'numeromascotas': _numpets,
         'nombreservicio': nombreServicio,
+        'precio': precio,
       }).then((value) => {
             AwesomeDialog(
               context: context,

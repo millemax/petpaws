@@ -50,6 +50,7 @@ class _CalendarPageState extends State<CalendarPage> {
     Map horarios = prodData[2];
     final idservicio = prodData[3];
     final idveterinaria = prodData[4];
+    var precio = prodData[5];
 
     //variable para captar horas de iniicio y final del mapa
     int _horainicio;
@@ -115,7 +116,7 @@ class _CalendarPageState extends State<CalendarPage> {
           endDate);
     } else {}
     print('********************************');
-    print(":creo es la fecha: $daysFecha");
+    print(daysFecha);
     print(daysHora);
     print(duracionCita);
     print(horarios);
@@ -182,8 +183,11 @@ class _CalendarPageState extends State<CalendarPage> {
                   Stack(
                     children: [
                       Container(
-                        height: 330,
-                        padding: EdgeInsets.only(right: 20, left: 20),
+                        height: MediaQuery.of(context).size.height * 0.65,
+                        padding: EdgeInsets.only(
+                          right: 20,
+                          left: 20,
+                        ),
                         child: GridView.builder(
                           shrinkWrap: true,
                           gridDelegate:
@@ -210,6 +214,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                 print(_mesFinal);
                                 print(_diaFinal);
                                 print(daysFecha[index]);
+
                                 DateTime oneDaysAgo =
                                     today.subtract(new Duration(days: 1));
                                 print(oneDaysAgo);
@@ -223,6 +228,7 @@ class _CalendarPageState extends State<CalendarPage> {
                                         duracionCita,
                                         idservicio,
                                         idveterinaria,
+                                        precio,
                                       ]);
                                 } else {
                                   return showDialog(
