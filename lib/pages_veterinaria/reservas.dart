@@ -103,9 +103,10 @@ class _ReservasPageState extends State<ReservasPage> {
   Widget card(DocumentSnapshot data) { 
 
     return GestureDetector(
-      child: Badge(
-          badgeContent: Text('2'),
-          badgeColor: Colors.red,
+      child: Badge( 
+                
+          badgeContent: Text('2', style: TextStyle(color: Colors.white)),
+          badgeColor: Color(0xFFED278A),
           child: Card(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           elevation: 5,
