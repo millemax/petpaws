@@ -6,6 +6,8 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 //--slimy card
 import 'package:slimy_card/slimy_card.dart';
+//---badges notification
+import 'package:badges/badges.dart';
 
 class MisReservas extends StatefulWidget {
   @override
@@ -188,7 +190,7 @@ class _MisReservasState extends State<MisReservas> {
                             fontWeight: FontWeight.w600, fontSize: 15),
                       ),
                       SizedBox(
-                        width: 105,
+                        width: 21,
                       ),
                       Text(
                         data.data()['nombreservicio'],
@@ -216,10 +218,10 @@ class _MisReservasState extends State<MisReservas> {
                             fontWeight: FontWeight.w600, fontSize: 15),
                       ),
                       SizedBox(
-                        width: 89,
+                        width: 5,
                       ),
                       Text(
-                        recupera(data.data()['veterinaria']),
+                        data.data()['nombreveterinaria'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -479,30 +481,4 @@ class _MisReservasState extends State<MisReservas> {
       ),
     );
   }
-
-  recupera(data) async {
-    await FirebaseFirestore.instance
-        .collection('veterinarias')
-        .doc(data)
-        .get()
-        .then((value) {
-      print('veterinarias');
-      print(value.data()['nombre']);
-    });
-  }
 }
-
-/* class ContainerTop extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return 
-  }
-} */
-
-//-------Contenedor de la parte inferior
-/* class ContainerBottom extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    retur
-  }
-} */
