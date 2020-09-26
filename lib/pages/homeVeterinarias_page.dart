@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
@@ -246,14 +247,22 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                       top: 10,
                       left: 18,
                     ),
-                    child: GestureDetector(
-                      child: Image.asset(
-                        "assets/images/calen.png",
-                        scale: 17,
+                    child: Badge(
+                      animationType: BadgeAnimationType.scale,
+                      badgeContent: Text(
+                        '4',
+                        style: TextStyle(color: Colors.white),
                       ),
-                      onTap: () {
-                        Navigator.pushNamed(context, 'MisReservas');
-                      },
+                      badgeColor: Color(0xffed278a),
+                      child: GestureDetector(
+                        child: Image.asset(
+                          "assets/images/calen.png",
+                          scale: 17,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, 'MisReservas');
+                        },
+                      ),
                     ),
                   ),
                   Text(
