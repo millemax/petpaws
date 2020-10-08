@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,73 @@ class ReservasPage extends StatefulWidget {
 }
 
 class _ReservasPageState extends State<ReservasPage> {
+
+  bool _estado= false;
+
+  //el objeto que contiene cuanto tiene cada servicio
+  var cantReservas={};
+  var prueba1={'romel':'5', 'windows':'hola'};
+  var prueba={'1MU8gYWJBTHyYRHcmCv6': '1', '5Up6ZXj2ERJvyghxPGHc': '0', '81TsqrIbGxrI3C0ed9cs': '2', '8lLwrdzGYw7rnxh7ukdV': '0', 'Li1iY3HZqpp8i8JgpMhP': '1', 'RIYruWDRNuD0MsnjYPrZ': '0', 'WLELKtLJrnsi3WZjwXcV': '0', 'agBAeUnxZ2QCRRTwVP6x': '0', 'gfqsZBt3KLjCjgwzVON2': '0', 'ywAbi6WvchEpF2vnczdT': '0'};
+
+
+  @override
+  void initState() { 
+    obtenerservicios();
+    
+    super.initState();
+    
+  }
+  //funcion para obtener los servicios
+  obtenerservicios(){
+    var contador=0;
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').get().then((value){
+      value.docs.forEach((doc){
+        contador=contador +1;
+        cantReservas[doc.id.toString()]='';
+         cantidadReservas(doc.id.toString(), contador, value.docs.length);        
+          
+         
+
+      });
+
+    });
+
+  
+
+
+  }
+
+ //funcion para obtener la cantidad que tiene cada reserva
+  cantidadReservas(String idservicio, int contar, int tamano){
+    
+    
+    final String id = FirebaseAuth.instance.currentUser.uid;  
+      FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: idservicio).get().then((value){      
+      //print(" cantidad : => ${value.docs.length} =>"+ idservicio);
+      cantReservas[idservicio] = value.docs.length.toString();
+      
+      print(cantReservas);
+      print('contador, tamano'+ contar.toString() + tamano.toString());
+      if (contar == tamano){
+        setState(() {
+              _estado=true;
+            });
+
+
+      }
+
+    });
+
+    
+
+    
+
+ }
+
+
+
+
   //---------wavess-------
   _buildCard({
     Config config,
@@ -38,7 +107,11 @@ class _ReservasPageState extends State<ReservasPage> {
       child: Scaffold(
         backgroundColor: Color(0xffffffff),
         /* appBar: AppBar(title: Text('Reservas')), */
-        body: Stack(
+        body:_estado==false? Container(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        )
+        : Stack(
           children: [
             titulo(),
             Padding(
@@ -61,7 +134,7 @@ class _ReservasPageState extends State<ReservasPage> {
 //recuperamos los servicios de la base de datos de firebase
   Widget cards() {
     final String id = FirebaseAuth.instance.currentUser.uid;
-    print('el id de san marcos'+ id);
+    print('el id : '+ id);
 
     return StreamBuilder(
         stream: FirebaseFirestore.instance
@@ -100,87 +173,102 @@ class _ReservasPageState extends State<ReservasPage> {
         });
   }
 
-  Widget card(DocumentSnapshot data) { 
+ 
 
+
+  //es le card que se genera de acuerdo a los servicios que tenga
+  Widget card(DocumentSnapshot data) {   
+    
     return GestureDetector(
-      child: Badge( 
-                
-          badgeContent: Text('2', style: TextStyle(color: Colors.white)),
-          badgeColor: Color(0xFFED278A),
-          child: Card(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          elevation: 5,
-          child: Column(
+      child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      elevation: 5,
+      child: Column(
 
-            children: [
-              SizedBox(height: 10),
-              Text(data.data()['nombre'],
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold)),
-              SizedBox(height: 20),
-              Image.network(data.data()['icono'],
-                  height: 75, color: Colors.white),
-             // SizedBox(height: 15),
-              Row(
-                children:[
-                   PopupMenuButton<int>(
-                    icon: Icon(Icons.more_vert, color: Colors.white),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    elevation: 10,
-                    onSelected: (value){
-                    print("es el valor "+ value.toString());
-                    switch (value) {
-                      case 1:{
-                          print('Actualizar');
-                          Navigator.pushNamed(context, 'actualizarservicio');
-                      }                
-                      break;
-                      case 2:{
-                        //con esta funcion se va eliminar servicio de base de datos
-                        
-                        
-                        final String iud = data.id;
-                        deleteservice(iud);
-
-                         
-                      }                
-                      break;
-
-
-                      default:{
-                        print('no coonozco este numero');
-                      }
-                      break;
-
-                    }
-
-                  },
-
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                          value: 1,
-                          child: Text("Actualizar"),
-                        ),
-                        PopupMenuItem(
-                          value: 2,
-                          child: Text("Eliminar"),
-                        ),
-                      ],
-                )
-                  
-
-                ]
-              )
-
-
-            ],
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            child: Container(
+              width: double.infinity,
+              child:Stack(children: [
+               // SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Badge(
+                  badgeContent: Text(cantReservas[data.id], style: TextStyle(color: Colors.white)),                
+                  badgeColor: Color(0xFF6600FF),
+                    ),
+                ),
+              ]),
+            ),
           ),
-          color: Color(0xFFFDD400),
-        ),
+          
+          Text(data.data()['nombre'],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold)),
+          SizedBox(height: 20),
+          Image.network(data.data()['icono'],
+              height: 50,),
+         // SizedBox(height: 15),
+          Row(
+            children:[
+               PopupMenuButton<int>(
+                icon: Icon(Icons.more_vert, color: Colors.black),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                elevation: 10,
+                onSelected: (value){
+                print("es el valor "+ value.toString());
+                switch (value) {
+                  case 1:{
+                      print('Actualizar');
+                      Navigator.pushNamed(context, 'actualizarservicio');
+                  }                
+                  break;
+                  case 2:{
+                    //con esta funcion se va eliminar servicio de base de datos
+                    
+                    
+                    final String iud = data.id;
+                    deleteservice(iud);
+
+                     
+                  }                
+                  break;
+
+
+                  default:{
+                    print('no coonozco este numero');
+                  }
+                  break;
+
+                }
+
+              },
+
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: 1,
+                      child: Text("Actualizar"),
+                    ),
+                    PopupMenuItem(
+                      value: 2,
+                      child: Text("Eliminar"),
+                    ),
+                  ],
+            )
+              
+
+            ]
+          )
+
+
+        ],
       ),
+      color: Colors.grey[300],
+        ),
       onTap: () {
         Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
       },

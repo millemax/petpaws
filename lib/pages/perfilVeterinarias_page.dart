@@ -85,7 +85,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
           } else {
             return Container(
                 width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height * 0.785,
+                height: MediaQuery.of(context).size.height* 0.95,
                 decoration: BoxDecoration(
                   color: Colors.white,
                 ),

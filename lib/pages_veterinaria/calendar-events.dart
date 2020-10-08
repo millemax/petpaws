@@ -17,6 +17,9 @@ class MyCalendar extends StatefulWidget {
 }
 
 class _MyCalendarState extends State<MyCalendar> {
+  Map<DateTime, List> _events;
+
+  Map<DateTime, List>  _eventos={};
   //-----waves------
   _buildCard({
     Config config,
@@ -42,17 +45,44 @@ class _MyCalendarState extends State<MyCalendar> {
   String _fecha;
   int _timeunix;
 
+  bool _estado = false;
+
   @override
   void initState() {
     
     super.initState();
-
+   
     //inicalizamos el calendario
     _controller = CalendarController();
 
     //variables de fecha y hora actual
     var fecha= DateTime.now();
-    var horaactual=fecha.toUtc().millisecondsSinceEpoch;    
+    var horaactual=fecha.toUtc().millisecondsSinceEpoch;  
+
+      _events = {
+      fecha.subtract(Duration(days: 30)): ['Event A0', 'Event B0', 'Event C0'],
+      fecha.subtract(Duration(days: 27)): ['Event A1'],
+      fecha.subtract(Duration(days: 20)): ['Event A2', 'Event B2', 'Event C2', 'Event D2'],
+      fecha.subtract(Duration(days: 16)): ['Event A3', 'Event B3'],
+      fecha.subtract(Duration(days: 10)): ['Event A4', 'Event B4', 'Event C4'],
+      fecha.subtract(Duration(days: 4)): ['Event A5', 'Event B5', 'Event C5'],
+      fecha.subtract(Duration(days: 2)): ['Event A6', 'Event B6'],
+      fecha: [null,null,null],
+      fecha.add(Duration(days: 1)): ['Event A8', 'Event B8', 'Event C8', 'Event D8'],
+      fecha.add(Duration(days: 3)): Set.from(['Event A9', 'Event A9', 'Event B9']).toList(),
+      fecha.add(Duration(days: 7)): ['Event A10', 'Event B10', 'Event C10'],
+      fecha.add(Duration(days: 11)): ['Event A11', 'Event B11'],
+      fecha.add(Duration(days: 17)): ['Event A12', 'Event B12', 'Event C12', 'Event D12'],
+      fecha.add(Duration(days: 22)): ['Event A13', 'Event B13'],
+      fecha.add(Duration(days: 26)): ['Event A14', 'Event B14', 'Event C14'],
+    };
+
+
+   
+
+    generarFechas(fecha);
+    //obtenercantidad(fecha);
+
     
       
      setState(() {
@@ -60,15 +90,58 @@ class _MyCalendarState extends State<MyCalendar> {
        _fecha=DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
        _timeunix= horaactual;
 
-     });
-
-
-
-   
+     }); 
     
 
   
   }
+
+
+ //funcion para generar las fechas 
+
+ generarFechas(DateTime fecha){
+   var contador=0;
+   
+
+   for (var i = 0; i < 7; i++) {
+     
+     DateTime  fechalarga=fecha.add(Duration(days: contador +=1));
+     var fechacorta=DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fechalarga).toString();
+      FirebaseFirestore.instance.collection('reservas').where('fechainicioreserva', isEqualTo: fechacorta).get().then((value) {
+        
+          var cantidad=value.docs.length;
+          _eventos[fechalarga]=new List(cantidad);     
+        
+        
+          print(fechacorta);
+          print(_eventos);
+
+          if (i==6) {
+            setState(() {
+              _estado=true;
+            });
+            
+          }
+          
+
+      });
+
+       
+      
+
+     
+
+     
+   }
+
+
+ }
+
+
+
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +152,12 @@ class _MyCalendarState extends State<MyCalendar> {
       appBar: AppBar(
         title: Text('Reservaciones')
       ),
-      body: SingleChildScrollView(
+      body: _estado==false? Container(
+        alignment: Alignment.center,
+        child: CircularProgressIndicator(),
+      ) 
+      
+      : SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -91,6 +169,7 @@ class _MyCalendarState extends State<MyCalendar> {
               ),
               child: TableCalendar(
                 calendarController: _controller,
+                events: _eventos,
                 locale:'es_ES',
                 calendarStyle: CalendarStyle(
                   todayColor: Color(0xFF6600FF),
