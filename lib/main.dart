@@ -59,7 +59,7 @@ class MyApp extends StatelessWidget {
             'horariosatencion': (context) => HorarioAtencion(),
             'ReservaService': (context) =>
                 ReservaService(), //la pagina donde se llena el formulario para reservar cita
-            'calendarevents': (context) => MyCalendar(),
+           // 'calendarevents': (context) => MyCalendar(),
             'PerfilUsuario': (context) => MisReservas(),
 
             'MisReservas': (context) =>

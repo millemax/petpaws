@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petpaws/pages_veterinaria/calendar-events.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:badges/badges.dart';
@@ -33,13 +34,16 @@ class _ReservasPageState extends State<ReservasPage> {
   }
   //funcion para obtener los servicios
   obtenerservicios(){
+    //variables de fecha y hora actual
+    var fecha= DateTime.now();
+    var horaactual=fecha.toUtc().millisecondsSinceEpoch;  
     var contador=0;
     final String id = FirebaseAuth.instance.currentUser.uid;
     FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').get().then((value){
       value.docs.forEach((doc){
         contador=contador +1;
         cantReservas[doc.id.toString()]='';
-         cantidadReservas(doc.id.toString(), contador, value.docs.length);        
+         cantidadReservas(doc.id.toString(), contador, value.docs.length, horaactual);        
           
          
 
@@ -53,12 +57,12 @@ class _ReservasPageState extends State<ReservasPage> {
   }
 
  //funcion para obtener la cantidad que tiene cada reserva
-  cantidadReservas(String idservicio, int contar, int tamano){
+  cantidadReservas(String idservicio, int contar, int tamano , int horaactual){
     
     
     final String id = FirebaseAuth.instance.currentUser.uid;  
-      FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: idservicio).get().then((value){      
-      //print(" cantidad : => ${value.docs.length} =>"+ idservicio);
+      FirebaseFirestore.instance.collection('reservas').where('veterinaria', isEqualTo: id).where('servicio', isEqualTo: idservicio).where('fechareservaunix',isGreaterThanOrEqualTo: horaactual).get().then((value){      
+      
       cantReservas[idservicio] = value.docs.length.toString();
       
       print(cantReservas);
@@ -270,7 +274,10 @@ class _ReservasPageState extends State<ReservasPage> {
       color: Colors.grey[300],
         ),
       onTap: () {
-        Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
+        //estamos enviando el iddel servicio
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => MyCalendar(data.id)));
+       // Navigator.pushNamed(context, 'calendarevents', arguments: data.id);
       },
     );
   }
