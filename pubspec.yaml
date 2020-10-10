@@ -55,11 +55,15 @@ dependencies:
   slimy_card: ^1.0.4
   #expansion card
   expansion_card: ^0.1.0
+  #toast notification
+  fluttertoast: ^7.1.1
+  flutter_facebook_login: ^3.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   splashscreen:
-    
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

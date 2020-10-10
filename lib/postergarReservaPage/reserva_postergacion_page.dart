@@ -3,20 +3,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-class ReservaService extends StatefulWidget {
-  ReservaService({Key key}) : super(key: key);
+class ReservaPostergacion extends StatefulWidget {
+  ReservaPostergacion({Key key}) : super(key: key);
 
   @override
-  _ReservaServiceState createState() => _ReservaServiceState();
+  _ReservaPostergacionState createState() => _ReservaPostergacionState();
 }
 
-class _ReservaServiceState extends State<ReservaService> {
+class _ReservaPostergacionState extends State<ReservaPostergacion> {
 //---------wavess-------
   _buildCard({
     Config config,
@@ -38,6 +37,7 @@ class _ReservaServiceState extends State<ReservaService> {
   var correo;
   var nombres;
   var celular;
+  var nombremascota;
   void initState() {
     getData();
     super.initState();
@@ -55,6 +55,7 @@ class _ReservaServiceState extends State<ReservaService> {
   var nombreServicio;
   var precio;
   var nombreveterinaria;
+  var idreserva;
 
   TextEditingController nameduenoCtrl = new TextEditingController();
   TextEditingController emailCtrl = new TextEditingController();
@@ -139,6 +140,7 @@ class _ReservaServiceState extends State<ReservaService> {
         nameduenoCtrl.text = nombres;
         emailCtrl.text = correo;
         celularCtrl.text = celular;
+        namemascotaCtrl.text = nombremascota;
       });
     });
   }
@@ -161,7 +163,8 @@ class _ReservaServiceState extends State<ReservaService> {
     idveterinaria = prodData[5];
     precio = prodData[6];
     nombreveterinaria = prodData[7];
-
+    idreserva = prodData[8];
+    nombremascota = prodData[9];
     //----metodo recuperar datos de usuario nombre/correo/telefono
 
     print("-------------------------");
@@ -510,44 +513,27 @@ class _ReservaServiceState extends State<ReservaService> {
 
     if (_formKey.currentState.validate()) {
       final String id = FirebaseAuth.instance.currentUser.uid;
-      FirebaseFirestore.instance.collection('reservas').add({
-        'usuario': id,
-        'veterinaria': idveterinaria,
-        'servicio': idservicio,
-        'fechareservaunix': fechaunix,
+      FirebaseFirestore.instance.collection('reservas').doc(idreserva).update({
         'fechainicioreserva': fechaReserva,
         'horainicioreserva': horaInicio,
-        'celular': celularCtrl.text,
-        'correo': emailCtrl.text,
-        'nombredueno': nameduenoCtrl.text,
-        'nombremascota': namemascotaCtrl.text,
-        'especie': _especie,
-        'numeromascotas': _numpets,
-        'nombreservicio': nombreServicio,
-        'precio': precio,
-        'nombreveterinaria': nombreveterinaria,
+        'fechareservaunix': fechaunix,
       }).then((resp) => {
-            FirebaseFirestore.instance
-                .collection('reservas')
-                .doc(resp.id)
-                .update({'idreserva': resp.id}).then((value) {
-              AwesomeDialog(
-                context: context,
-                animType: AnimType.SCALE,
-                dialogType: DialogType.SUCCES,
-                body: Center(
-                  child: Text(
-                    ' En hora buena. Ya tienes una reserva',
-                    style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
+            AwesomeDialog(
+              context: context,
+              animType: AnimType.SCALE,
+              dialogType: DialogType.SUCCES,
+              body: Center(
+                child: Text(
+                  ' Postergaste tu reserva',
+                  style: TextStyle(fontStyle: FontStyle.italic),
                 ),
-                title: 'Felicidades',
-                btnOkOnPress: () {
-                  //------remplazar todas la rutas e ir a perfil usuario
-                  Navigator.pushReplacementNamed(context, 'HomeVeterinarias');
-                },
-              )..show();
-            })
+              ),
+              title: 'Felicidades',
+              btnOkOnPress: () {
+                //------remplazar todas la rutas e ir a perfil usuario
+                Navigator.pushReplacementNamed(context, 'HomeVeterinarias');
+              },
+            )..show()
           });
     }
   }

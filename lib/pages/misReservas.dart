@@ -9,12 +9,22 @@ import 'package:slimy_card/slimy_card.dart';
 //---badges notification
 import 'package:badges/badges.dart';
 
+import 'calendar_reservation_page.dart';
+
 class MisReservas extends StatefulWidget {
   @override
   _MisReservasState createState() => _MisReservasState();
 }
 
 class _MisReservasState extends State<MisReservas> {
+  List reservasRecuperado = [];
+  bool control = false;
+  @override
+  void initState() {
+    getData();
+    super.initState();
+  }
+
   DocumentSnapshot data;
   //-----waves------
   _buildCard({
@@ -34,54 +44,55 @@ class _MisReservasState extends State<MisReservas> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Color(0XFFFFFFFF),
-        body: Stack(
-          children: [
-            titulo(),
-            Padding(
-              padding: EdgeInsets.only(top: 90.0),
-              child: reservaCards(),
-            )
-          ],
-        ),
+    print(reservasRecuperado);
+    return Scaffold(
+      backgroundColor: Color(0XFFFFFFFF),
+      body: SafeArea(
+        child: control == false
+            ? Container(
+                color: Colors.white,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              )
+            : Stack(
+                children: [
+                  titulo(),
+                  Padding(
+                    padding: EdgeInsets.only(top: 90.0),
+                    child: reservaCards(),
+                  )
+                ],
+              ),
       ),
     );
   }
 
   //recuperamos los servicios de la base de datos de firebase
   Widget reservaCards() {
-    final String id = FirebaseAuth.instance.currentUser.uid;
-
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance
-          .collection('reservas')
-          .where('usuario', isEqualTo: id)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container(
-            width: MediaQuery.of(context).size.width * 0.93,
-            child: Center(
-              child: CircularProgressIndicator(),
+    return ListView.builder(
+      itemCount: reservasRecuperado.length,
+      itemBuilder: (context, index) {
+        //data = snapshot.data.documents[index];
+        return Column(
+          children: <Widget>[
+            SizedBox(height: 10),
+            SlimyCard(
+              topCardHeight: 195,
+              bottomCardHeight: 150,
+              width: 380,
+              color: Colors.grey,
+              topCardWidget: _containerTop(reservasRecuperado[index]),
+              bottomCardWidget: _containerBottom(reservasRecuperado[index]),
             ),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              data = snapshot.data.documents[index];
-              return slimyCard(data);
-            },
-          );
-        }
+          ],
+        );
       },
     );
   }
 
   //-------SlimyCard
-  Widget slimyCard(DocumentSnapshot data) {
+  /*  Widget slimyCard(DocumentSnapshot data) {
     return Column(
       children: <Widget>[
         SizedBox(height: 10),
@@ -89,17 +100,18 @@ class _MisReservasState extends State<MisReservas> {
           topCardHeight: 195,
           bottomCardHeight: 150,
           width: 380,
-          color: Color(0xffed278a),
+          color: Colors.grey,
           topCardWidget: _containerTop(),
           bottomCardWidget: _containerBottom(),
         ),
       ],
     );
-  }
+  } */
 
 //------------contenedor de la parte superior---
-  Widget _containerTop() {
-    var precioservicio = data.data()['precio'].toString();
+  Widget _containerTop(data) {
+    print(data['nombreveterinaria']);
+    var precioservicio = data['precio'].toString();
     return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -131,7 +143,7 @@ class _MisReservasState extends State<MisReservas> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 16.0,
-                            color: Color(0xffed278a),
+                            color: Colors.purpleAccent[300],
                           ),
                         ),
                         Text(
@@ -165,7 +177,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 15,
                       ),
                       Text(
-                        data.data()['fechainicioreserva'],
+                        data['fechainicioreserva'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -193,7 +205,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 21,
                       ),
                       Text(
-                        data.data()['nombreservicio'],
+                        data['nombreservicio'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -221,7 +233,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 5,
                       ),
                       Text(
-                        data.data()['nombreveterinaria'],
+                        data['nombreveterinaria'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -246,7 +258,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 5,
                       ),
                       Text(
-                        data.data()['horainicioreserva'],
+                        data['horainicioreserva'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -271,7 +283,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 53,
                       ),
                       Text(
-                        data.data()['celular'],
+                        data['celular'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -296,7 +308,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 48,
                       ),
                       Text(
-                        data.data()['nombredueno'],
+                        data['nombredueno'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -321,7 +333,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 38,
                       ),
                       Text(
-                        data.data()['nombremascota'],
+                        data['nombremascota'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -346,7 +358,7 @@ class _MisReservasState extends State<MisReservas> {
                         width: 38,
                       ),
                       Text(
-                        data.data()['especie'],
+                        data['especie'],
                         style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 15,
@@ -388,7 +400,7 @@ class _MisReservasState extends State<MisReservas> {
   }
 
 //-----------contenedor de laparte superior---
-  Widget _containerBottom() {
+  Widget _containerBottom(data) {
     return Container(
       height: MediaQuery.of(context).size.height,
       decoration: BoxDecoration(
@@ -403,11 +415,21 @@ class _MisReservasState extends State<MisReservas> {
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             color: Color(0xfffdd400),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, 'CalendarPostegar', arguments: [
+                data['veterinaria'],
+                data['servicio'],
+                data['nombreveterinaria'],
+                data['nombreservicio'],
+                data['idreserva'],
+                data['nombremascota'],
+              ]);
+            },
             child: Row(
               children: [
-                Text('Cancelar Reserva',
-                    style: TextStyle(color: Color(0xffed278a), fontSize: 18)),
+                Text('Postergar',
+                    style: TextStyle(
+                        color: Colors.deepPurpleAccent[400], fontSize: 18)),
               ],
             ),
           ),
@@ -480,5 +502,31 @@ class _MisReservasState extends State<MisReservas> {
         ],
       ),
     );
+  }
+
+  getData() async {
+    var contador = 0;
+    var tamano = 0;
+
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    await FirebaseFirestore.instance
+        .collection('reservas')
+        .where("usuario", isEqualTo: id)
+        .get()
+        .then((value) {
+      tamano = value.docs.length;
+
+      value.docs.forEach((element) {
+        contador += 1;
+        reservasRecuperado.add(element.data());
+        print(reservasRecuperado);
+
+        if (contador >= tamano) {
+          setState(() {
+            control = true;
+          });
+        }
+      });
+    });
   }
 }

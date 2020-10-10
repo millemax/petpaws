@@ -9,6 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+//---login con facebook
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -212,7 +216,76 @@ class MyPainter extends CustomPainter {
 }
 
 //--------definimos las clases de las paginas ------
-class ExistentePage extends StatelessWidget {
+class ExistentePage extends StatefulWidget {
+  //-------recuperacion de contraseña--
+  @override
+  _ExistentePageState createState() => _ExistentePageState();
+}
+
+class _ExistentePageState extends State<ExistentePage> {
+  //---------
+  static final FacebookLogin facebookSignIn = new FacebookLogin();
+
+  String _message = 'Log in/out by pressing the buttons below.';
+
+  Future<Null> _login() async {
+    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final FacebookAccessToken accessToken = result.accessToken;
+        _showMessage('''
+         Logged in!
+         
+         Token: ${accessToken.token}
+         User id: ${accessToken.userId}
+         Expires: ${accessToken.expires}
+         Permissions: ${accessToken.permissions}
+         Declined permissions: ${accessToken.declinedPermissions}
+         ''');
+        break;
+      case FacebookLoginStatus.cancelledByUser:
+        _showMessage('Login cancelled by the user.');
+        break;
+      case FacebookLoginStatus.error:
+        _showMessage('Something went wrong with the login process.\n'
+            'Here\'s the error Facebook gave us: ${result.errorMessage}');
+        break;
+    }
+  }
+
+  /* Future<Null> _logOut() async {
+    await facebookSignIn.logOut();
+    _showMessage('Logged out.');
+  } */
+
+  void _showMessage(String message) {
+    setState(() {
+      _message = message;
+    });
+  }
+
+  //------------facebook fin--
+
+  TextEditingController correoCtrl = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  bool _autovalidate = false;
+
+  String correoValidator(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (value.isEmpty) return '*Requerido';
+    if (!regex.hasMatch(value))
+      return '*Ingrese un correo válido';
+    else
+      return null;
+  }
+
+//------------------
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<LoginBloc>(context);
@@ -223,7 +296,7 @@ class ExistentePage extends StatelessWidget {
       child: Column(
         children: [
           campologin(bloc),
-          textrecordarcontrasena(),
+          textolvidocontrasena(context),
           lineaOnlogin(),
           iconlogin(),
         ],
@@ -325,18 +398,153 @@ class ExistentePage extends StatelessWidget {
     );
   }
 
-  Widget textrecordarcontrasena() {
+  Widget textolvidocontrasena(context) {
     return Column(
       children: [
         SizedBox(
           height: 25,
         ),
-        Text(
-          "¿Se te olvidó tu contraseña?",
-          style: TextStyle(color: Colors.white, fontSize: 10),
+        GestureDetector(
+          child: Text(
+            "¿Se te olvidó tu contraseña?",
+            style: TextStyle(color: Colors.white, fontSize: 13),
+          ),
+          onTap: () {
+            //---------------
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.only(top: 10.0),
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20)),
+                  content: Container(
+                    width: 300.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: Text(
+                                'Restablecer Contraseña',
+                                style: TextStyle(
+                                    color: Color(0xffed278a),
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () {
+                                  correoCtrl.clear();
+                                  Navigator.pop(context);
+                                })
+                          ],
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                        Divider(
+                          color: Color(0xffed278a),
+                          height: 4.0,
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, left: 15, top: 10),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Ingrese su correo para poder restablecer su contraseña.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                Form(
+                                  key: _formKey,
+                                  autovalidate: _autovalidate,
+                                  child: TextFormField(
+                                    controller: correoCtrl,
+                                    decoration: InputDecoration(
+                                      labelText: "Correo",
+                                      hintText: "Correo",
+                                      //----llama los iconos declarados
+                                      prefixIcon: Padding(
+                                        padding: EdgeInsets.only(right: 10),
+                                        child: Icon(
+                                          Icons.mail_outline,
+                                          color: Theme.of(context).primaryColor,
+                                        ),
+                                      ),
+                                    ),
+                                    validator: correoValidator,
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ],
+                    ),
+                  ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 90.0),
+                      child: RaisedButton(
+                        onPressed: () {
+                          restablecerContrasena(context);
+                        },
+                        padding:
+                            EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                        color: Colors.purple[300],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        child: Text(
+                          "Enviar",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              },
+            );
+            //---------------
+          },
         ),
       ],
     );
+  }
+
+  void restablecerContrasena(BuildContext context) async {
+    if (_formKey.currentState.validate()) {}
+    await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: correoCtrl.text)
+        .then(
+      (value) {
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg:
+              "El enlace de restablecimiento de contraseña ha enviado su correo,"
+              "utilícelo para cambiar la contraseña",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 3,
+        );
+      },
+    ).catchError((error) {
+      Fluttertoast.showToast(
+        msg: "Correo inválido",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+      );
+    });
   }
 
   Widget lineaOnlogin() {
@@ -357,30 +565,36 @@ class ExistentePage extends StatelessWidget {
         SizedBox(
           height: 25,
         ),
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(130),
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/images/fb-icon.png"))),
+        GestureDetector(
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(130),
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/images/fb-icon.png"))),
+          ),
+          onTap: () {
+            _login();
+          },
         ),
         SizedBox(width: 20),
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(130),
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage("assets/images/google-icon.png"))),
+        GestureDetector(
+          child: Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(130),
+                image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage("assets/images/google-icon.png"))),
+          ),
+          onTap: () async {},
         ),
       ],
     );
   }
-
-//-------------funcion para loguearse...............................
 
   _loguear(LoginBloc bloc, BuildContext context) {
     FirebaseAuth.instance
@@ -704,13 +918,4 @@ class NuevoPage extends StatelessWidget {
       )..show();
     });
   }
-
-  /* 
-  _loguearRegistro(LoginBloc bloc, BuildContext context) {
-    print('Nombres ${bloc.nombre}');
-    print('Email ${bloc.email}');
-    print('Password ${bloc.contrasena}');
-    print('celular ${bloc.celular}');
-  } */
-
 }

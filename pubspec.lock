@@ -223,6 +223,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_facebook_login:
+    dependency: "direct main"
+    description:
+      name: flutter_facebook_login
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.0"
   flutter_plugin_android_lifecycle:
     dependency: transitive
     description:
@@ -240,6 +247,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: "direct main"
+    description:
+      name: fluttertoast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "7.1.1"
   http:
     dependency: transitive
     description:
