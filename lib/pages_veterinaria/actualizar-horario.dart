@@ -5,15 +5,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-class HorarioAtencion extends StatefulWidget {
-  HorarioAtencion({Key key}) : super(key: key);
+class ActualizarHorario extends StatefulWidget {
+
+  final String idService;
+  ActualizarHorario(this.idService);
 
   @override
-  _HorarioAtencionState createState() => _HorarioAtencionState();
+  _ActualizarHorarioState createState() => _ActualizarHorarioState();
 }
 
-class _HorarioAtencionState extends State<HorarioAtencion> {
-  //---------wavess-------
+class _ActualizarHorarioState extends State<ActualizarHorario> {
+    //---------wavess-------
   _buildCard({
     Config config,
     Color backgroundColor = Colors.transparent,
@@ -71,7 +73,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
 
   @override
   Widget build(BuildContext context) {
-    final nombreService = ModalRoute.of(context).settings.arguments;
+    final nombreService = widget.idService;
     return SafeArea(
           child: Scaffold(
         backgroundColor: Color(0xffffffff),
@@ -2017,7 +2019,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
                   top: 15.0,
                 ),
                 child: Text(
-                  "Horarios de Atención",
+                  "Actualizar horario",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 19.0,
@@ -2031,6 +2033,5 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
       ),
     );
   }
-
-  
+ 
 }

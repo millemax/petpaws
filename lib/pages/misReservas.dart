@@ -6,8 +6,9 @@ import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 //--slimy card
 import 'package:slimy_card/slimy_card.dart';
-//---badges notification
-import 'package:badges/badges.dart';
+
+
+
 
 class MisReservas extends StatefulWidget {
   @override

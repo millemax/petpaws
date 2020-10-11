@@ -370,7 +370,8 @@ class _CreateServicesState extends State<CreateServices> {
   }
 
   //----encabezado de la pagina ---
-  Widget titulo() {
+ // app bar con waves 
+   Widget titulo() {
     return Container(
       child: Stack(
         children: [
@@ -388,15 +389,39 @@ class _CreateServicesState extends State<CreateServices> {
             backgroundColor: Colors.deepPurpleAccent[400],
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              //----WIDGET REGRESO A PERFIL VETERINARIA---
+              Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                runSpacing: 1.0,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      top: 20,
+                      left: 18,
+                    ),
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                ],
+              ),
               //----TITULO DE LA SECCION---
               Padding(
                 padding: const EdgeInsets.only(
                   top: 15.0,
+                  right: 130,
                 ),
                 child: Text(
-                  "Crear servicio",
+                  "Crear Servicio",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 19.0,
@@ -410,4 +435,8 @@ class _CreateServicesState extends State<CreateServices> {
       ),
     );
   }
+
+
+
+
 }

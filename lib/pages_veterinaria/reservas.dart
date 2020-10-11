@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:petpaws/pages_veterinaria/actualizar-service.dart';
 import 'package:petpaws/pages_veterinaria/calendar-events.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -215,7 +216,7 @@ class _ReservasPageState extends State<ReservasPage> {
                   fontWeight: FontWeight.bold)),
           SizedBox(height: 20),
           Image.network(data.data()['icono'],
-              height: 50,),
+              height: 50, color: Colors.black,),
          // SizedBox(height: 15),
           Row(
             children:[
@@ -228,7 +229,8 @@ class _ReservasPageState extends State<ReservasPage> {
                 switch (value) {
                   case 1:{
                       print('Actualizar');
-                      Navigator.pushNamed(context, 'actualizarservicio');
+                      Navigator.push(context,
+            MaterialPageRoute(builder: (context) =>  ActualizarService(data.id) ));
                   }                
                   break;
                   case 2:{

@@ -51,6 +51,7 @@ dependencies:
   expansion_tile_card: ^1.1.0
   call_number: ^0.0.1
   badges: ^1.1.3
+  http: ^0.12.2
   #--slimy-card
   slimy_card: ^1.0.4
   #expansion card
