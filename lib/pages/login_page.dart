@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/page_administrador/menu.dart';
 import 'package:petpaws/pages/homeVeterinarias_page.dart';
@@ -10,9 +12,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-//---login con facebook
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
+/* import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as JSON; */
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,6 +31,15 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    /* var bloc = Provider.of<LoginBloc>(context, listen: false);
+    bloc.currentUser.listen((fbUser) {
+      if (fbUser != null) {
+
+        Navigator.pushNamed(context, 'HomeVeterinarias');
+
+      }
+    }); */
+
     super.initState();
     _pageController = PageController();
   }
@@ -223,7 +235,40 @@ class ExistentePage extends StatefulWidget {
 }
 
 class _ExistentePageState extends State<ExistentePage> {
-  //---------
+  //--------- ------ facebook login ------------
+/*   bool _isLoggedIn = false;
+  Map userProfile;
+  final facebookLogin = FacebookLogin();
+
+  _loginWithFB() async {
+    final result = await facebookLogin.logIn(['email']);
+
+    switch (result.status) {
+      case FacebookLoginStatus.loggedIn:
+        final token = result.accessToken.token;
+        final graphResponse = await http.get(
+            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
+        final profile = JSON.jsonDecode(graphResponse.body);
+        print(profile);
+        setState(() {
+          userProfile = profile;
+          _isLoggedIn = true;
+          if (User != null) {
+            Navigator.pushNamed(context, 'HomeVeterinarias');
+          }
+        });
+        break;
+
+      case FacebookLoginStatus.cancelledByUser:
+        setState(() => _isLoggedIn = false);
+        break;
+      case FacebookLoginStatus.error:
+        setState(() => _isLoggedIn = false);
+        break;
+    }
+  } */
+  //---------------------------------------------facebook fin--
+  //---------------------login facebook 2--------
   static final FacebookLogin facebookSignIn = new FacebookLogin();
 
   String _message = 'Log in/out by pressing the buttons below.';
@@ -254,10 +299,10 @@ class _ExistentePageState extends State<ExistentePage> {
     }
   }
 
-  /* Future<Null> _logOut() async {
+  Future<Null> _logOut() async {
     await facebookSignIn.logOut();
     _showMessage('Logged out.');
-  } */
+  }
 
   void _showMessage(String message) {
     setState(() {
@@ -265,8 +310,7 @@ class _ExistentePageState extends State<ExistentePage> {
     });
   }
 
-  //------------facebook fin--
-
+  //---------------------login facebook 2 fin----
   TextEditingController correoCtrl = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -284,10 +328,10 @@ class _ExistentePageState extends State<ExistentePage> {
       return null;
   }
 
-//------------------
-
   @override
   Widget build(BuildContext context) {
+    //-----login facebook----
+
     final bloc = Provider.of<LoginBloc>(context);
     return Container(
       margin: EdgeInsets.only(top: 30),
@@ -576,6 +620,8 @@ class _ExistentePageState extends State<ExistentePage> {
                     image: AssetImage("assets/images/fb-icon.png"))),
           ),
           onTap: () {
+            /* bloc.loginfacebook(); */
+            /* _loginWithFB(); */
             _login();
           },
         ),
