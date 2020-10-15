@@ -127,6 +127,7 @@ class _ReservaServiceState extends State<ReservaService> {
   //---funciona para recuperar datos de usuario /nombres/correo/celular
   getData() async {
     final String id = FirebaseAuth.instance.currentUser.uid;
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(id)

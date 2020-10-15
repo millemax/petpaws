@@ -1,7 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 
 import 'package:petpaws/bloc/login_bloc.dart';
 import 'package:petpaws/page_administrador/menu.dart';
@@ -13,9 +13,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-/* import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as JSON; */
+import 'package:google_sign_in/google_sign_in.dart';
+
+import 'package:flutter_signin_button/flutter_signin_button.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -31,15 +31,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    /* var bloc = Provider.of<LoginBloc>(context, listen: false);
-    bloc.currentUser.listen((fbUser) {
-      if (fbUser != null) {
-
-        Navigator.pushNamed(context, 'HomeVeterinarias');
-
-      }
-    }); */
-
     super.initState();
     _pageController = PageController();
   }
@@ -235,82 +226,38 @@ class ExistentePage extends StatefulWidget {
 }
 
 class _ExistentePageState extends State<ExistentePage> {
-  //--------- ------ facebook login ------------
-/*   bool _isLoggedIn = false;
-  Map userProfile;
-  final facebookLogin = FacebookLogin();
+  //--------------------------------login con google ----------
+  bool signInState = false;
 
-  _loginWithFB() async {
-    final result = await facebookLogin.logIn(['email']);
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  var name;
+  var id;
+  var email;
 
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final token = result.accessToken.token;
-        final graphResponse = await http.get(
-            'https://graph.facebook.com/v2.12/me?fields=name,picture,email&access_token=${token}');
-        final profile = JSON.jsonDecode(graphResponse.body);
-        print(profile);
-        setState(() {
-          userProfile = profile;
-          _isLoggedIn = true;
-          if (User != null) {
-            Navigator.pushNamed(context, 'HomeVeterinarias');
-          }
-        });
-        break;
+  GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+  Future<void> _GoogleSignIn() async {
+    GoogleSignInAccount signInAccount = await _googleSignIn.signIn();
+    GoogleSignInAuthentication signInAuthentication =
+        await signInAccount.authentication;
+    AuthCredential credential = await GoogleAuthProvider.credential(
+        idToken: signInAuthentication.idToken,
+        accessToken: signInAuthentication.accessToken);
+    User user = (await auth.signInWithCredential(credential)).user;
 
-      case FacebookLoginStatus.cancelledByUser:
-        setState(() => _isLoggedIn = false);
-        break;
-      case FacebookLoginStatus.error:
-        setState(() => _isLoggedIn = false);
-        break;
-    }
-  } */
-  //---------------------------------------------facebook fin--
-  //---------------------login facebook 2--------
-  static final FacebookLogin facebookSignIn = new FacebookLogin();
+    print("uuuuuuuuuuuuuuuuuuuuuuuuuuuu");
+    print(user);
+    print(user.uid);
 
-  String _message = 'Log in/out by pressing the buttons below.';
-
-  Future<Null> _login() async {
-    final FacebookLoginResult result = await facebookSignIn.logIn(['email']);
-
-    switch (result.status) {
-      case FacebookLoginStatus.loggedIn:
-        final FacebookAccessToken accessToken = result.accessToken;
-        _showMessage('''
-         Logged in!
-         
-         Token: ${accessToken.token}
-         User id: ${accessToken.userId}
-         Expires: ${accessToken.expires}
-         Permissions: ${accessToken.permissions}
-         Declined permissions: ${accessToken.declinedPermissions}
-         ''');
-        break;
-      case FacebookLoginStatus.cancelledByUser:
-        _showMessage('Login cancelled by the user.');
-        break;
-      case FacebookLoginStatus.error:
-        _showMessage('Something went wrong with the login process.\n'
-            'Here\'s the error Facebook gave us: ${result.errorMessage}');
-        break;
-    }
-  }
-
-  Future<Null> _logOut() async {
-    await facebookSignIn.logOut();
-    _showMessage('Logged out.');
-  }
-
-  void _showMessage(String message) {
     setState(() {
-      _message = message;
+      name = user.displayName;
+      email = user.email;
+      id = user.uid;
+      signInState = true;
     });
   }
 
-  //---------------------login facebook 2 fin----
+  //-------------------------------fin login con google-------
+
   TextEditingController correoCtrl = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -603,42 +550,30 @@ class _ExistentePageState extends State<ExistentePage> {
   }
 
   Widget iconlogin() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 25,
-        ),
-        GestureDetector(
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(130),
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/images/fb-icon.png"))),
-          ),
-          onTap: () {
-            /* bloc.loginfacebook(); */
-            /* _loginWithFB(); */
-            _login();
-          },
-        ),
-        SizedBox(width: 20),
-        GestureDetector(
-          child: Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(130),
-                image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage("assets/images/google-icon.png"))),
-          ),
-          onTap: () async {},
-        ),
-      ],
+    return SignInButton(
+      Buttons.Google,
+      text: "Iniciar sesión con Google",
+      onPressed: () async {
+        _GoogleSignIn().then((value) {
+          FirebaseFirestore.instance
+              .collection('users')
+              .where('correo', isEqualTo: email)
+              .get()
+              .then((value) {
+            print('******_____KKKKKKKKKKKK');
+            print(value.docs.length);
+            if (value.docs.length == 0) {
+              createuserGoogle();
+            } else {
+              Navigator.pushNamed(context, 'HomeVeterinarias');
+            }
+          });
+        });
+
+        /*       if (signInState) {
+          Navigator.pushNamed(context, 'HomeVeterinarias');
+        } */
+      },
     );
   }
 
@@ -713,6 +648,53 @@ class _ExistentePageState extends State<ExistentePage> {
         title: 'This is Ignored',
         desc: 'This is also Ignored',
         btnOkOnPress: () {},
+      )..show();
+    });
+  }
+
+  //-----crear un usuario cuando inicie sesion con google
+
+  createuserGoogle() {
+    FirebaseFirestore.instance.collection('users').doc(id).set({
+      'correo': email,
+      'nombre': name,
+      'rol': 'usuario',
+      'estado': true,
+    }).then((value) {
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.SUCCES,
+        body: Center(
+          child: Text(
+            ' Bienvenido a la comunidad',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        btnOkOnPress: () {
+          Navigator.pushNamed(context, 'HomeVeterinarias');
+        },
+      )..show();
+    }).catchError((onError) {
+      print("error al cargar los datos");
+      AwesomeDialog(
+        context: context,
+        animType: AnimType.SCALE,
+        dialogType: DialogType.ERROR,
+        body: Center(
+          child: Text(
+            ' Error en conexion ',
+            style: TextStyle(fontStyle: FontStyle.italic),
+          ),
+        ),
+        title: 'This is Ignored',
+        desc: 'This is also Ignored',
+        //btnOkColor: Colors.yellow,
+        btnOkOnPress: () {
+          exit(0);
+        },
       )..show();
     });
   }

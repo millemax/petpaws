@@ -1,6 +1,8 @@
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -27,6 +29,31 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   }
   //-----fin   waves------
 
+  //---------variables para recuperar la cantidad de reservas actuales
+  //variable para obtener la fecha hora actual
+  String _fecha;
+  int _timeunix;
+  int numReserva;
+
+  List reservasRecuperado = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    //variables de fecha y hora actual
+    var fecha = DateTime.now();
+    var horaactual = fecha.toUtc().millisecondsSinceEpoch;
+
+    setState(() {
+      _fecha = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
+      _timeunix = horaactual;
+    });
+
+    getData();
+  }
+
+  //-----------
   //------------------------
   @override
   Widget build(BuildContext context) {
@@ -95,7 +122,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
           boxShadow: [
             BoxShadow(
               color: Colors.black38.withOpacity(0.5),
-              spreadRadius: 5,
+              spreadRadius: 2,
               blurRadius: 7,
               offset: Offset(0, 3),
             )
@@ -250,7 +277,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     child: Badge(
                       animationType: BadgeAnimationType.scale,
                       badgeContent: Text(
-                        '4',
+                        numReserva.toString(),
                         style: TextStyle(color: Colors.white),
                       ),
                       badgeColor: Color(0xffed278a),
@@ -276,5 +303,29 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         ],
       ),
     );
+  }
+
+//--------------------------funcion para obtener reservas actuales
+  getData() async {
+    print('*******************************');
+    print(_timeunix);
+
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    await FirebaseFirestore.instance
+        .collection('reservas')
+        .where("usuario", isEqualTo: id)
+        .where('fechareservaunix', isGreaterThanOrEqualTo: _timeunix)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        reservasRecuperado.add(element.data());
+        print(reservasRecuperado);
+      });
+      setState(() {
+        numReserva = reservasRecuperado.length;
+      });
+      print('CONTADOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
+      print(reservasRecuperado.length);
+    });
   }
 }

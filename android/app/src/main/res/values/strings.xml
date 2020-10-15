@@ -1,12 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-<string name="app_name">Petpaws</string> 
-
-<string name="facebook_app_id">726521367941228</string> 
-<string name="fb_login_protocol_scheme">fb726521367941228</string>
-
+    <string name="app_name">PetPaws</string>
+    <string name="facebook_app_id">1107210709681568</string>
+    <string name="fb_login_protocol_scheme">fb1107210709681568</string>
 </resources>
-
 
 
 

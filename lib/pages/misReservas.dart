@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 //--waves---
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -17,12 +18,26 @@ class MisReservas extends StatefulWidget {
 }
 
 class _MisReservasState extends State<MisReservas> {
+  //variable para obtener la fecha hora actual
+  String _fecha;
+  int _timeunix;
+
   List reservasRecuperado = [];
   bool control = false;
   @override
   void initState() {
-    getData();
     super.initState();
+
+    //variables de fecha y hora actual
+    var fecha = DateTime.now();
+    var horaactual = fecha.toUtc().millisecondsSinceEpoch;
+
+    setState(() {
+      _fecha = DateFormat('EEEE, d MMMM, ' 'yyyy', 'es_ES').format(fecha);
+      _timeunix = horaactual;
+    });
+
+    getData();
   }
 
   DocumentSnapshot data;
@@ -45,6 +60,8 @@ class _MisReservasState extends State<MisReservas> {
   @override
   Widget build(BuildContext context) {
     print(reservasRecuperado);
+    print("contandooooooooooooooooooooooooooooooo");
+    print(reservasRecuperado.length);
     return Scaffold(
       backgroundColor: Color(0XFFFFFFFF),
       body: SafeArea(
@@ -505,6 +522,8 @@ class _MisReservasState extends State<MisReservas> {
   }
 
   getData() async {
+    print('*******************************');
+    print(_timeunix);
     var contador = 0;
     var tamano = 0;
 
@@ -512,6 +531,7 @@ class _MisReservasState extends State<MisReservas> {
     await FirebaseFirestore.instance
         .collection('reservas')
         .where("usuario", isEqualTo: id)
+        .where('fechareservaunix', isGreaterThanOrEqualTo: _timeunix)
         .get()
         .then((value) {
       tamano = value.docs.length;

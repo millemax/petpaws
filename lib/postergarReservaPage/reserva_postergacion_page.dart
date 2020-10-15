@@ -484,10 +484,10 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                             color: Color(0xFFED278A),
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
-                                solicitarcita();
+                                postergarcita();
                               }
                             },
-                            child: Text('Reservar',
+                            child: Text('Postergar',
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18)),
                           ),
@@ -507,7 +507,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
     );
   }
 
-  void solicitarcita() {
+  void postergarcita() {
     //--convitiendo a fecha datetime a formato unix
     var fechaunix = fecha.toUtc().millisecondsSinceEpoch;
 
@@ -593,7 +593,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                   right: 150,
                 ),
                 child: Text(
-                  "Solicitar cita",
+                  "Postergar cita",
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 19.0,

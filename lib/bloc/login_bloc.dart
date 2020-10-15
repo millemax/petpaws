@@ -1,35 +1,9 @@
 import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:petpaws/services/auth_fb.dart';
 import 'package:rxdart/rxdart.dart';
 
 class LoginBloc {
-/* //--------------BLOC PARA FACEBOOK LOGIN
-  final authService = AuthService();
-  final fb = FacebookLogin();
-
-  Stream<User> get currentUser => authService.currentUser;
-  loginfacebook() async {
-    print("Iniciando sesion con facebook");
-
-    final res = await fb.logIn(permissions: [
-      FacebookPermission.publicProfile,
-      FacebookPermission.email,
-    ]);
-
-    switch (res.status) {
-      case FacebookLoginStatus.Success:
-        print("funcionó");
-        break;
-      case FacebookLoginStatus.Cancel:
-        print("El usuario cancelo el login");
-        break;
-      case FacebookLoginStatus.Error:
-        print("Aqui hubo un error");
-        break;
-    }
-  } */
   //----------bloc para manejar el login para usuario existente y nuevo usuario-------------
 
   //declaramos los streams para controlar el correo y la contra
