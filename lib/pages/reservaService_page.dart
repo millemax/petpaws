@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
-import 'package:petpaws/pages/calendar_reservation_page.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wave/config.dart';
@@ -127,6 +127,7 @@ class _ReservaServiceState extends State<ReservaService> {
   //---funciona para recuperar datos de usuario /nombres/correo/celular
   getData() async {
     final String id = FirebaseAuth.instance.currentUser.uid;
+
     await FirebaseFirestore.instance
         .collection('users')
         .doc(id)

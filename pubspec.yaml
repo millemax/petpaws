@@ -35,9 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   
   cupertino_icons: ^0.1.3
-  provider: ^4.3.2+1
+  
+  provider: ^4.3.2+2
   rxdart: ^0.24.1
-  firebase_auth: ^0.18.0+1
+  firebase_auth: ^0.18.1+2
   firebase_core: ^0.5.0
   cloud_firestore: ^0.14.0+2
   awesome_dialog: ^1.2.0
@@ -50,8 +51,7 @@ dependencies:
   url_launcher: ^5.6.0
   expansion_tile_card: ^1.1.0
   call_number: ^0.0.1
-  badges: ^1.1.3
-  http: ^0.12.2
+  badges: ^1.1.3  
   #--slimy-card
   slimy_card: ^1.0.4
   #expansion card
@@ -59,7 +59,9 @@ dependencies:
   #toast notification
   fluttertoast: ^7.1.1
   flutter_facebook_login: ^3.0.0
-  fancy_bottom_navigation: ^0.3.2
+  fancy_bottom_navigation: ^0.3.2  
+  google_sign_in: ^4.5.4
+  flutter_signin_button: ^1.1.0
 
 dev_dependencies:
   flutter_test:
