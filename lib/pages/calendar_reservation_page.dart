@@ -253,71 +253,70 @@ class _CalendarPageState extends State<CalendarPage> {
                                         ]);
                                   } else {
                                     return showDialog(
-                                        context: context,
-                                        barrierDismissible: false,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            contentPadding:
-                                                EdgeInsets.only(top: 10.0),
-                                            elevation: 10,
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20)),
-                                            content: Container(
-                                              width: 300.0,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Container(
-                                                    width: double.infinity,
-                                                    child: Text(
-                                                      'Cupos LLenos',
-                                                      style: TextStyle(
-                                                          color:
-                                                              Color(0xffed278a),
-                                                          fontSize: 25,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 5.0,
-                                                  ),
-                                                  Divider(
-                                                    color: Color(0xffed278a),
-                                                    height: 4.0,
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 15,
-                                                            left: 15,
-                                                            top: 10),
-                                                    child: Text(
-                                                      'Lo sentimos a esta hora los $cupo cupos estan llenos.',
-                                                      style: TextStyle(
-                                                          fontSize: 20),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            actions: [
-                                              FlatButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: Text('OK',
-                                                      style: TextStyle(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          contentPadding:
+                                              EdgeInsets.only(top: 10.0),
+                                          elevation: 10,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          content: Container(
+                                            width: 300.0,
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Container(
+                                                  width: double.infinity,
+                                                  child: Text(
+                                                    'Cupos LLenos',
+                                                    style: TextStyle(
                                                         color:
                                                             Color(0xffed278a),
-                                                        fontSize: 22,
-                                                      )))
-                                            ],
-                                          );
-                                        });
+                                                        fontSize: 25,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                Divider(
+                                                  color: Color(0xffed278a),
+                                                  height: 4.0,
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 15,
+                                                          left: 15,
+                                                          top: 10),
+                                                  child: Text(
+                                                    'Lo sentimos a esta hora los $cupo cupos estan llenos.',
+                                                    style:
+                                                        TextStyle(fontSize: 20),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          actions: [
+                                            FlatButton(
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Text('OK',
+                                                    style: TextStyle(
+                                                      color: Color(0xffed278a),
+                                                      fontSize: 22,
+                                                    )))
+                                          ],
+                                        );
+                                      },
+                                    );
                                   }
                                 } else {
                                   return showDialog(

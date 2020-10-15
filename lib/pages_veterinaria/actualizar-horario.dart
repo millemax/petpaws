@@ -71,6 +71,175 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
 
   var horarios = {};
 
+@override
+void initState() { 
+
+  getData();
+  super.initState();
+  
+}
+
+
+//funcion para los horarios desde la base de datos
+  getData(){
+    final semana=['lunes','martes','miércoles','jueves','viernes','sábado','domingo'];
+    
+     final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(widget.idService).get().then((value){
+      
+       for (var i = 0; i < 7; i++) {
+
+        setState(() {
+
+          switch (i) {
+
+            case 0:{
+               try {
+                 _value1= value.data()['horarios'][semana[i]]['inicio'];
+                 _value2= value.data()['horarios'][semana[i]]['final'];
+                 _lunes=true;
+                 horarios['lunes'] = {
+                            'inicio': _value1,
+                            'final': _value2
+                          };
+                  
+               } catch (e) {
+                 
+
+               }              
+              
+              }
+              break;
+
+            case 1:{
+              try {
+                _value3= value.data()['horarios'][semana[i]]['inicio'];
+                _value4= value.data()['horarios'][semana[i]]['final'];    
+                _martes=true;
+                horarios['martes'] = {
+                            'inicio': _value3,
+                            'final': _value4
+                          };            
+              } catch (e) {
+
+              }
+              
+
+              }              
+              break;
+
+
+            case 2:{
+              try {
+                 _value5= value.data()['horarios'][semana[i]]['inicio'];
+                 _value6= value.data()['horarios'][semana[i]]['final'];
+                 _miercoles=true;
+                 horarios['miércoles']={'inicio':_value5,'final':_value6}; 
+                
+              } catch (e) {
+
+              }
+             
+
+             }    
+              break;
+
+            
+            case 3:{
+              try {
+                _value7= value.data()['horarios'][semana[i]]['inicio'];
+                _value8= value.data()['horarios'][semana[i]]['final'];
+                _jueves=true;
+                horarios['jueves'] = {
+                            'inicio': _value7,
+                            'final': _value8
+                          };
+                
+              } catch (e) {
+              }
+              
+
+             }              
+              break;
+
+            
+            case 4:{
+              try {
+                _value9= value.data()['horarios'][semana[i]]['inicio'];
+                _value10= value.data()['horarios'][semana[i]]['final'];
+                _viernes=true;
+                horarios['viernes'] = {
+                            'inicio': _value9,
+                            'final': _value10
+                          };
+                
+              } catch (e) {
+              }
+              
+
+             }              
+              break;
+
+
+            case 5:{
+              try {
+                _value11= value.data()['horarios'][semana[i]]['inicio'];
+                _value12= value.data()['horarios'][semana[i]]['final'];
+                _sabado=true;
+                horarios['sábado']={'inicio':_value11,'final':_value12}; 
+                
+              } catch (e) {
+
+              }
+              
+
+             }             
+              break;
+
+            
+            case 6:{              
+             
+              try {
+                _value13= value.data()['horarios'][semana[i]]['inicio'];
+                _value14= value.data()['horarios'][semana[i]]['final'];
+                _domingo=true;
+                horarios['domingo'] = {
+                            'inicio': _value13,
+                            'final': _value14
+                          };
+                
+              } catch (e) {
+                print('no pude encontrar valores');
+              }
+              
+
+             }              
+              break;
+            
+
+            default:
+              break;
+          }
+          
+          
+        
+
+        
+         
+        });
+
+
+        
+      } 
+      
+
+
+    });
+    
+
+
+  }
+
   @override
   Widget build(BuildContext context) {
     final nombreService = widget.idService;
@@ -1977,8 +2146,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
         context: context,
         builder: (_) => new AlertDialog(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              title: new Text("Excelente !!"),
-              content: new Text("El nuevo servicio a sido creado correctamente"),
+              title: new Text("Actualizado"),
+              content: new Text("los datos han sido actualizados correctamente"),
               actions: <Widget>[
                 FlatButton(
                   child: Text('OK'),

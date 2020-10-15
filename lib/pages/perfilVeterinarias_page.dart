@@ -210,7 +210,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     return GestureDetector(
       onTap: () {
         print("esta es la veterinaria: $veterinaria");
-        Navigator.pushNamed(context, 'calendarPage', arguments: [
+        Navigator.pushNamed(context, 'CalendarPage', arguments: [
           data.data()['nombre'],
           data.data()['duracioncita'],
           data.data()['horarios'],
