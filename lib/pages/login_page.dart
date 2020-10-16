@@ -128,12 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   }
                 },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-                  child: Text(
-                    "Existente",
-                    style: TextStyle(color: left),
-                  ),
+                child: Text(
+                  "Existente",
+                  style: TextStyle(color: left),
                 ),
               ),
             ),
@@ -548,41 +545,42 @@ class _ExistentePageState extends State<ExistentePage> {
   }
 
   Widget iconlogin() {
-    return SignInButton(
-      Buttons.Google,
-      text: "Iniciar sesión con Google",
-      onPressed: () async {
-        _GoogleSignIn().then((value) {
-          FirebaseFirestore.instance
-              .collection('users')
-              .where('correo', isEqualTo: email)
-              .get()
-              .then((value) {
-            print('******_____KKKKKKKKKKKK');
-            print(value.docs.length);
-            if (value.docs.length == 0) {
-              createuserGoogle();
-            } else {
-              Navigator.pushNamed(context, 'HomeVeterinarias');
-            }
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.6,
+      child: SignInButton(
+        Buttons.Google,
+        text: "Iniciar con Google",
+        onPressed: () async {
+          _GoogleSignIn().then((value) {
+            FirebaseFirestore.instance
+                .collection('users')
+                .where('correo', isEqualTo: email)
+                .get()
+                .then((value) {
+              print(value.docs.length);
+              if (value.docs.length == 0) {
+                createuserGoogle();
+              } else {
+                Navigator.pushNamed(context, 'HomeVeterinarias');
+              }
+            });
           });
-        });
-
-        /*       if (signInState) {
-          Navigator.pushNamed(context, 'HomeVeterinarias');
-        } */
-      },
+        },
+        elevation: 10.0,
+      ),
     );
   }
 
-   //show alert dialog para las notificaciones
-   _showMaterialDialog() {
+  //show alert dialog para las notificaciones
+  _showMaterialDialog() {
     showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               title: new Text("Suspendido"),
-              content: new Text("Tu cuenta ha sido suspendido por infringir nuestras politicas."),
+              content: new Text(
+                  "Tu cuenta ha sido suspendido por infringir nuestras politicas."),
               actions: <Widget>[
                 FlatButton(
                   child: Text('OK'),
@@ -607,60 +605,49 @@ class _ExistentePageState extends State<ExistentePage> {
           .get()
           .then((data) {
         final String rol = data.data()['rol'];
-        final bool estado= data.data()['estado'];
+        final bool estado = data.data()['estado'];
         print('este es el rol' + rol);
 
         switch (rol) {
           case 'usuario':
             {
-              if (estado==true) {
-                 //redirigimos en la pantalla
+              if (estado == true) {
+                //redirigimos en la pantalla
                 Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
-                  (Route<dynamic> route) => false);                
-              }else{
+                    context,
+                    MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+                    (Route<dynamic> route) => false);
+              } else {
                 _showMaterialDialog();
-
-
               }
-             
             }
             break;
 
           case 'veterinario':
             {
-              if (estado==true) {
+              if (estado == true) {
                 //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => ReservasPage()),
-                  (Route<dynamic> route) => false);
-                
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => ReservasPage()),
+                    (Route<dynamic> route) => false);
               } else {
                 _showMaterialDialog();
               }
-              
-
-              
-
             }
             break;
 
           case 'administrador':
             {
-              if (estado==true) {
+              if (estado == true) {
                 //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => MenuAdministrador()),
-                  (Route<dynamic> route) => false);
-
-                
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => MenuAdministrador()),
+                    (Route<dynamic> route) => false);
               } else {
                 _showMaterialDialog();
               }
-              
             }
             break;
 

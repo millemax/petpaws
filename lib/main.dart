@@ -11,6 +11,7 @@ import 'package:petpaws/pages_veterinaria/reservas.dart';
 
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
+import 'package:google_fonts/google_fonts.dart';
 //import 'package:petpaws/screens/login_screen.dart';
 //import 'package:petpaws/screens/splash_screen.dart';
 
@@ -20,6 +21,7 @@ import 'package:firebase_core/firebase_core.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'page_administrador/menu.dart';
 import 'pages/homeVeterinarias_page.dart';
 import 'postergarReservaPage/calendar_postergacion_Page.dart';
 import 'postergarReservaPage/reserva_postergacion_page.dart';
@@ -43,6 +45,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(
             primaryColor: Color(0xFF6600FF),
+            fontFamily: 'McLaren',
           ),
           title: 'login iu',
           debugShowCheckedModeBanner: false,
@@ -60,7 +63,7 @@ class MyApp extends StatelessWidget {
             'horariosatencion': (context) => HorarioAtencion(),
             'ReservaService': (context) =>
                 ReservaService(), //la pagina donde se llena el formulario para reservar cita
-           // 'calendarevents': (context) => MyCalendar(),
+            // 'calendarevents': (context) => MyCalendar(),
             'PerfilUsuario': (context) => MisReservas(),
 
             'MisReservas': (context) =>

@@ -65,14 +65,6 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
   //creamos la llave para el control de formulario
   final _formKey = GlobalKey<FormState>();
 
-  /*  //---pop on tap para volver--
-  void pushRoute(BuildContext context) {
-    Navigator.pop(
-      context,
-      CupertinoPageRoute(builder: (BuildContext context) => CalendarPage()),
-    );
-  } */
-
   //-----------DropdownButton-------------
   String _especie = 'Canino';
   int _numpets = 1;

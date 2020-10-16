@@ -62,6 +62,8 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2  
   google_sign_in: ^4.5.4
   flutter_signin_button: ^1.1.0
+  google_fonts: ^1.1.1
+
 
 dev_dependencies:
   flutter_test:
@@ -96,7 +98,8 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
@@ -107,6 +110,18 @@ flutter:
   #       - asset: fonts/TrajanPro.ttf
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
-  #
+      - family: Chilanka
+        fonts:
+          - asset: assets/fonts/Chilanka-Regular.ttf
+      - family: Donuts
+        fonts:
+          - asset: assets/fonts/PWYummyDonuts.ttf
+      - family: McLaren
+        fonts:
+          - asset: assets/fonts/McLaren-Regular.ttf
+      - family: Pumpkin-Soup
+        fonts:
+          - asset: assets/fonts/Pumpkin-Soup.ttf
+          - asset: assets/fonts/Pumpkin-Soup-Italic.ttf
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

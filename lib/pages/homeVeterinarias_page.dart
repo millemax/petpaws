@@ -169,8 +169,9 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 22,
+                fontSize: 20,
                 color: Colors.white,
+                letterSpacing: 1,
               ),
             ),
           ),
@@ -246,59 +247,63 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             ),
             backgroundColor: Colors.deepPurpleAccent[400],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                ),
-                child: Text(
-                  "VETERINARIAS",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 19.0,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
-                ),
-              ),
-
-              //----campo de busqueda-a
-              Wrap(
-                direction: Axis.vertical,
-                alignment: WrapAlignment.center,
-                runSpacing: 1.0,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 10,
-                      left: 18,
-                    ),
-                    child: Badge(
-                      animationType: BadgeAnimationType.scale,
-                      badgeContent: Text(
-                        numReserva.toString(),
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      badgeColor: Color(0xffed278a),
-                      child: GestureDetector(
-                        child: Image.asset(
-                          "assets/images/calen.png",
-                          scale: 17,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, 'MisReservas');
-                        },
-                      ),
-                    ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    top: 1.0,
                   ),
-                  Text(
-                    "Mis reservas",
-                    style: TextStyle(color: Colors.white, fontSize: 13),
-                  )
-                ],
-              )
-            ],
+                  child: Text(
+                    "VETERINARIAS",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Pumpkin-Soup',
+                        letterSpacing: 3),
+                  ),
+                ),
+
+                //----campo de busqueda-a
+                Wrap(
+                  direction: Axis.vertical,
+                  alignment: WrapAlignment.center,
+                  runSpacing: 1.0,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 10,
+                        left: 18,
+                      ),
+                      child: Badge(
+                        animationType: BadgeAnimationType.scale,
+                        badgeContent: Text(
+                          numReserva.toString(),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        badgeColor: Color(0xff42BFDD),
+                        child: GestureDetector(
+                          child: Image.asset(
+                            "assets/images/calen.png",
+                            scale: 17,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, 'MisReservas');
+                          },
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Mis reservas",
+                      style: TextStyle(color: Colors.white, fontSize: 13),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),
