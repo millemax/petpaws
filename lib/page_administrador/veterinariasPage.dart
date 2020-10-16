@@ -98,6 +98,7 @@ class _VeterinariasListState extends State<VeterinariasList> {
                      GestureDetector(
                        onTap: () {
                          print('suspender');
+                         suspenderUser(data.id);
                        },
                          child: Container(                       
                          padding: EdgeInsets.symmetric(horizontal:8 , vertical: 8),
@@ -148,6 +149,7 @@ class _VeterinariasListState extends State<VeterinariasList> {
                      GestureDetector(
                        onTap: (){
                          print('borrar');
+                         _showDialogDelete('¿Seguro que quiere eliminar ?', 'Esta accion hará que la veterinaria se elimine permanentemente', data.id);
                        },
                          child: Container(                       
                          padding: EdgeInsets.symmetric(horizontal:8 , vertical: 8),
@@ -208,17 +210,96 @@ class _VeterinariasListState extends State<VeterinariasList> {
             ));
   }
 
+  //show alert dialog para las notificaciones
+   _showDialogDelete(String titulo, String contenido, String idVeterinaria) {
+
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              title: new Text(titulo),
+              content: new Text(contenido),
+              actions: <Widget>[
+                 FlatButton(
+                  child: Text('NO'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+                FlatButton(
+                  child: Text('SI'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    deleteVeterinaria(idVeterinaria);
+
+                  },
+                )
+              ],
+            ));
+  }
+
 //es la funcion para actualizar es estado del usuario
   suspenderUser(String id){
-    FirebaseFirestore.instance.collection('users').doc(id).update({'estado': false}).then((value) {
+    var user= FirebaseFirestore.instance.collection('users').doc(id);
+    user.get().then((value){
+      var estado = value.data()['estado'];
+      
+      if (estado == true) {
+
+          user.update({'estado': false}).then((value) {
+            _showMaterialDialog('Usuario Suspendido', 'La cuenta asociada a esta veterinaria a sido suspendida.');
+          }).catchError((err){
+
+          });
+
+        
+      } else {
+        if (estado == false) {
+          user.update({'estado': true}).then((value) {
+            _showMaterialDialog('Usuario Activado', 'La cuenta asociada ha sido activado');
+          }).catchError((err){
+
+          });
+
+          
+        }
+
+
+
+      }
+      
+
 
     }).catchError((err){
+      _showMaterialDialog('Error', 'No podemos ejecutar esta accion');
 
-    });
-
-    
+    });   
 
   }
+
+
+// funcion para eliminar la veterinaria
+  deleteVeterinaria(String idveterinaria){    
+
+  /*  FirebaseFirestore.instance.collection('veterinarias').doc(idveterinaria).delete().then((value) {
+        FirebaseFirestore.instance.collection('users').doc(idveterinaria).update({'estado': false}).then((resp){
+             _showMaterialDialog('Eliminado','La veterinaria ha sido eliminado correctamente');
+
+        });
+    
+    
+
+  }).catchError((err){
+
+    _showMaterialDialog('Error', 'No podemos ejecutar esta accion');
+
+
+  });  */
+ 
+
+}
+
+
 
 
 

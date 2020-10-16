@@ -22,7 +22,7 @@ class _MenuAdministradorState extends State<MenuAdministrador> {
       appBar: AppBar(
         title: Text('Administrador')
       ),
-      body: Center(
+      body: Container(
         child: _getPage(currentPage),
       ),
 
@@ -64,9 +64,9 @@ class _MenuAdministradorState extends State<MenuAdministrador> {
         break;
 
       case 1:
-        return Container(
-          child: CrearVeterinaria(),
-        );
+        return CrearVeterinaria();
+           
+        
 
         
 
