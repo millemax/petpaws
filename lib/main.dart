@@ -21,6 +21,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'pages/homeVeterinarias_page.dart';
+
 import 'postergarReservaPage/calendar_postergacion_Page.dart';
 import 'postergarReservaPage/reserva_postergacion_page.dart';
 
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
             'horariosatencion': (context) => HorarioAtencion(),
             'ReservaService': (context) =>
                 ReservaService(), //la pagina donde se llena el formulario para reservar cita
-           // 'calendarevents': (context) => MyCalendar(),
+            // 'calendarevents': (context) => MyCalendar(),
             'PerfilUsuario': (context) => MisReservas(),
 
             'MisReservas': (context) =>
