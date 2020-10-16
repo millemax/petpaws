@@ -575,14 +575,16 @@ class _ExistentePageState extends State<ExistentePage> {
     );
   }
 
-   //show alert dialog para las notificaciones
-   _showMaterialDialog() {
+  //show alert dialog para las notificaciones
+  _showMaterialDialog() {
     showDialog(
         context: context,
         builder: (_) => new AlertDialog(
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               title: new Text("Suspendido"),
-              content: new Text("Tu cuenta ha sido suspendido por infringir nuestras politicas."),
+              content: new Text(
+                  "Tu cuenta ha sido suspendido por infringir nuestras politicas."),
               actions: <Widget>[
                 FlatButton(
                   child: Text('OK'),
@@ -607,60 +609,49 @@ class _ExistentePageState extends State<ExistentePage> {
           .get()
           .then((data) {
         final String rol = data.data()['rol'];
-        final bool estado= data.data()['estado'];
+        final bool estado = data.data()['estado'];
         print('este es el rol' + rol);
 
         switch (rol) {
           case 'usuario':
             {
-              if (estado==true) {
-                 //redirigimos en la pantalla
+              if (estado == true) {
+                //redirigimos en la pantalla
                 Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
-                  (Route<dynamic> route) => false);                
-              }else{
+                    context,
+                    MaterialPageRoute(builder: (_) => HomeVeterinariasPage()),
+                    (Route<dynamic> route) => false);
+              } else {
                 _showMaterialDialog();
-
-
               }
-             
             }
             break;
 
           case 'veterinario':
             {
-              if (estado==true) {
+              if (estado == true) {
                 //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => ReservasPage()),
-                  (Route<dynamic> route) => false);
-                
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => ReservasPage()),
+                    (Route<dynamic> route) => false);
               } else {
                 _showMaterialDialog();
               }
-              
-
-              
-
             }
             break;
 
           case 'administrador':
             {
-              if (estado==true) {
+              if (estado == true) {
                 //redirigimos en la pantalla
-                  Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => MenuAdministrador()),
-                  (Route<dynamic> route) => false);
-
-                
+                Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (_) => MenuAdministrador()),
+                    (Route<dynamic> route) => false);
               } else {
                 _showMaterialDialog();
               }
-              
             }
             break;
 

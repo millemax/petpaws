@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 class HomeVeterinariasPage extends StatefulWidget {
   @override
@@ -12,6 +13,9 @@ class HomeVeterinariasPage extends StatefulWidget {
 }
 
 class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
+  //varibles para recibir datos latitud y longitud
+  double _latitud;
+  double _longitud;
   //---------wavess-------
   _buildCard({
     Config config,
@@ -94,6 +98,8 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index) {
                   DocumentSnapshot data = snapshot.data.documents[index];
+                  print('holiiiiii');
+                  print(data.data()['ubicacion'].latitude);
                   return GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, 'perfilveterinarias',
@@ -207,20 +213,48 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
               Text(
                 data.data()['horarioatencion'],
                 style: TextStyle(color: Colors.white, fontSize: 18),
-              )
+              ),
+/*               IconButton(
+                  icon: Icon(Icons.room, color: Theme.of(context).primaryColor),
+                  onPressed: () {}) */
             ],
           ),
         ]));
     //logo del card
     var logo = Container(
+        height: MediaQuery.of(context).size.height * 0.25,
         margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.all(10),
         width: MediaQuery.of(context).size.width * 0.93,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircleAvatar(
-                radius: 40, backgroundImage: NetworkImage(data.data()['logo']))
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                    radius: 40,
+                    backgroundImage: NetworkImage(data.data()['logo'])),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    openMapsSheet(
+                        context,
+                        data.data()['ubicacion'].latitude,
+                        data.data()['ubicacion'].longitude,
+                        data.data()['nombre']);
+                  },
+                  child: Image.asset(
+                    'assets/images/mapalocation.png',
+                    scale: 10,
+                  ),
+                ),
+              ],
+            )
           ],
         ));
 
@@ -327,5 +361,45 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       print('CONTADOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
       print(reservasRecuperado.length);
     });
+  }
+
+//esta es la funcion para mostrar el mapa
+  openMapsSheet(context, latitude, longitude, nombre) async {
+    try {
+      final coords = Coords(latitude, longitude);
+      final title = nombre;
+      final availableMaps = await MapLauncher.installedMaps;
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Wrap(
+                  children: <Widget>[
+                    for (var map in availableMaps)
+                      ListTile(
+                        onTap: () => map.showMarker(
+                          coords: coords,
+                          title: title,
+                        ),
+                        title: Text(map.mapName),
+                        leading: Image(
+                          image: map.icon,
+                          height: 30.0,
+                          width: 30.0,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }
