@@ -17,6 +17,13 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   TextEditingController direccionCtrl = new TextEditingController();
   TextEditingController direCtrl = new TextEditingController();
 
+  TextEditingController responCtrl = new TextEditingController();
+  TextEditingController correoCtrl = new TextEditingController();
+  TextEditingController telefonoCtrl = new TextEditingController();
+  TextEditingController contrasenaCtrl = new TextEditingController();
+
+
+
   //creamos la llave para el control de formulario
   final _formKey = GlobalKey<FormState>();
 
@@ -32,6 +39,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   //vavriable para la imagen
 
   File  _image;
+  File  _logo;
 
   final picker = ImagePicker();
 
@@ -67,6 +75,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
           
           
           children: [
+
             SizedBox(height: 20),
             TextFormField(              
               controller: nombreCtrl,
@@ -84,6 +93,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                 }
               },
             ),
+
             SizedBox(height: 10),
              TextFormField(
               controller: descripCtrl,
@@ -120,6 +130,87 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                 }
               },
             ),
+
+            SizedBox(height: 10),
+            TextFormField(              
+              controller: responCtrl,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.person_outline),
+                labelText: 'Nombre del responsable',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+              ),
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Por favor ingrese un responsable';
+                } else {
+                  return null;
+                }
+              },
+            ),
+
+            SizedBox(height: 10),
+            TextFormField(              
+              controller: correoCtrl,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.email),
+                labelText: 'correo del responsable',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+              ),
+              validator: (value) {
+                Pattern pattern =r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+                RegExp regex = new RegExp(pattern);
+                if (!regex.hasMatch(value)) {
+                  return 'Por favor ingrese un correo valido';
+                } else {
+                  return null;
+                }
+              },
+            ),
+
+            SizedBox(height: 10),
+            TextFormField(              
+              controller: contrasenaCtrl,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.lock),
+                labelText: 'Contraseña del responsable',
+                border:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+              ),
+              obscureText: true,
+              validator: (value) {
+                if (value.length > 6) {
+                  return 'contraseña debe ser mayor a 6 caracteres';
+                } else {
+                  return null;
+                }
+              },
+            ),
+
+            SizedBox(height: 10),
+            TextFormField(              
+              controller: telefonoCtrl,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                prefixIcon: Icon(Icons.phone),
+                labelText: 'telefono de responsable',
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
+              ),
+              validator: (value) {
+                if (value.length > 9) {
+                  return 'telefono valido';
+                } else {
+                  return null;
+                }
+              },
+            ),
+
+
+
+
+
             SizedBox(height: 10),
             Row(
               children: [
@@ -528,6 +619,28 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
             Row(
               children: [
                 Text("Logo :", style: TextStyle(fontSize: 15)),
+              ],
+            ),
+
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    getImage();
+                  },
+                  child: Card(
+                        elevation: 10,
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: _image == null
+                              ? Image.asset('assets/images/logo.png', height: 50)
+                              : Image.file(_image, height: 100),
+                        ),
+                      ),
+                  
+
+
+                ),
               ],
             ),
             

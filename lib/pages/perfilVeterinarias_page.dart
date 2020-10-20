@@ -85,7 +85,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
           } else {
             return Container(
                 width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height* 0.95,
+                height: MediaQuery.of(context).size.height * 0.95,
                 decoration: BoxDecoration(
                   color: Colors.white,
                 ),
@@ -222,7 +222,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
         ]);
       },
       child: Card(
-          color: Color(0XFFFDD400),
+          color: Color(0XFFCAD2C5),
           elevation: 4,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -235,6 +235,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      //-----------container para mostrar precio de servicios -----
                       Padding(
                         padding: const EdgeInsets.only(right: 6.5, bottom: 10),
                         child: Container(
@@ -244,7 +245,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                             borderRadius: BorderRadius.circular(5),
                             /* color: Theme.of(context).primaryColor, */
                             border: Border.all(
-                                color: Color(0xffed278a), width: 0.8),
+                                color: Color(0xff6600FF), width: 0.8),
                           ),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -252,7 +253,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                               Text(
                                 "S/.",
                                 style: TextStyle(
-                                    color: Color(0xffed278a),
+                                    color: Color(0xff6600FF),
                                     fontWeight: FontWeight.bold,
                                     fontSize: 10),
                               ),
@@ -262,7 +263,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                                 child: Text(
                                   '$precioservicio.00',
                                   style: TextStyle(
-                                      color: Color(0xffed278a),
+                                      color: Color(0xff6600FF),
                                       fontWeight: FontWeight.bold,
                                       fontSize: 16),
                                 ),

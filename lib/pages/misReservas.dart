@@ -8,11 +8,6 @@ import 'package:wave/wave.dart';
 //--slimy card
 import 'package:slimy_card/slimy_card.dart';
 
-
-
-
-
-
 class MisReservas extends StatefulWidget {
   @override
   _MisReservasState createState() => _MisReservasState();
@@ -108,23 +103,6 @@ class _MisReservasState extends State<MisReservas> {
       },
     );
   }
-
-  //-------SlimyCard
-  /*  Widget slimyCard(DocumentSnapshot data) {
-    return Column(
-      children: <Widget>[
-        SizedBox(height: 10),
-        SlimyCard(
-          topCardHeight: 195,
-          bottomCardHeight: 150,
-          width: 380,
-          color: Colors.grey,
-          topCardWidget: _containerTop(),
-          bottomCardWidget: _containerBottom(),
-        ),
-      ],
-    );
-  } */
 
 //------------contenedor de la parte superior---
   Widget _containerTop(data) {

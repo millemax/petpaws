@@ -27,6 +27,10 @@ class _CalendarPageState extends State<CalendarPage> {
       waveAmplitude: 0,
     );
   }
+
+ //lista de prueba donde saco una copia de dayshora
+  List _lista=[];
+
   //-----fin   waves------
 
   //recuperar la lista de reservas
@@ -136,6 +140,22 @@ class _CalendarPageState extends State<CalendarPage> {
 
     return SafeArea(
       child: Scaffold(
+       /*  floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print('borrando................');
+            setState(() {
+              _lista= daysHora;
+              _lista.removeAt(2);
+              cubitos(_lista, daysFecha, idveterinaria, idservicio, cupo, fechaFinal,today,nombreServicio,duracionCita, precio,veterinaria);
+              print(_lista);
+
+
+            });
+            
+
+          },
+          child: Icon(Icons.ac_unit)
+          ), */
         backgroundColor: Color(0xffffffff),
         body: Stack(
           children: [
@@ -195,7 +215,29 @@ class _CalendarPageState extends State<CalendarPage> {
                   ),
                   Stack(
                     children: [
-                      Container(
+                      cubitos(daysHora, daysFecha, idveterinaria, idservicio, cupo,fechaFinal,today,nombreServicio,duracionCita, precio,veterinaria),
+                      
+
+
+
+
+                    ],
+                  ),
+                  SizedBox(
+                    height: 100,
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  //funcion que dibuja los cuadros con los horarios
+  Widget cubitos(daysHora, daysFecha, idveterinaria, idservicio, cupo, fechaFinal,today,nombreServicio,duracionCita, precio,veterinaria){
+    return Container(
                         height: MediaQuery.of(context).size.height * 0.65,
                         padding: EdgeInsets.only(
                           right: 20,
@@ -398,20 +440,11 @@ class _CalendarPageState extends State<CalendarPage> {
                             );
                           },
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 100,
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
+                      );
+
   }
+
+
 
   getData(int fecha, idVeterinaria, idServicio) async {
     await FirebaseFirestore.instance

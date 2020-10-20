@@ -128,12 +128,9 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   }
                 },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 18),
-                  child: Text(
-                    "Existente",
-                    style: TextStyle(color: left),
-                  ),
+                child: Text(
+                  "Existente",
+                  style: TextStyle(color: left),
                 ),
               ),
             ),
@@ -548,30 +545,29 @@ class _ExistentePageState extends State<ExistentePage> {
   }
 
   Widget iconlogin() {
-    return SignInButton(
-      Buttons.Google,
-      text: "Iniciar sesión con Google",
-      onPressed: () async {
-        _GoogleSignIn().then((value) {
-          FirebaseFirestore.instance
-              .collection('users')
-              .where('correo', isEqualTo: email)
-              .get()
-              .then((value) {
-            print('******_____KKKKKKKKKKKK');
-            print(value.docs.length);
-            if (value.docs.length == 0) {
-              createuserGoogle();
-            } else {
-              Navigator.pushNamed(context, 'HomeVeterinarias');
-            }
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.6,
+      child: SignInButton(
+        Buttons.Google,
+        text: "Iniciar con Google",
+        onPressed: () async {
+          _GoogleSignIn().then((value) {
+            FirebaseFirestore.instance
+                .collection('users')
+                .where('correo', isEqualTo: email)
+                .get()
+                .then((value) {
+              print(value.docs.length);
+              if (value.docs.length == 0) {
+                createuserGoogle();
+              } else {
+                Navigator.pushNamed(context, 'HomeVeterinarias');
+              }
+            });
           });
-        });
-
-        /*       if (signInState) {
-          Navigator.pushNamed(context, 'HomeVeterinarias');
-        } */
-      },
+        },
+        elevation: 10.0,
+      ),
     );
   }
 

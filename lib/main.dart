@@ -11,14 +11,12 @@ import 'package:petpaws/pages_veterinaria/reservas.dart';
 
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
-//import 'package:petpaws/screens/login_screen.dart';
-//import 'package:petpaws/screens/splash_screen.dart';
 
-//import 'package:petpaws/screens/inicio.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
+
 
 import 'pages/homeVeterinarias_page.dart';
 
@@ -44,6 +42,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
           theme: ThemeData(
             primaryColor: Color(0xFF6600FF),
+            //fontFamily: 'McLaren',
           ),
           title: 'login iu',
           debugShowCheckedModeBanner: false,
