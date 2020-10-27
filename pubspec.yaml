@@ -65,6 +65,8 @@ dependencies:
   geolocator: ^6.0.0+4
   map_launcher: ^0.12.2
   google_fonts: ^1.1.1
+  geocoder: ^0.2.1
+  
 
 
 dev_dependencies:

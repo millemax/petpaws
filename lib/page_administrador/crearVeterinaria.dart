@@ -1,11 +1,18 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petpaws/providers/ubicacion.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 
 class CrearVeterinaria extends StatefulWidget {
-  CrearVeterinaria({Key key}) : super(key: key);
+
+  /* final GeoPoint latlong;
+  CrearVeterinaria(this.latlong); */
 
   @override
   _CrearVeterinariaState createState() => _CrearVeterinariaState();
@@ -27,6 +34,8 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   //creamos la llave para el control de formulario
   final _formKey = GlobalKey<FormState>();
 
+  List dias=['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
+  List horas=['00:00AM','01:00AM','02:00AM','03:00AM','04:00AM','05:00AM','06:00AM','07:00AM','08:00AM','09:00AM','10:00AM','11:00AM','12:00PM','01:00PM','02:00PM','03:00PM','04:00PM','05:00PM','06:00PM','07:00PM','08:00PM','09:00PM','10:00PM','11:00PM'];
 
   //variables para los dias
   int _value = 0;
@@ -43,6 +52,21 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
 
   final picker = ImagePicker();
 
+
+  @override
+  void initState() { 
+   
+    super.initState();
+    
+  }
+  
+
+
+
+
+
+
+
   //funcion para obtener las imagenes de la camara
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
@@ -51,14 +75,24 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
     });
   }
 
+    Future getLogo() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _logo = File(pickedFile.path);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
+    final ubicacioninfo= Provider.of<Ubicacioninfo>(context);
+
     return Container(
             
             width: MediaQuery.of(context).size.width,
             padding: EdgeInsets.symmetric(horizontal:20),
-            child: formulario(),
+            child: formulario(ubicacioninfo),
         
 
       );
@@ -66,7 +100,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   }
 
 
-  Widget formulario(){
+  Widget formulario(ubicacioninfo){
     return SingleChildScrollView(
       child: Form(
         
@@ -351,105 +385,102 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                       value: _horainicio,
                       items: [
                         DropdownMenuItem(
-                          child: Text('00:00'),
+                          child: Text('00:00AM'),
                           value: 0,
                         ),
                         DropdownMenuItem(
-                          child: Text('01:00'),
+                          child: Text('01:00AM'),
                           value: 1,
                         ),
                         DropdownMenuItem(
-                          child: Text('02.00'),
+                          child: Text('02.00AM'),
                           value: 2,
                         ),
                         DropdownMenuItem(
-                          child: Text('03:00'),
+                          child: Text('03:00AM'),
                           value: 3,
                         ),
                         DropdownMenuItem(
-                          child: Text('04:00'),
+                          child: Text('04:00AM'),
                           value: 4,
                         ),
                         DropdownMenuItem(
-                          child: Text('05:00'),
+                          child: Text('05:00AM'),
                           value: 5,
                         ),
                         DropdownMenuItem(
-                          child: Text('06:00'),
+                          child: Text('06:00AM'),
                           value: 6,
                         ),
                         DropdownMenuItem(
-                          child: Text('07:00'),
+                          child: Text('07:00AM'),
                           value: 7,
                         ),
                         DropdownMenuItem(
-                          child: Text('08:00'),
+                          child: Text('08:00AM'),
                           value: 8,
                         ),
                         DropdownMenuItem(
-                          child: Text('09:00'),
+                          child: Text('09:00AM'),
                           value: 9,
                         ),
                         DropdownMenuItem(
-                          child: Text('10:00'),
+                          child: Text('10:00AM'),
                           value: 10,
                         ),
                         DropdownMenuItem(
-                          child: Text('11:00'),
+                          child: Text('11:00AM'),
                           value: 11,
                         ),
                         DropdownMenuItem(
-                          child: Text('12:00'),
+                          child: Text('12:00PM'),
                           value: 12,
                         ),
                         DropdownMenuItem(
-                          child: Text('13:00'),
+                          child: Text('1:00PM'),
                           value: 13,
                         ),
                         DropdownMenuItem(
-                          child: Text('14:00'),
+                          child: Text('2:00PM'),
                           value: 14,
                         ),
                         DropdownMenuItem(
-                          child: Text('15:00'),
+                          child: Text('3:00PM'),
                           value: 15,
                         ),
                         DropdownMenuItem(
-                          child: Text('16:00'),
+                          child: Text('4:00PM'),
                           value: 16,
                         ),
                         DropdownMenuItem(
-                          child: Text('17:00'),
+                          child: Text('5:00PM'),
                           value: 17,
                         ),
                         DropdownMenuItem(
-                          child: Text('18:00'),
+                          child: Text('6:00PM'),
                           value: 18,
                         ),
                         DropdownMenuItem(
-                          child: Text('19:00'),
+                          child: Text('7:00PM'),
                           value: 19,
                         ),
                         DropdownMenuItem(
-                          child: Text('20:00'),
+                          child: Text('8:00PM'),
                           value: 20,
                         ),
                         DropdownMenuItem(
-                          child: Text('21:00'),
+                          child: Text('9:00PM'),
                           value: 21,
                         ),
                         DropdownMenuItem(
-                          child: Text('22:00'),
+                          child: Text('10:00PM'),
                           value: 22,
                         ),
                         DropdownMenuItem(
-                          child: Text('23:00'),
+                          child: Text('11:00PM'),
                           value: 23,
                         ),
-                        DropdownMenuItem(
-                          child: Text('24:00'),
-                          value: 24,
-                        ),
+                        
 
                       ],
                       onChanged: (value) {
@@ -476,105 +507,102 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                       value: _horafinal,
                       items: [
                         DropdownMenuItem(
-                          child: Text('00:00'),
+                          child: Text('00:00AM'),
                           value: 0,
                         ),
                         DropdownMenuItem(
-                          child: Text('01:00'),
+                          child: Text('01:00AM'),
                           value: 1,
                         ),
                         DropdownMenuItem(
-                          child: Text('02.00'),
+                          child: Text('02.00AM'),
                           value: 2,
                         ),
                         DropdownMenuItem(
-                          child: Text('03:00'),
+                          child: Text('03:00AM'),
                           value: 3,
                         ),
                         DropdownMenuItem(
-                          child: Text('04:00'),
+                          child: Text('04:00AM'),
                           value: 4,
                         ),
                         DropdownMenuItem(
-                          child: Text('05:00'),
+                          child: Text('05:00AM'),
                           value: 5,
                         ),
                         DropdownMenuItem(
-                          child: Text('06:00'),
+                          child: Text('06:00AM'),
                           value: 6,
                         ),
                         DropdownMenuItem(
-                          child: Text('07:00'),
+                          child: Text('07:00AM'),
                           value: 7,
                         ),
                         DropdownMenuItem(
-                          child: Text('08:00'),
+                          child: Text('08:00AM'),
                           value: 8,
                         ),
                         DropdownMenuItem(
-                          child: Text('09:00'),
+                          child: Text('09:00AM'),
                           value: 9,
                         ),
                         DropdownMenuItem(
-                          child: Text('10:00'),
+                          child: Text('10:00AM'),
                           value: 10,
                         ),
                         DropdownMenuItem(
-                          child: Text('11:00'),
+                          child: Text('11:00AM'),
                           value: 11,
                         ),
                         DropdownMenuItem(
-                          child: Text('12:00'),
+                          child: Text('12:00PM'),
                           value: 12,
                         ),
                         DropdownMenuItem(
-                          child: Text('13:00'),
+                          child: Text('1:00PM'),
                           value: 13,
                         ),
                         DropdownMenuItem(
-                          child: Text('14:00'),
+                          child: Text('2:00PM'),
                           value: 14,
                         ),
                         DropdownMenuItem(
-                          child: Text('15:00'),
+                          child: Text('3:00PM'),
                           value: 15,
                         ),
                         DropdownMenuItem(
-                          child: Text('16:00'),
+                          child: Text('4:00PM'),
                           value: 16,
                         ),
                         DropdownMenuItem(
-                          child: Text('17:00'),
+                          child: Text('5:00PM'),
                           value: 17,
                         ),
                         DropdownMenuItem(
-                          child: Text('18:00'),
+                          child: Text('6:00PM'),
                           value: 18,
                         ),
                         DropdownMenuItem(
-                          child: Text('19:00'),
+                          child: Text('7:00PM'),
                           value: 19,
                         ),
                         DropdownMenuItem(
-                          child: Text('20:00'),
+                          child: Text('8:00PM'),
                           value: 20,
                         ),
                         DropdownMenuItem(
-                          child: Text('21:00'),
+                          child: Text('9:00PM'),
                           value: 21,
                         ),
                         DropdownMenuItem(
-                          child: Text('22:00'),
+                          child: Text('10:00PM'),
                           value: 22,
                         ),
                         DropdownMenuItem(
-                          child: Text('23:00'),
+                          child: Text('11:00PM'),
                           value: 23,
                         ),
-                        DropdownMenuItem(
-                          child: Text('24:00'),
-                          value: 24,
-                        ),
+                        
                         
                       ],
                       onChanged: (value) {
@@ -626,14 +654,42 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    getImage();
+                    getLogo();
                   },
                   child: Card(
                         elevation: 10,
                         child: Container(
                           padding: EdgeInsets.all(20),
-                          child: _image == null
+                          child: _logo == null
                               ? Image.asset('assets/images/logo.png', height: 50)
+                              : Image.file(_image, height: 100),
+                        ),
+                      ),
+                  
+
+
+                ),
+              ],
+            ),
+
+             SizedBox(height: 10),
+            Row(
+              children: [
+                Text("Ubicacion :", style: TextStyle(fontSize: 15)),
+              ],
+            ),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'obtenerubicacion');
+                  },
+                  child: Card(
+                        elevation: 10,
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          child: _logo == null
+                              ? Image.asset('assets/images/icomarker.png', height: 50)
                               : Image.file(_image, height: 100),
                         ),
                       ),
@@ -659,5 +715,91 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
 
   }
 
+
+
+  main() async{
+
+    var image= await uploadImage();
+    var logo = await uploadLogo();
+
+    
+  }
+
+  createUser(){
+      FirebaseAuth.instance.createUserWithEmailAndPassword(email: correoCtrl.text, password:contrasenaCtrl.text)
+    .then((value) {
+      
+      FirebaseFirestore.instance.collection('users').doc(value.user.uid).set({
+        'correo': correoCtrl.text,
+        'estado':'true',
+        'nombre': responCtrl.text, 
+        'rol': 'veterinario',
+        'telefono':telefonoCtrl.text,
+      }).then((resp){
+        
+
+
+      });
+
+
+    });  
+
+  }
+
+  //funcion para cargar la imagen a firestore y recuerar la url
+  Future<String> uploadImage() async {
+    final StorageReference postImgRef =
+        FirebaseStorage.instance.ref().child('icons');
+    var timeKey = DateTime.now();
+
+    //carguemos a storage
+    final StorageUploadTask uploadTask =
+        postImgRef.child(timeKey.toString() + ".png").putFile(_image);
+
+    // recuperamos la  url esperamos que termine de cargar
+    var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
+
+    final String urlimage = imageUrl.toString();
+
+    return urlimage;
+   
+  }
+
+   //funcion para cargar la imagen a firestore y recuerar la url
+ Future<String>  uploadLogo() async {
+    final StorageReference postImgRef =
+        FirebaseStorage.instance.ref().child('icons');
+    var timeKey = DateTime.now();
+
+    //carguemos a storage
+    final StorageUploadTask uploadTask =
+        postImgRef.child(timeKey.toString() + ".png").putFile(_logo);
+
+    // recuperamos la  url esperamos que termine de cargar
+    var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();   
+      
+    
+
+    final String urllogo = imageUrl.toString();
+
+    return urllogo;
+
+  }
+
+  createVeterinaria(){
+     FirebaseFirestore.instance.collection('veterinarias').add(
+      {
+        'descripcion':descripCtrl.text,
+        'direccion':direccionCtrl.text,
+        'horario':dias[_value]+'-'+dias[_value1],
+        'horarioatencion':horas[_horainicio]+'-'+horas[_horafinal],
+        'imagen':'',
+        'logo':'',
+        'nombre':nombreCtrl.text,
+        'ubicacion':'',
+      }
+      ); 
+
+  }
 
 }

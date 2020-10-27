@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
+import 'package:petpaws/page_administrador/localizacion.dart';
 import 'package:petpaws/pages/calendar_reservation_page.dart';
 import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
@@ -70,6 +71,7 @@ class MyApp extends StatelessWidget {
             //'actualizarservicio': (context) => ActualizarService(),
             'CalendarPostegar': (context) => CalendarPostegar(),
             'ReservaPostergacion': (context) => ReservaPostergacion(),
+            'obtenerubicacion': (context) => ObtenerUbicacion(),
           }),
     );
   }
