@@ -49,6 +49,12 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
   Map horarios;
   int cupo;
   var precio;
+
+  List daysHora;
+  List<DateTime> daysFecha;
+  var numeroreservas = {};
+  List<int> reservas = new List();
+
   @override
   void initState() {
     //-----inicializar el controlador para usar el calendario--
@@ -121,8 +127,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
     print(_diaFinal);
 
     //lista para ir almacenando los tiempos sumado al intervalo
-    List daysHora = [];
-    List<DateTime> daysFecha = [];
+    daysHora = [];
+    daysFecha = [];
     if (_horainicio != null && _horafinal != null) {
       DateTime startDate =
           new DateTime(_anoFinal, _mesFinal, _diaFinal, _horainicio, 00);
@@ -166,8 +172,11 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                           margin: EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            border:
-                                Border.all(color: Color(0XFFED278A), width: 2),
+                            border: Border.all(
+                                color: Theme.of(context)
+                                    .accentColor
+                                    .withOpacity(0.6),
+                                width: 2),
                           ),
                           child: TableCalendar(
                             initialSelectedDay: DateTime.now(),
@@ -186,7 +195,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                   fontSize: 18,
                                   color: Colors.white),
                               //-----seleccion fecha----
-                              selectedColor: Color(0xFFFDD400),
+                              selectedColor:
+                                  Theme.of(context).primaryColorLight,
                               selectedStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -208,10 +218,10 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                 child: daySelected == null
                                     ? Text(
                                         '$fechaHoy',
-                                        style: TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 17),
                                       )
                                     : Text('$fechaSelected',
-                                        style: TextStyle(fontSize: 20)))
+                                        style: TextStyle(fontSize: 17)))
                           ],
                         ),
                         Stack(
@@ -276,6 +286,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                 nombremascota,
                                               ]);
                                         } else {
+                                          //------------------mensaje si no hay cuposs-----
                                           return showDialog(
                                             context: context,
                                             barrierDismissible: false,
@@ -299,9 +310,10 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         child: Text(
                                                           'Cupos LLenos',
                                                           style: TextStyle(
-                                                              color: Color(
-                                                                  0xffed278a),
-                                                              fontSize: 25,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              fontSize: 18,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -313,8 +325,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         height: 5.0,
                                                       ),
                                                       Divider(
-                                                        color:
-                                                            Color(0xffed278a),
+                                                        color: Theme.of(context)
+                                                            .accentColor,
                                                         height: 4.0,
                                                       ),
                                                       Padding(
@@ -327,7 +339,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         child: Text(
                                                           'Lo sentimos a esta hora los $cupo cupos estan llenos.',
                                                           style: TextStyle(
-                                                              fontSize: 20),
+                                                              fontSize: 12),
                                                         ),
                                                       ),
                                                     ],
@@ -342,8 +354,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                       child: Text('OK',
                                                           style: TextStyle(
                                                             color: Color(
-                                                                0xffed278a),
-                                                            fontSize: 22,
+                                                                0xffFE5F55),
+                                                            fontSize: 13,
                                                           )))
                                                 ],
                                               );
@@ -351,6 +363,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                           );
                                         }
                                       } else {
+                                        //-------------------mensaje de horario no disponible -----
                                         return showDialog(
                                             context: context,
                                             barrierDismissible: false,
@@ -374,9 +387,10 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         child: Text(
                                                           'Horario no Disponible',
                                                           style: TextStyle(
-                                                              color: Color(
-                                                                  0xffed278a),
-                                                              fontSize: 25,
+                                                              color: Theme.of(
+                                                                      context)
+                                                                  .primaryColor,
+                                                              fontSize: 17,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),
@@ -388,8 +402,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         height: 5.0,
                                                       ),
                                                       Divider(
-                                                        color:
-                                                            Color(0xffed278a),
+                                                        color: Theme.of(context)
+                                                            .accentColor,
                                                         height: 4.0,
                                                       ),
                                                       Padding(
@@ -402,7 +416,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                         child: Text(
                                                           'No puede reservar en un horario pasada a la fecha  y hora actual.',
                                                           style: TextStyle(
-                                                              fontSize: 20),
+                                                              fontSize: 12),
                                                         ),
                                                       ),
                                                     ],
@@ -417,8 +431,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                       child: Text('OK',
                                                           style: TextStyle(
                                                             color: Color(
-                                                                0xffed278a),
-                                                            fontSize: 22,
+                                                                0xffFE5F55),
+                                                            fontSize: 13,
                                                           )))
                                                 ],
                                               );
@@ -433,9 +447,19 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                   fontWeight:
                                                       FontWeight.bold))),
                                       decoration: BoxDecoration(
-                                          color: Color(0XFFED278A),
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                                        color: reservas[index] == cupo
+                                            ? Theme.of(context)
+                                                .accentColor
+                                                .withOpacity(0.2)
+                                            : Theme.of(context)
+                                                .accentColor
+                                                .withOpacity(0.5),
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        border: Border.all(
+                                            color: Colors.grey[300],
+                                            width: 1.0),
+                                      ),
                                     ),
                                   );
                                 },
@@ -485,8 +509,8 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
         horarios = value.data()['horarios'];
         cupo = value.data()['cupo'];
         precio = value.data()['precio'];
-        control = true;
       });
+      lista();
     });
   }
 
@@ -514,7 +538,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -552,7 +576,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                   "Elíge una fecha y una hora",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -562,5 +586,50 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
         ],
       ),
     );
+  }
+
+  lista() {
+    final tamano = daysFecha.length;
+    print('tamaño de array' + tamano.toString());
+    var contador = 0;
+    //numeroreservas = {};
+    for (int i = 0; i < tamano; i++) {
+      FirebaseFirestore.instance
+          .collection('reservas')
+          .where("fechareservaunix",
+              isEqualTo: daysFecha[i].toUtc().millisecondsSinceEpoch)
+          .where("veterinaria", isEqualTo: idveterinaria)
+          .where("servicio", isEqualTo: idservicio)
+          .get()
+          .then((value) {
+        numeroreservas[i] = value.docs.length;
+        contador = contador + 1;
+        print('contador' + contador.toString());
+
+        print(numeroreservas);
+
+        if (contador == tamano) {
+          print("comienza a ordenar............");
+          ordenar(tamano);
+        }
+      });
+    }
+  }
+
+  ordenar(cantidad) {
+    print('ordenando.............');
+    reservas = [];
+    for (int i = 0; i < cantidad; i++) {
+      reservas.add(numeroreservas[i]);
+      print(".....el array.....");
+
+      print(reservas);
+    }
+
+    if (reservas.length == cantidad) {
+      setState(() {
+        control = true;
+      });
+    }
   }
 }

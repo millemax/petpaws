@@ -14,12 +14,15 @@ class MisReservas extends StatefulWidget {
 }
 
 class _MisReservasState extends State<MisReservas> {
+  int numreserva;
+
   //variable para obtener la fecha hora actual
   String _fecha;
   int _timeunix;
 
   List reservasRecuperado = [];
   bool control = false;
+
   @override
   void initState() {
     super.initState();
@@ -64,9 +67,11 @@ class _MisReservasState extends State<MisReservas> {
         child: control == false
             ? Container(
                 color: Colors.white,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                ),
+                child: numreserva == 0
+                    ? Center(child: _alertasinreserva())
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
               )
             : Stack(
                 children: [
@@ -93,8 +98,8 @@ class _MisReservasState extends State<MisReservas> {
             SlimyCard(
               topCardHeight: 195,
               bottomCardHeight: 150,
-              width: 380,
-              color: Colors.grey,
+              width: MediaQuery.of(context).size.width * 0.95,
+              color: Theme.of(context).cardColor,
               topCardWidget: _containerTop(reservasRecuperado[index]),
               bottomCardWidget: _containerBottom(reservasRecuperado[index]),
             ),
@@ -104,287 +109,199 @@ class _MisReservasState extends State<MisReservas> {
     );
   }
 
-//------------contenedor de la parte superior---
+  //------------contenedor de la parte superior---
   Widget _containerTop(data) {
     print(data['nombreveterinaria']);
     var precioservicio = data['precio'].toString();
     return Container(
         decoration: BoxDecoration(
+          color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Color(0xffffffff), width: 0.8),
         ),
         child: Stack(
           children: [
+            Image.asset("assets/images/iii.png"),
             Padding(
-              padding: const EdgeInsets.only(
-                top: 105,
-              ),
+              padding:
+                  const EdgeInsets.only(top: 100.0, bottom: 10.0, right: 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   //-----------------container circular --
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xfffdd400),
-                      //---widget para convertir en circulo
-                      shape: BoxShape.circle,
-                    ),
-                    height: 62,
-                    width: 80,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "S/.",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16.0,
-                            color: Colors.purpleAccent[300],
-                          ),
+                  /* Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white.withOpacity(0.8),
+                                              //---widget para convertir en circulo
+                                              shape: BoxShape.circle,
+                                            ), */
+                  /* height: MediaQuery.of(context).size.height * 0.18,
+                                            width: MediaQuery.of(context).size.width * 0.18, */
+                  /*         child: */ Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "S/.",
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          color: Color(0xffFE5F55),
                         ),
-                        Text(
-                          '$precioservicio.00',
-                          /*  data.data()['precio'], */
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 22.0,
-                            color: Color(0xffed278a),
-                          ),
+                      ),
+                      Text(
+                        '$precioservicio.00',
+                        /*  data.data()['precio'], */
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16.0,
+                          color: Color(0xffFE5F55),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
+                  /* ), */
                 ],
               ),
             ),
+            //----------------fecha inicio reserva ------------
+            Padding(
+              padding: const EdgeInsets.only(
+                top: 60.0,
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(100.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                  color: Theme.of(context).cardColor,
+                ),
+                width: MediaQuery.of(context).size.width * 0.22,
+                height: MediaQuery.of(context).size.height * 0.15,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.15,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 1.5),
+                        child: Text(
+                          data['fechainicioreserva'].toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).accentColor,
+                              fontSize: 13,
+                              letterSpacing: 1),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 3, left: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Fecha de Reserva",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 15),
+                //---------------veterinaria / dueño-----------
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 1),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width * 0.7,
+                        child: ListTile(
+                          title: Text(
+                            data['nombreveterinaria'].toUpperCase(),
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Theme.of(context).accentColor,
+                                letterSpacing: 1),
+                          ),
+                          subtitle: Padding(
+                            padding: const EdgeInsets.only(left: 90.0),
+                            child: Text(
+                              data['nombredueno'],
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       ),
-                      SizedBox(
-                        width: 15,
-                      ),
-                      Text(
-                        data['fechainicioreserva'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                //------------servicio----
-                SizedBox(
-                  height: 5,
-                ),
+
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  padding: const EdgeInsets.only(left: 150.0, top: 10.0),
+                  child: Column(
                     children: [
-                      Text(
-                        "Servicio:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
+                      //--------------inicio reserva--------------
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Hora:",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            data['horainicioreserva'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black,
+                                letterSpacing: 1),
+                          ),
+                        ],
                       ),
-                      SizedBox(
-                        width: 21,
+                      //--------------nombre servicio--------------
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Servicio:",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            data['nombreservicio'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black,
+                                letterSpacing: 1),
+                          ),
+                        ],
                       ),
-                      Text(
-                        data['nombreservicio'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                    ],
-                  ),
-                ),
-                //---------duracion de servicio----
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Veterinaria:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        data['nombreveterinaria'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //-----------hora de servicio -----
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Hora de inicio del servicio:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                      Text(
-                        data['horainicioreserva'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //------------celular------
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Celular del dueño:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 53,
-                      ),
-                      Text(
-                        data['celular'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //-------------nombre del dueño
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Nombre del dueño:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 48,
-                      ),
-                      Text(
-                        data['nombredueno'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //-------------Nombre de la mascota
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Nombre de mascota:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 38,
-                      ),
-                      Text(
-                        data['nombremascota'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //-------------especie de la mascota
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Especie de mascota:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 38,
-                      ),
-                      Text(
-                        data['especie'],
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
-                      ),
-                    ],
-                  ),
-                ),
-                //-------------correo
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Número de mascotas:",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 30,
-                      ),
-                      Text(
-                        "1",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15,
-                            color: Colors.white,
-                            letterSpacing: 1),
+                      //--------------nombre mascota-------------
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Mascota:",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            data['nombremascota'],
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black,
+                                letterSpacing: 1),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -395,7 +312,7 @@ class _MisReservasState extends State<MisReservas> {
         ));
   }
 
-//-----------contenedor de laparte superior---
+  //-----------contenedor de laparte superior---
   Widget _containerBottom(data) {
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -410,7 +327,7 @@ class _MisReservasState extends State<MisReservas> {
             padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-            color: Color(0xfffdd400),
+            color: Theme.of(context).primaryColorLight,
             onPressed: () {
               Navigator.pushNamed(context, 'CalendarPostegar', arguments: [
                 data['veterinaria'],
@@ -424,8 +341,7 @@ class _MisReservasState extends State<MisReservas> {
             child: Row(
               children: [
                 Text('Postergar',
-                    style: TextStyle(
-                        color: Colors.deepPurpleAccent[400], fontSize: 18)),
+                    style: TextStyle(color: Colors.black, fontSize: 18)),
               ],
             ),
           ),
@@ -450,7 +366,7 @@ class _MisReservasState extends State<MisReservas> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -482,13 +398,13 @@ class _MisReservasState extends State<MisReservas> {
               Padding(
                 padding: const EdgeInsets.only(
                   top: 15.0,
-                  right: 150,
+                  right: 140,
                 ),
                 child: Text(
-                  "Reservaciones",
+                  "Mis Reservas",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -514,18 +430,58 @@ class _MisReservasState extends State<MisReservas> {
         .get()
         .then((value) {
       tamano = value.docs.length;
+      if (value.docs.length == 0) {
+        setState(() {
+          numreserva = value.docs.length;
+        });
+      } else {
+        value.docs.forEach((element) {
+          contador += 1;
+          reservasRecuperado.add(element.data());
+          print(reservasRecuperado);
 
-      value.docs.forEach((element) {
-        contador += 1;
-        reservasRecuperado.add(element.data());
-        print(reservasRecuperado);
-
-        if (contador >= tamano) {
-          setState(() {
-            control = true;
-          });
-        }
-      });
+          if (contador >= tamano) {
+            setState(() {
+              control = true;
+            });
+          }
+        });
+      }
     });
+  }
+
+  Widget _alertasinreserva() {
+    return Container(
+        color: Colors.white,
+        width: MediaQuery.of(context).size.width * 0.5,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'NO TIENE RESERVAS',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black45),
+            ),
+            //---------
+            Image.asset(
+              "assets/images/perri.gif",
+              width: MediaQuery.of(context).size.width,
+            ),
+            //---------
+            RaisedButton(
+              splashColor: Theme.of(context).primaryColor,
+              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 8),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Colors.greenAccent[200],
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK',
+                  style: TextStyle(
+                      color: Colors.black.withOpacity(0.5), fontSize: 17)),
+            ),
+          ],
+        ));
   }
 }

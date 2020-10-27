@@ -67,7 +67,6 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
 
   //-----------DropdownButton-------------
   String _especie = 'Canino';
-  int _numpets = 1;
 
   //------------validar usario correo
 
@@ -198,7 +197,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                                   nombreServicio,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25),
+                                      fontSize: 20),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -206,7 +205,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                                 Text(
                                   "$durationCita minutos",
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Color.fromRGBO(102, 0, 161, 0.4)),
                                 )
                               ],
@@ -233,7 +232,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                                 Text(
                                   fechaReserva,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 17,
                                   ),
                                 ),
                                 SizedBox(
@@ -262,7 +261,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                               children: [
                                 Text(
                                   horaInicio,
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -270,7 +269,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                                 Text(
                                   "Hora de inicio",
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Color.fromRGBO(102, 0, 161, 0.4)),
                                 )
                               ],
@@ -372,6 +371,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: DropdownButton<String>(
+                                    dropdownColor: Colors.white,
                                     value: _especie,
                                     onChanged: (String newValue) {
                                       setState(() {
@@ -399,67 +399,6 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                             SizedBox(
                               width: 15,
                             ),
-                            //----------escoger cantidad de cupos----
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 25, bottom: 5),
-                                  child: Text("Nro. de Mascotas:"),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButton(
-                                    iconEnabledColor:
-                                        Theme.of(context).primaryColor,
-                                    iconSize: 40,
-                                    value: _numpets,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text('1'),
-                                        value: 1,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('2'),
-                                        value: 2,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('3'),
-                                        value: 3,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('4'),
-                                        value: 4,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('5'),
-                                        value: 5,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('6'),
-                                        value: 6,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('7'),
-                                        value: 7,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('8'),
-                                        value: 8,
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _numpets = value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -469,11 +408,12 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RaisedButton(
+                            splashColor: Theme.of(context).primaryColor,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            color: Color(0xFFED278A),
+                            color: Colors.red[200],
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 postergarcita();
@@ -481,7 +421,8 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                             },
                             child: Text('Postergar',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18)),
+                                    color: Colors.black.withOpacity(0.7),
+                                    fontSize: 17)),
                           ),
                         ],
                       ),
@@ -550,7 +491,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -588,7 +529,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
                   "Postergar cita",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

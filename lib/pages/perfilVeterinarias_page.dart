@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'calendar_reservation_page.dart';
+
 class PerfilVeterinariaPage extends StatefulWidget {
   @override
   _PerfilVeterinariaPageState createState() => _PerfilVeterinariaPageState();
@@ -13,22 +15,36 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     final prodData = ModalRoute.of(context).settings.arguments;
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         floatingActionButton: Column(
           children: [
-            SizedBox(height: 70),
+            SizedBox(height: 25),
             Row(
               children: [
                 SizedBox(
                   width: 25,
                 ),
-                FloatingActionButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  backgroundColor: Color(0xFF6600FF),
-                  child:
-                      Icon(Icons.chevron_left, color: Colors.white, size: 50),
-                ),
+                //-----------------------------boton de regreso a la anterior pagina
+                ClipOval(
+                  child: Material(
+                    color: Theme.of(context).primaryColor, // button color
+                    child: InkWell(
+                      splashColor:
+                          Theme.of(context).primaryColorLight, // inkwell color
+                      child: SizedBox(
+                          width: 43,
+                          height: 43,
+                          child: Icon(
+                            Icons.chevron_left,
+                            size: 43,
+                            color: Colors.white,
+                          )),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ),
+                )
               ],
             ),
           ],
@@ -84,24 +100,25 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             );
           } else {
             return Container(
-                width: MediaQuery.of(context).size.width * 0.93,
-                height: MediaQuery.of(context).size.height * 0.95,
-                decoration: BoxDecoration(
-                  color: Colors.white,
+              width: MediaQuery.of(context).size.width * 0.93,
+              height: MediaQuery.of(context).size.height * 0.66,
+              decoration: BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 15,
+                  mainAxisSpacing: 15,
                 ),
-                child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 15,
-                    mainAxisSpacing: 15,
-                  ),
-                  itemCount: snapshot.data.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    DocumentSnapshot data = snapshot.data.documents[index];
+                itemCount: snapshot.data.docs.length,
+                itemBuilder: (BuildContext context, int index) {
+                  DocumentSnapshot data = snapshot.data.documents[index];
 
-                    return card(data, prodData);
-                  },
-                ));
+                  return card(data, prodData);
+                },
+              ),
+            );
           }
         });
 //cuerpo donde van a ir los cards de servicios
@@ -155,7 +172,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                                 data.data()['nombre'],
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20,
+                                  fontSize: 17,
                                 ),
                               ),
                               SizedBox(
@@ -164,6 +181,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                               Text(
                                 data.data()['descripcion'],
                                 textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 13),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(
@@ -176,10 +194,11 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                                     Text(
                                       "NUESTROS SERVICIOS",
                                       style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                          color: Color(0xff0100ca),
+                                          fontSize: 17,
+                                          /* fontWeight: FontWeight.bold, */
+                                          fontFamily: 'Pumpkin-Soup',
+                                          letterSpacing: 1),
                                     )
                                   ],
                                 ),
@@ -210,20 +229,22 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
     return GestureDetector(
       onTap: () {
         print("esta es la veterinaria: $veterinaria");
-        Navigator.pushNamed(context, 'CalendarPage', arguments: [
-          data.data()['nombre'],
-          data.data()['duracioncita'],
-          data.data()['horarios'],
-          data.id,
-          prodData,
-          data.data()['cupo'],
-          data.data()['precio'],
-          veterinaria,
-        ]);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CalendarPage(
+                      data.data()['nombre'],
+                      data.data()['duracioncita'],
+                      data.data()['horarios'],
+                      data.id,
+                      prodData,
+                      data.data()['cupo'],
+                      data.data()['precio'],
+                      veterinaria,
+                    )));
       },
       child: Card(
-          color: Color(0XFFCAD2C5),
-          elevation: 4,
+          elevation: 5,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Stack(
@@ -237,39 +258,25 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                     children: [
                       //-----------container para mostrar precio de servicios -----
                       Padding(
-                        padding: const EdgeInsets.only(right: 6.5, bottom: 10),
-                        child: Container(
-                          height: 40,
-                          width: 48,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            /* color: Theme.of(context).primaryColor, */
-                            border: Border.all(
-                                color: Color(0xff6600FF), width: 0.8),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "S/.",
-                                style: TextStyle(
-                                    color: Color(0xff6600FF),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 10),
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 1),
-                                child: Text(
-                                  '$precioservicio.00',
-                                  style: TextStyle(
-                                      color: Color(0xff6600FF),
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
+                        padding: const EdgeInsets.only(right: 6.5, bottom: 5),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "S/.",
+                              style: TextStyle(
+                                  color: Color(0xffFE5F55),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10),
+                            ),
+                            Text(
+                              '$precioservicio.00',
+                              style: TextStyle(
+                                  color: Color(0xffFE5F55),
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16),
+                            ),
+                          ],
                         ),
                       )
                     ],
@@ -289,16 +296,15 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
                       maxLines: 2,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
+                          color: Colors. /*white. withOpacity(0.85) */ black,
+                          fontSize: 17,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
                   Image.network(
                     data.data()['icono'],
-                    width: 80,
-                    height: 80,
-                    color: Colors.white,
+                    width: MediaQuery.of(context).size.width * 0.15,
+                    color: Colors.black.withOpacity(0.55),
                   ),
                   SizedBox(
                     height: 5,

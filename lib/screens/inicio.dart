@@ -22,9 +22,10 @@ class _InicioState extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(children: <Widget>[
-      imagen(),
-    ]));
+          imagen(),
+        ]));
   }
 }
 

@@ -74,7 +74,6 @@ class _ReservaServiceState extends State<ReservaService> {
 
   //-----------DropdownButton-------------
   String _especie = 'Canino';
-  int _numpets = 1;
 
   //------------validar usario correo
 
@@ -106,7 +105,7 @@ class _ReservaServiceState extends State<ReservaService> {
 //-----validar nombre mascota
   String nombremascotaValidator(String value) {
     if (value.isEmpty) return '*Requerido';
-    if (value.length >= 10)
+    if (value.length >= 20)
       return 'Escriba un nombre corto';
     else
       return null;
@@ -204,7 +203,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                   nombreServicio,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 25),
+                                      fontSize: 20.0),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -212,7 +211,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                 Text(
                                   "$durationCita minutos",
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Color.fromRGBO(102, 0, 161, 0.4)),
                                 )
                               ],
@@ -239,7 +238,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                 Text(
                                   fechaReserva,
                                   style: TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 17,
                                   ),
                                 ),
                                 SizedBox(
@@ -268,7 +267,7 @@ class _ReservaServiceState extends State<ReservaService> {
                               children: [
                                 Text(
                                   horaInicio,
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(fontSize: 17),
                                 ),
                                 SizedBox(
                                   height: 5,
@@ -276,7 +275,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                 Text(
                                   "Hora de inicio",
                                   style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 15,
                                       color: Color.fromRGBO(102, 0, 161, 0.4)),
                                 )
                               ],
@@ -378,6 +377,7 @@ class _ReservaServiceState extends State<ReservaService> {
                                     borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: DropdownButton<String>(
+                                    dropdownColor: Colors.white,
                                     value: _especie,
                                     onChanged: (String newValue) {
                                       setState(() {
@@ -406,66 +406,6 @@ class _ReservaServiceState extends State<ReservaService> {
                               width: 15,
                             ),
                             //----------escoger cantidad de cupos----
-                            Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(left: 25, bottom: 5),
-                                  child: Text("Nro. de Mascotas:"),
-                                ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.black),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: DropdownButton(
-                                    iconEnabledColor:
-                                        Theme.of(context).primaryColor,
-                                    iconSize: 40,
-                                    value: _numpets,
-                                    items: [
-                                      DropdownMenuItem(
-                                        child: Text('1'),
-                                        value: 1,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('2'),
-                                        value: 2,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('3'),
-                                        value: 3,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('4'),
-                                        value: 4,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('5'),
-                                        value: 5,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('6'),
-                                        value: 6,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('7'),
-                                        value: 7,
-                                      ),
-                                      DropdownMenuItem(
-                                        child: Text('8'),
-                                        value: 8,
-                                      ),
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        _numpets = value;
-                                      });
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -475,11 +415,12 @@ class _ReservaServiceState extends State<ReservaService> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           RaisedButton(
+                            splashColor: Theme.of(context).primaryColor,
                             padding: EdgeInsets.symmetric(
                                 horizontal: 30, vertical: 15),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10)),
-                            color: Color(0xFFED278A),
+                            color: Colors.greenAccent[200],
                             onPressed: () {
                               if (_formKey.currentState.validate()) {
                                 solicitarcita();
@@ -487,7 +428,8 @@ class _ReservaServiceState extends State<ReservaService> {
                             },
                             child: Text('Reservar',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 18)),
+                                    color: Colors.black.withOpacity(0.7),
+                                    fontSize: 17)),
                           ),
                         ],
                       ),
@@ -523,7 +465,6 @@ class _ReservaServiceState extends State<ReservaService> {
         'nombredueno': nameduenoCtrl.text,
         'nombremascota': namemascotaCtrl.text,
         'especie': _especie,
-        'numeromascotas': _numpets,
         'nombreservicio': nombreServicio,
         'precio': precio,
         'nombreveterinaria': nombreveterinaria,
@@ -533,6 +474,7 @@ class _ReservaServiceState extends State<ReservaService> {
                 .doc(resp.id)
                 .update({'idreserva': resp.id}).then((value) {
               AwesomeDialog(
+                dismissOnTouchOutside: false,
                 context: context,
                 animType: AnimType.SCALE,
                 dialogType: DialogType.SUCCES,
@@ -573,7 +515,7 @@ class _ReservaServiceState extends State<ReservaService> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -605,13 +547,13 @@ class _ReservaServiceState extends State<ReservaService> {
               Padding(
                 padding: const EdgeInsets.only(
                   top: 15.0,
-                  right: 150,
+                  right: 140,
                 ),
                 child: Text(
                   "Solicitar cita",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

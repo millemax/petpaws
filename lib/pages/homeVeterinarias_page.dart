@@ -59,6 +59,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           titulo(),
@@ -163,13 +164,14 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width * 0.5,
+            height: MediaQuery.of(context).size.height * 0.2,
             child: Text(
               data.data()['nombre'],
               maxLines: 2,
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontSize: 20.0,
                 fontWeight: FontWeight.bold,
-                fontSize: 20,
                 color: Colors.white,
                 letterSpacing: 1,
               ),
@@ -190,11 +192,12 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             children: [
               SizedBox(width: 15),
               Text(data.data()['horario'],
-                  style: TextStyle(fontSize: 15, color: Color(0xFFFDD400))),
+                  style: TextStyle(
+                      fontSize: 17, color: Theme.of(context).canvasColor)),
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 8,
           ),
           Row(
             children: [
@@ -205,9 +208,14 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                 Icons.access_alarm,
                 color: Colors.white,
               ),
+              SizedBox(
+                width: 5,
+              ),
               Text(
                 data.data()['horarioatencion'],
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(
+                    color: Colors.white,
+                    height: MediaQuery.of(context).size.height * 0.0025),
               )
             ],
           ),
@@ -221,7 +229,12 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             CircleAvatar(
-                radius: 40, backgroundImage: NetworkImage(data.data()['logo']))
+              radius: 35.5,
+              backgroundColor: Theme.of(context).accentColor.withOpacity(0.6),
+              child: CircleAvatar(
+                  radius: 35,
+                  backgroundImage: NetworkImage(data.data()['logo'])),
+            )
           ],
         ));
 
@@ -245,7 +258,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -260,10 +273,10 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     "VETERINARIAS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
+                        fontSize: 17.0,
+                        /*fontWeight: FontWeight.bold, */
                         fontFamily: 'Pumpkin-Soup',
-                        letterSpacing: 3),
+                        letterSpacing: 2),
                   ),
                 ),
 
@@ -276,19 +289,21 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     Padding(
                       padding: EdgeInsets.only(
                         top: 10,
-                        left: 18,
+                        left: 26,
                       ),
                       child: Badge(
                         animationType: BadgeAnimationType.scale,
-                        badgeContent: Text(
-                          numReserva.toString(),
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        badgeColor: Color(0xff42BFDD),
+                        badgeContent: numReserva == null
+                            ? Text('0')
+                            : Text(
+                                numReserva.toString(),
+                                style: TextStyle(color: Colors.black87),
+                              ),
+                        badgeColor: Theme.of(context).canvasColor,
                         child: GestureDetector(
                           child: Image.asset(
-                            "assets/images/calen.png",
-                            scale: 17,
+                            "assets/images/reserva1.png",
+                            height: 23,
                           ),
                           onTap: () {
                             Navigator.pushNamed(context, 'MisReservas');
@@ -298,7 +313,9 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     ),
                     Text(
                       "Mis reservas",
-                      style: TextStyle(color: Colors.white, fontSize: 13),
+                      style: TextStyle(
+                          color: Colors.white,
+                          height: MediaQuery.of(context).size.height * 0.002),
                     )
                   ],
                 )

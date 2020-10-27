@@ -9,10 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
-
-
 class ActualizarService extends StatefulWidget {
-
   final String idservice;
   ActualizarService(this.idservice);
 
@@ -21,10 +18,7 @@ class ActualizarService extends StatefulWidget {
 }
 
 class _ActualizarServiceState extends State<ActualizarService> {
-
-  
-
- //---------wavess-------
+  //---------wavess-------
   _buildCard({
     Config config,
     Color backgroundColor = Colors.transparent,
@@ -69,92 +63,81 @@ class _ActualizarServiceState extends State<ActualizarService> {
     });
 
     uploadImage();
-
   }
 
+  //funcion que carga todo lo declarado cuando inicia todo
+  @override
+  void initState() {
+    print('id del servicio' + widget.idservice);
+    getdata();
+    super.initState();
+  }
 
- //funcion que carga todo lo declarado cuando inicia todo
- @override
- void initState() { 
-   print('id del servicio'+ widget.idservice);
-   getdata();
-   super.initState();
-   
- }
+  //recuperar datos del servicio para actualizarlos
+  getdata() {
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance
+        .collection('veterinarias')
+        .doc(id)
+        .collection('servicios')
+        .doc(widget.idservice)
+        .get()
+        .then((value) {
+      setState(() {
+        nameCtrl.text = value.data()['nombre'];
+        precioCtrl.text = value.data()['precio'].toString();
+        descripCtrl.text = value.data()['descripcion'];
+        _aforo = value.data()['cupo'];
+        _urlImage = value.data()['icono'];
 
- //recuperar datos del servicio para actualizarlos
- getdata(){
-   final String id = FirebaseAuth.instance.currentUser.uid;
-   FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(widget.idservice).get().then((value){
-     setState(() {
-       nameCtrl.text= value.data()['nombre'];
-       precioCtrl.text= value.data()['precio'].toString();
-       descripCtrl.text= value.data()['descripcion'];
-       _aforo= value.data()['cupo'];
-       _urlImage= value.data()['icono'];
-       
-       var citaduracion= value.data()['duracioncita'];
-       var entero=(citaduracion/60).toInt();
-       
-       var residuo= citaduracion-(60 * entero);
-            
-       if (citaduracion >= 60) {
-        
-         switch (entero) {
-           case 1: {
-             _value= entero*60;
-             _value1= residuo;
+        var citaduracion = value.data()['duracioncita'];
+        var entero = (citaduracion / 60).toInt();
 
-           } break;     
-             
+        var residuo = citaduracion - (60 * entero);
 
-           case 2: {
-             _value= entero*60;
-             _value1= residuo;
+        if (citaduracion >= 60) {
+          switch (entero) {
+            case 1:
+              {
+                _value = entero * 60;
+                _value1 = residuo;
+              }
+              break;
 
-           } break;    
+            case 2:
+              {
+                _value = entero * 60;
+                _value1 = residuo;
+              }
+              break;
 
-             
-           case 3:{
-             _value= entero*60;
-             _value1= residuo;
+            case 3:
+              {
+                _value = entero * 60;
+                _value1 = residuo;
+              }
+              break;
 
-           } break;    
+            case 4:
+              {
+                _value = entero * 60;
+                _value1 = residuo;
+              }
+              break;
 
-             
-           case 4:{
-             _value= entero*60;
-             _value1= residuo;
-
-           }break;           
-             
-          
-           default:{
-             
-           }break;
-
-
-         }
-         
-       } else {
-         if (citaduracion <= 45) {
-           _value1=citaduracion;
-           _value=0;
-           
-         }
-       }
-
-     });
-
-
-     
-   });
-
- }
-
- 
-
- 
+            default:
+              {}
+              break;
+          }
+        } else {
+          if (citaduracion <= 45) {
+            _value1 = citaduracion;
+            _value = 0;
+          }
+        }
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -294,7 +277,7 @@ class _ActualizarServiceState extends State<ActualizarService> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
-                      iconSize: 40,                      
+                      iconSize: 40,
                       value: _value1,
                       items: [
                         DropdownMenuItem(
@@ -388,11 +371,10 @@ class _ActualizarServiceState extends State<ActualizarService> {
                   child: Card(
                     elevation: 10,
                     child: Container(
-                      padding: EdgeInsets.all(20),
-                      child: _urlImage == null
-                          ? Image.asset('assets/images/plus.png', height: 50)
-                          : Image.network(_urlImage, height: 80)
-                    ),
+                        padding: EdgeInsets.all(20),
+                        child: _urlImage == null
+                            ? Image.asset('assets/images/plus.png', height: 50)
+                            : Image.network(_urlImage, height: 80)),
                   ),
                 ),
                 SizedBox(width: 20),
@@ -409,18 +391,22 @@ class _ActualizarServiceState extends State<ActualizarService> {
             ),
             SizedBox(height: 25),
             RaisedButton(
+              splashColor: Theme.of(context).primaryColor,
+              color: Theme.of(context).primaryColorLight,
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              color: Color(0xFFED278A),
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   saveDatabase();
                 }
               },
               child: Text('Siguiente',
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: TextStyle(color: Colors.black, fontSize: 18)),
             ),
+            SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),
@@ -441,41 +427,40 @@ class _ActualizarServiceState extends State<ActualizarService> {
     var imageUrl = await (await uploadTask.onComplete).ref.getDownloadURL();
 
     setState(() {
-
       _urlImage = imageUrl.toString();
-
     });
-    
 
-   // saveDatabase(url);
+    // saveDatabase(url);
   }
 
   saveDatabase() {
     //guardar en la bd(nombre, precio, descripcion, duracion de cita, cupo, urlicono)
     final int duracion = _value + _value1;
     final String id = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').doc(widget.idservice).update({
+    FirebaseFirestore.instance
+        .collection('veterinarias')
+        .doc(id)
+        .collection('servicios')
+        .doc(widget.idservice)
+        .update({
       'nombre': nameCtrl.text,
       'icono': _urlImage,
       'descripcion': descripCtrl.text,
       'duracioncita': duracion,
-      'cupo':_aforo,
-      'precio': int.parse(precioCtrl.text) ,
-    }).then((value){
-      
+      'cupo': _aforo,
+      'precio': int.parse(precioCtrl.text),
+    }).then((value) {
       //Navigator.pushNamed(context,'horariosatencion',arguments: widget.idservice);
-      Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ActualizarHorario(widget.idservice)  ));
-
-    }); 
-
-
-
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ActualizarHorario(widget.idservice)));
+    });
   }
 
   //----encabezado de la pagina ---
- // app bar con waves 
-   Widget titulo() {
+  // app bar con waves
+  Widget titulo() {
     return Container(
       child: Stack(
         children: [
@@ -490,8 +475,9 @@ class _ActualizarServiceState extends State<ActualizarService> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
+          //--------------------------------
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -522,13 +508,13 @@ class _ActualizarServiceState extends State<ActualizarService> {
               Padding(
                 padding: const EdgeInsets.only(
                   top: 15.0,
-                  right: 130,
+                  right: 120,
                 ),
                 child: Text(
                   "Actualizar Servicio",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -536,12 +522,8 @@ class _ActualizarServiceState extends State<ActualizarService> {
             ],
           ),
         ],
+        //-----------------------------------
       ),
     );
   }
-
-
-
-
-
 }
