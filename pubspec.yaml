@@ -16,10 +16,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 version: 1.0.0+1
-
 environment:
   sdk: ">=2.7.0 <3.0.0"
-
 dependencies:
   flutter:
     sdk: flutter
@@ -62,8 +60,13 @@ dependencies:
   fancy_bottom_navigation: ^0.3.2  
   google_sign_in: ^4.5.4
   flutter_signin_button: ^1.1.0
+  #google maps
+  google_maps_flutter: ^1.0.3
+  geolocator: ^6.0.0+4
+  map_launcher: ^0.12.2
   google_fonts: ^1.1.1
-  flutter_gifimage: ^1.0.0
+  geocoder: ^0.2.1
+  
 
 
 dev_dependencies:

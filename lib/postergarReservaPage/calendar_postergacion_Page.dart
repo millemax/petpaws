@@ -158,7 +158,10 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
             ? Container(
                 color: Colors.white,
                 child: Center(
-                  child: CircularProgressIndicator(),
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    child: Image.asset("assets/images/perrito.gif"),
+                  ),
                 ),
               )
             : Stack(
@@ -346,17 +349,39 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                   ),
                                                 ),
                                                 actions: [
-                                                  FlatButton(
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 12),
+                                                    child: RaisedButton(
+                                                      splashColor:
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 120.0,
+                                                              vertical: 8),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      color: Colors
+                                                          .greenAccent[200],
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
                                                       child: Text('OK',
                                                           style: TextStyle(
-                                                            color: Color(
-                                                                0xffFE5F55),
-                                                            fontSize: 13,
-                                                          )))
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              fontSize: 17)),
+                                                    ),
+                                                  ),
                                                 ],
                                               );
                                             },
@@ -414,7 +439,7 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                                 left: 15,
                                                                 top: 10),
                                                         child: Text(
-                                                          'No puede reservar en un horario pasada a la fecha  y hora actual.',
+                                                          'No puede postergar en un horario pasada a la fecha  y hora actual.',
                                                           style: TextStyle(
                                                               fontSize: 12),
                                                         ),
@@ -423,17 +448,39 @@ class _CalendarPostegarState extends State<CalendarPostegar> {
                                                   ),
                                                 ),
                                                 actions: [
-                                                  FlatButton(
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            right: 12),
+                                                    child: RaisedButton(
+                                                      splashColor:
+                                                          Theme.of(context)
+                                                              .primaryColor,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 120.0,
+                                                              vertical: 8),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10)),
+                                                      color: Colors
+                                                          .greenAccent[200],
                                                       onPressed: () {
                                                         Navigator.of(context)
                                                             .pop();
                                                       },
                                                       child: Text('OK',
                                                           style: TextStyle(
-                                                            color: Color(
-                                                                0xffFE5F55),
-                                                            fontSize: 13,
-                                                          )))
+                                                              color: Colors
+                                                                  .black
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              fontSize: 17)),
+                                                    ),
+                                                  ),
                                                 ],
                                               );
                                             });

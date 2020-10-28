@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 class HomeVeterinariasPage extends StatefulWidget {
   @override
@@ -12,6 +13,9 @@ class HomeVeterinariasPage extends StatefulWidget {
 }
 
 class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
+  //varibles para recibir datos latitud y longitud
+  double _latitud;
+  double _longitud;
   //---------wavess-------
   _buildCard({
     Config config,
@@ -81,7 +85,10 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             return Container(
               width: MediaQuery.of(context).size.width * 0.93,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Image.asset("assets/images/perrito.gif"),
+                ),
               ),
             );
           } else {
@@ -95,6 +102,8 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                 itemCount: snapshot.data.docs.length,
                 itemBuilder: (BuildContext context, int index) {
                   DocumentSnapshot data = snapshot.data.documents[index];
+                  print('holiiiiii');
+                  print(data.data()['ubicacion'].latitude);
                   return GestureDetector(
                       onTap: () {
                         Navigator.pushNamed(context, 'perfilveterinarias',
@@ -128,7 +137,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
               offset: Offset(0, 3),
             )
           ],
-          color: Colors.transparent,
+          color: Colors.grey[100],
           borderRadius: BorderRadius.circular(20),
           image: DecorationImage(
               fit: BoxFit.cover, image: NetworkImage(data.data()['imagen']))),
@@ -222,18 +231,39 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         ]));
     //logo del card
     var logo = Container(
+        height: MediaQuery.of(context).size.height * 0.25,
         margin: EdgeInsets.only(top: 20),
         padding: EdgeInsets.all(10),
         width: MediaQuery.of(context).size.width * 0.93,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircleAvatar(
-              radius: 35.5,
-              backgroundColor: Theme.of(context).accentColor.withOpacity(0.6),
-              child: CircleAvatar(
-                  radius: 35,
-                  backgroundImage: NetworkImage(data.data()['logo'])),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    radius: 40,
+                    backgroundImage: NetworkImage(data.data()['logo'])),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    openMapsSheet(
+                        context,
+                        data.data()['ubicacion'].latitude,
+                        data.data()['ubicacion'].longitude,
+                        data.data()['nombre']);
+                  },
+                  child: Image.asset(
+                    'assets/images/ubimap.png',
+                    scale: 2.5,
+                  ),
+                ),
+              ],
             )
           ],
         ));
@@ -349,5 +379,45 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       print('CONTADOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
       print(reservasRecuperado.length);
     });
+  }
+
+//esta es la funcion para mostrar el mapa
+  openMapsSheet(context, latitude, longitude, nombre) async {
+    try {
+      final coords = Coords(latitude, longitude);
+      final title = nombre;
+      final availableMaps = await MapLauncher.installedMaps;
+
+      showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                child: Wrap(
+                  children: <Widget>[
+                    for (var map in availableMaps)
+                      ListTile(
+                        onTap: () => map.showMarker(
+                          coords: coords,
+                          title: title,
+                        ),
+                        title: Text(map.mapName),
+                        leading: Image(
+                          image: map.icon,
+                          height: 30.0,
+                          width: 30.0,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      print(e);
+    }
   }
 }

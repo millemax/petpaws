@@ -70,7 +70,10 @@ class _MisReservasState extends State<MisReservas> {
                 child: numreserva == 0
                     ? Center(child: _alertasinreserva())
                     : Center(
-                        child: CircularProgressIndicator(),
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          child: Image.asset("assets/images/perrito.gif"),
+                        ),
                       ),
               )
             : Stack(
@@ -128,16 +131,7 @@ class _MisReservasState extends State<MisReservas> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  //-----------------container circular --
-                  /* Container(
-                                            decoration: BoxDecoration(
-                                              color: Colors.white.withOpacity(0.8),
-                                              //---widget para convertir en circulo
-                                              shape: BoxShape.circle,
-                                            ), */
-                  /* height: MediaQuery.of(context).size.height * 0.18,
-                                            width: MediaQuery.of(context).size.width * 0.18, */
-                  /*         child: */ Column(
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
@@ -460,24 +454,24 @@ class _MisReservasState extends State<MisReservas> {
             Text(
               'NO TIENE RESERVAS',
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black45),
+              style: TextStyle(color: Colors.black45, wordSpacing: 5),
             ),
             //---------
             Image.asset(
-              "assets/images/perri.gif",
+              "assets/images/PER.png",
               width: MediaQuery.of(context).size.width,
             ),
             //---------
             RaisedButton(
               splashColor: Theme.of(context).primaryColor,
-              padding: EdgeInsets.symmetric(horizontal: 80, vertical: 8),
+              padding: EdgeInsets.symmetric(horizontal: 60, vertical: 8),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               color: Colors.greenAccent[200],
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('OK',
+              child: Text('Volver',
                   style: TextStyle(
                       color: Colors.black.withOpacity(0.5), fontSize: 17)),
             ),

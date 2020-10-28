@@ -9,6 +9,8 @@ class PerfilVeterinariaPage extends StatefulWidget {
 }
 
 class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
+  bool control = false;
+
   var veterinaria;
   @override
   Widget build(BuildContext context) {
@@ -65,22 +67,34 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         DocumentSnapshot data = snapshot.data;
-        return Container(
-          height: MediaQuery.of(context).size.height * 0.5,
-          width: double.infinity,
-          child: Stack(
-            children: [
-              Image.network(
-                data.data()['imagen'],
-                fit: BoxFit.cover,
-                width: double.infinity,
+        if (!snapshot.hasData) {
+          return Container(
+            width: MediaQuery.of(context).size.width * 0.93,
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.4,
+                child: Image.asset("assets/images/perrito.gif"),
               ),
-              Container(
-                color: Color.fromRGBO(0, 0, 0, 0.3),
-              ),
-            ],
-          ),
-        );
+            ),
+          );
+        } else {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.5,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                Image.network(
+                  data.data()['imagen'],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+                Container(
+                  color: Color.fromRGBO(0, 0, 0, 0.3),
+                ),
+              ],
+            ),
+          );
+        }
       },
     );
 //cards en grupo de los servicios
@@ -95,7 +109,10 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             return Container(
               width: MediaQuery.of(context).size.width * 0.93,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Image.asset("assets/images/perrito.gif"),
+                ),
               ),
             );
           } else {
@@ -138,7 +155,7 @@ class _PerfilVeterinariaPageState extends State<PerfilVeterinariaPage> {
             return Container(
               width: MediaQuery.of(context).size.width * 0.93,
               child: Center(
-                child: CircularProgressIndicator(),
+                child: Image.asset("assets/images/perrito.gif"),
               ),
             );
           } else {
