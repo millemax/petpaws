@@ -8,7 +8,7 @@ class Ubicacioninfo with ChangeNotifier{
     return _latitud;
   }
 
-  get longitud {
+  get longitud{
     return _longitud;
   }
 

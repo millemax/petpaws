@@ -4,6 +4,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:petpaws/page_administrador/menu.dart';
+import 'package:petpaws/providers/ubicacion.dart';
+import 'package:provider/provider.dart';
 
 class ObtenerUbicacion extends StatefulWidget {
   ObtenerUbicacion({Key key}) : super(key: key);
@@ -65,8 +67,10 @@ void initState() {
       snippet: "tu ubicacion",      
     ),
     onDragEnd: (newPosition){
-      print(newPosition.latitude);
-      print(newPosition.longitude);
+
+      _latitud=newPosition.latitude;
+      _longitud =newPosition.longitude; 
+
       getAdress(newPosition.latitude, newPosition.longitude);
 
     },
@@ -102,6 +106,9 @@ void initState() {
 
   @override
   Widget build(BuildContext context) {
+
+    final ubicacioninfo= Provider.of<Ubicacioninfo>(context);
+    
     return Scaffold(
      
       appBar: AppBar(
@@ -170,14 +177,16 @@ void initState() {
 
           if (_formKey.currentState.validate()) {
 
-            //Navigator.push(context, MaterialPageRoute(builder: (context) => CrearVeterinaria() )  );7
+            ubicacioninfo.latitud=_latitud;
+            ubicacioninfo.longitud=_longitud;
+            
 
             print('la latitud y longitud button ... : ');
             print(ubicacion.latitude);
             print(ubicacion.longitude);
             print('la direccion'+ direccionCtrl.text );
-            Navigator.push(context,
-            MaterialPageRoute(builder: (context) => MenuAdministrador() ));
+
+            Navigator.pop(context);
                   
           }
 

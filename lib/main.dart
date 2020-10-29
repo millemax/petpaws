@@ -9,6 +9,7 @@ import 'package:petpaws/pages/reservaService_page.dart';
 import 'package:petpaws/pages_veterinaria/create-service.dart';
 import 'package:petpaws/pages_veterinaria/horarios_atencion.dart';
 import 'package:petpaws/pages_veterinaria/reservas.dart';
+import 'package:petpaws/providers/ubicacion.dart';
 
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
@@ -40,39 +41,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => LoginBloc(),
-      child: MaterialApp(
-          theme: ThemeData(
-            primaryColor: Color(0xFF6600FF),
-            //fontFamily: 'McLaren',
-          ),
-          title: 'login iu',
-          debugShowCheckedModeBanner: false,
-          //home: LoginScreen(),
-          // home: Inicio(),
-          initialRoute: '/',
-          // home: LoginPage(),
-          routes: {
-            '/': (context) => Inicio(),
-            'perfilveterinarias': (context) => PerfilVeterinariaPage(),
-            'HomeVeterinarias': (context) => HomeVeterinariasPage(),
-            'crearservico': (context) =>
-                CreateServices(), //este es la pagina en el perfil de veterninarias
-            'CalendarPage': (context) => CalendarPage(),
-            'horariosatencion': (context) => HorarioAtencion(),
-            'ReservaService': (context) =>
-                ReservaService(), //la pagina donde se llena el formulario para reservar cita
-            // 'calendarevents': (context) => MyCalendar(),
-            'PerfilUsuario': (context) => MisReservas(),
+      child: ChangeNotifierProvider(
+          create:(_)=>Ubicacioninfo(),
+            child: MaterialApp(
+            theme: ThemeData(
+              primaryColor: Color(0xFF6600FF),
+              //fontFamily: 'McLaren',
+            ),
+            title: 'login iu',
+            debugShowCheckedModeBanner: false,
+            //home: LoginScreen(),
+            // home: Inicio(),
+            initialRoute: '/',
+            // home: LoginPage(),
+            routes: {
+              '/': (context) => Inicio(),
+              'perfilveterinarias': (context) => PerfilVeterinariaPage(),
+              'HomeVeterinarias': (context) => HomeVeterinariasPage(),
+              'crearservico': (context) =>
+                  CreateServices(), //este es la pagina en el perfil de veterninarias
+              'CalendarPage': (context) => CalendarPage(),
+              'horariosatencion': (context) => HorarioAtencion(),
+              'ReservaService': (context) =>
+                  ReservaService(), //la pagina donde se llena el formulario para reservar cita
+              // 'calendarevents': (context) => MyCalendar(),
+              'PerfilUsuario': (context) => MisReservas(),
 
-            'MisReservas': (context) =>
-                MisReservas(), // pagina donde vemos nuestro historial de reservas
+              'MisReservas': (context) =>
+                  MisReservas(), // pagina donde vemos nuestro historial de reservas
 
-            'reservasveterinario': (context) => ReservasPage(),
-            //'actualizarservicio': (context) => ActualizarService(),
-            'CalendarPostegar': (context) => CalendarPostegar(),
-            'ReservaPostergacion': (context) => ReservaPostergacion(),
-            'obtenerubicacion': (context) => ObtenerUbicacion(),
-          }),
+              'reservasveterinario': (context) => ReservasPage(),
+              //'actualizarservicio': (context) => ActualizarService(),
+              'CalendarPostegar': (context) => CalendarPostegar(),
+              'ReservaPostergacion': (context) => ReservaPostergacion(),
+              'obtenerubicacion': (context) => ObtenerUbicacion(),
+            }),
+      ),
     );
   }
 }

@@ -29,10 +29,16 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   TextEditingController telefonoCtrl = new TextEditingController();
   TextEditingController contrasenaCtrl = new TextEditingController();
 
+//este  campo es para pedir la contraseña
+TextEditingController admincontrasenaCtrl = new TextEditingController();
+
+
 
 
   //creamos la llave para el control de formulario
   final _formKey = GlobalKey<FormState>();
+
+  final _alertKey = GlobalKey<FormState>();
 
   List dias=['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo'];
   List horas=['00:00AM','01:00AM','02:00AM','03:00AM','04:00AM','05:00AM','06:00AM','07:00AM','08:00AM','09:00AM','10:00AM','11:00AM','12:00PM','01:00PM','02:00PM','03:00PM','04:00PM','05:00PM','06:00PM','07:00PM','08:00PM','09:00PM','10:00PM','11:00PM'];
@@ -85,6 +91,10 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
 
   @override
   Widget build(BuildContext context) {
+
+    final String id = FirebaseAuth.instance.currentUser.uid;
+
+    print(id);
 
     final ubicacioninfo= Provider.of<Ubicacioninfo>(context);
 
@@ -215,7 +225,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
               ),
               obscureText: true,
               validator: (value) {
-                if (value.length > 6) {
+                if (value.length < 6) {
                   return 'contraseña debe ser mayor a 6 caracteres';
                 } else {
                   return null;
@@ -233,8 +243,8 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                 border: OutlineInputBorder(borderRadius: BorderRadius.circular(40)),
               ),
               validator: (value) {
-                if (value.length > 9) {
-                  return 'telefono valido';
+                if (value.length < 9) {
+                  return 'telefono invalido';
                 } else {
                   return null;
                 }
@@ -699,6 +709,27 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
                 ),
               ],
             ),
+
+            SizedBox(height:20),
+
+            RaisedButton(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              color: Color(0xFFED278A),
+              onPressed: () {
+                if (_formKey.currentState.validate()) {
+                  
+                  alert(ubicacioninfo);
+                  
+                }
+              },
+              child: Text('Crear Veterinaria',
+                  style: TextStyle(color: Colors.white, fontSize: 18)),
+            ),
+
+            SizedBox(height:50),
+
             
 
 
@@ -716,40 +747,169 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
   }
 
 
+ Future alert(ubicacioninfo){
+    
+    return showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context){
+               return AlertDialog(
+                    contentPadding: EdgeInsets.only(top: 10.0),
+                    elevation: 10,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    content: Container(
+                      width: 300.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(left: 20),
+                                child: Text(
+                                  'Confirmar Contraseña',
+                                  style: TextStyle(
+                                      color: Color(0xffed278a),
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                              IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    correoCtrl.clear();
+                                    Navigator.pop(context);
+                                  })
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5.0,
+                          ),
+                          Divider(
+                            color: Color(0xffed278a),
+                            height: 4.0,
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 15, left: 15, top: 10),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Para ejecutar esta accion nesecitamos confirmar su contraseña',
+                                    style: TextStyle(fontSize: 12),
+                                  ),
+                                  Form(
+                                    key: _alertKey,
+                                  
+                                    child: TextFormField(
+                                      controller: admincontrasenaCtrl,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                        labelText: "Contraseña",
+                                        hintText: "Contraseña",
+                                        //----llama los iconos declarados
+                                        prefixIcon: Padding(
+                                          padding: EdgeInsets.only(right: 10),
+                                          child: Icon(
+                                            Icons.lock,
+                                            color: Theme.of(context).primaryColor,
+                                          ),
+                                        ),
+                                      ),
+                                      validator: (value){
+                                        if (value.isEmpty) {
+                                            return 'Por favor ingrese una contraseña';
+                                          } else {
+                                            return null;
+                                          }
 
-  main() async{
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )),
+                        ],
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 90.0),
+                        child: RaisedButton(
+                          onPressed: () {
+                          if (_alertKey.currentState.validate()) {
+                                 main(ubicacioninfo);
+                                 Navigator.pop(context);
+                            
+                          }
+                            //restablecerContrasena(context);
+                          },
+                          padding:
+                              EdgeInsets.symmetric(vertical: 15, horizontal: 35),
+                          color: Colors.purple[300],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(30),
+                            ),
+                          ),
+                          child: Text(
+                            "Enviar",
+                            style: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }
+    );
+  }
 
-    var image= await uploadImage();
-    var logo = await uploadLogo();
+
+  main(ubicacioninfo) async{
+
+    var ubicacion= new GeoPoint(ubicacioninfo.latitud,ubicacioninfo.longitud);
+
+    try {
+      var correo = await getUser();      
+      var image= await uploadImage();
+      var logo = await uploadLogo();
+      var idUser= await createUser();
+      await createVeterinaria(image, logo,idUser, ubicacion);
+      await autologuearse(correo, idUser);
+      
+      
+    } catch (e) {
+      
+    }
+
+    
 
     
   }
 
-  createUser(){
-      FirebaseAuth.instance.createUserWithEmailAndPassword(email: correoCtrl.text, password:contrasenaCtrl.text)
-    .then((value) {
-      
-      FirebaseFirestore.instance.collection('users').doc(value.user.uid).set({
+  Future<String> createUser()async{
+    var value = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: correoCtrl.text, password:contrasenaCtrl.text);
+     await   FirebaseFirestore.instance.collection('users').doc(value.user.uid).set({
         'correo': correoCtrl.text,
-        'estado':'true',
+        'estado':true,
         'nombre': responCtrl.text, 
         'rol': 'veterinario',
         'telefono':telefonoCtrl.text,
-      }).then((resp){
-        
-
-
       });
+  
 
-
-    });  
+      
+    return  value.user.uid;
 
   }
 
   //funcion para cargar la imagen a firestore y recuerar la url
   Future<String> uploadImage() async {
     final StorageReference postImgRef =
-        FirebaseStorage.instance.ref().child('icons');
+        FirebaseStorage.instance.ref().child('portada');
     var timeKey = DateTime.now();
 
     //carguemos a storage
@@ -768,7 +928,7 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
    //funcion para cargar la imagen a firestore y recuerar la url
  Future<String>  uploadLogo() async {
     final StorageReference postImgRef =
-        FirebaseStorage.instance.ref().child('icons');
+        FirebaseStorage.instance.ref().child('logo');
     var timeKey = DateTime.now();
 
     //carguemos a storage
@@ -786,20 +946,99 @@ class _CrearVeterinariaState extends State<CrearVeterinaria> {
 
   }
 
-  createVeterinaria(){
-     FirebaseFirestore.instance.collection('veterinarias').add(
+  createVeterinaria(String image,String logo, String iduser, GeoPoint ubicacion) async{
+
+    print('la ubicacion'+ ubicacion.toString());
+
+    await  FirebaseFirestore.instance.collection('veterinarias').doc(iduser).set(
       {
         'descripcion':descripCtrl.text,
         'direccion':direccionCtrl.text,
         'horario':dias[_value]+'-'+dias[_value1],
         'horarioatencion':horas[_horainicio]+'-'+horas[_horafinal],
-        'imagen':'',
-        'logo':'',
+        'imagen':image,
+        'logo':logo,
         'nombre':nombreCtrl.text,
-        'ubicacion':'',
+        'ubicacion':ubicacion,
       }
       ); 
 
   }
+
+
+//funcion para obtener el correo del usuario administrador
+Future<String> getUser() async{
+
+    final String id = FirebaseAuth.instance.currentUser.uid;
+     var doc= await FirebaseFirestore.instance.collection('users').doc(id).get();
+     return doc.data()['correo'];
+
+  }
+
+//funcion que hace persistir al usuario administrador
+autologuearse(String correo, String iduser) async {
+  // el iduser es el id del usuario que se creo
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: admincontrasenaCtrl.text);
+  } catch (e) {
+
+    
+    await eliminarveterinaria(iduser);
+    await eliminarusers(iduser);
+    eliminarcuenta();
+
+    
+
+  }
+}
+
+eliminarveterinaria(String iduser)async {
+  await FirebaseFirestore.instance.collection('veterinarias').doc(iduser).delete();
+
+}
+
+eliminarusers(String iduser)async {
+  await FirebaseFirestore.instance.collection('users').doc(iduser).delete();
+
+}
+
+eliminarcuenta(){
+  var x=  FirebaseAuth.instance.currentUser;
+  x.delete().then((value) {
+   _showMaterialDialog('contraseña incorrecta','nos vemos obligados a cerrar el aplicativo ,ingrese sus credenciales nuevamente');
+  
+
+}).catchError((err){});
+
+ 
+
+
+}
+
+
+ //show alert dialog para las notificaciones
+_showMaterialDialog(String titulo, String contenido) {
+    showDialog(
+        context: context,
+        builder: (_) => new AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              title: new Text(titulo),
+              content: new Text(contenido),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/');
+                  },
+                )
+              ],
+            ));
+  }
+
+
+
+
+
+
 
 }
