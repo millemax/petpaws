@@ -138,6 +138,7 @@ class _CreateServicesState extends State<CreateServices> {
               },
             ),
             SizedBox(height: 10),
+            //-------------------duracion de citas horas--------
             Row(
               children: [
                 Text('Duracion de cita :',
@@ -156,6 +157,7 @@ class _CreateServicesState extends State<CreateServices> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
+                      dropdownColor: Colors.white,
                       iconSize: 40,
                       value: _value,
                       items: [
@@ -189,6 +191,7 @@ class _CreateServicesState extends State<CreateServices> {
                   ),
                 ),
                 SizedBox(width: 10),
+                //----------------------duracion de cita minutos----------
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black),
@@ -197,7 +200,8 @@ class _CreateServicesState extends State<CreateServices> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
-                      iconSize: 40,                      
+                      dropdownColor: Colors.white,
+                      iconSize: 40,
                       value: _value1,
                       items: [
                         DropdownMenuItem(
@@ -228,6 +232,7 @@ class _CreateServicesState extends State<CreateServices> {
               ],
             ),
             SizedBox(height: 10),
+            //-------------a foro de citas-----------
             Row(
               children: [
                 Text('Aforo por cita :',
@@ -246,6 +251,8 @@ class _CreateServicesState extends State<CreateServices> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
+                      dropdownColor: Colors.white,
+                      focusColor: Colors.red,
                       iconSize: 40,
                       value: _aforo,
                       items: [
@@ -312,18 +319,22 @@ class _CreateServicesState extends State<CreateServices> {
             ),
             SizedBox(height: 25),
             RaisedButton(
+              splashColor: Theme.of(context).primaryColor,
               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              color: Color(0xFFED278A),
+              color: Theme.of(context).primaryColorLight,
               onPressed: () {
                 if (_formKey.currentState.validate()) {
                   uploadImage();
                 }
               },
               child: Text('Siguiente',
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+                  style: TextStyle(color: Colors.black, fontSize: 18)),
             ),
+            SizedBox(
+              height: 10,
+            )
           ],
         ),
       ),
@@ -352,26 +363,26 @@ class _CreateServicesState extends State<CreateServices> {
     //guardar en la bd(nombre, precio, descripcion, duracion de cita, cupo, urlicono)
     final int duracion = _value + _value1;
     final String id = FirebaseAuth.instance.currentUser.uid;
-    FirebaseFirestore.instance.collection('veterinarias').doc(id).collection('servicios').add({
+    FirebaseFirestore.instance
+        .collection('veterinarias')
+        .doc(id)
+        .collection('servicios')
+        .add({
       'nombre': nameCtrl.text,
       'icono': url,
       'descripcion': descripCtrl.text,
       'duracioncita': duracion,
-      'cupo':_aforo,
-      'precio': int.parse(precioCtrl.text) ,
-    }).then((value){
-      print('el id del nuevo servicio'+ value.id);
-      Navigator.pushNamed(context,'horariosatencion',arguments: value.id);
-
-    }); 
-
-
-
+      'cupo': _aforo,
+      'precio': int.parse(precioCtrl.text),
+    }).then((value) {
+      print('el id del nuevo servicio' + value.id);
+      Navigator.pushNamed(context, 'horariosatencion', arguments: value.id);
+    });
   }
 
   //----encabezado de la pagina ---
- // app bar con waves 
-   Widget titulo() {
+  // app bar con waves
+  Widget titulo() {
     return Container(
       child: Stack(
         children: [
@@ -386,7 +397,7 @@ class _CreateServicesState extends State<CreateServices> {
               durations: [32000, 21000, 18000, 5000],
               heightPercentages: [0.31, 0.35, 0.40, 0.41],
             ),
-            backgroundColor: Colors.deepPurpleAccent[400],
+            backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -424,7 +435,7 @@ class _CreateServicesState extends State<CreateServices> {
                   "Crear Servicio",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 19.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -435,8 +446,4 @@ class _CreateServicesState extends State<CreateServices> {
       ),
     );
   }
-
-
-
-
 }

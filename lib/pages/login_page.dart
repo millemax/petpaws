@@ -363,15 +363,18 @@ class _ExistentePageState extends State<ExistentePage> {
                 stream: bloc.formValidStream,
                 builder: (context, snapshot) {
                   return RaisedButton(
+                      splashColor: Theme.of(context).primaryColor,
                       child: Container(
                         padding:
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        child: Text('INICIAR SESIÓN'),
+                        child: Text(
+                          'INICIAR SESIÓN',
+                        ),
                       ),
-                      disabledColor: Colors.red[400],
-                      color: Colors.red,
-                      disabledTextColor: Colors.white,
-                      textColor: Colors.white,
+                      disabledColor: Theme.of(context).primaryColorLight,
+                      color: Theme.of(context).primaryColorLight,
+                      disabledTextColor: Colors.black.withOpacity(0.8),
+                      textColor: Colors.black,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),
                       onPressed: snapshot.hasData
@@ -384,6 +387,7 @@ class _ExistentePageState extends State<ExistentePage> {
     );
   }
 
+//-----------------------------Widget para reestablecer contraseña--
   Widget textolvidocontrasena(context) {
     return Column(
       children: [
@@ -396,7 +400,7 @@ class _ExistentePageState extends State<ExistentePage> {
             style: TextStyle(color: Colors.white, fontSize: 13),
           ),
           onTap: () {
-            //---------------
+            //---------------modal para restablecer contraseña
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -419,8 +423,8 @@ class _ExistentePageState extends State<ExistentePage> {
                               child: Text(
                                 'Restablecer Contraseña',
                                 style: TextStyle(
-                                    color: Color(0xffed278a),
-                                    fontSize: 18,
+                                    color: Theme.of(context).primaryColor,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.bold),
                                 textAlign: TextAlign.center,
                               ),
@@ -437,7 +441,7 @@ class _ExistentePageState extends State<ExistentePage> {
                           height: 5.0,
                         ),
                         Divider(
-                          color: Color(0xffed278a),
+                          color: Theme.of(context).accentColor,
                           height: 4.0,
                         ),
                         Padding(
@@ -476,23 +480,27 @@ class _ExistentePageState extends State<ExistentePage> {
                   ),
                   actions: [
                     Padding(
-                      padding: const EdgeInsets.only(right: 90.0),
+                      padding: const EdgeInsets.only(right: 50.0),
                       child: RaisedButton(
+                        splashColor: Theme.of(context).primaryColor,
                         onPressed: () {
                           restablecerContrasena(context);
                         },
-                        padding:
-                            EdgeInsets.symmetric(vertical: 15, horizontal: 35),
-                        color: Colors.purple[300],
+                        color: Theme.of(context).primaryColorLight,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
                             Radius.circular(30),
                           ),
                         ),
-                        child: Text(
-                          "Enviar",
-                          style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 55.0, vertical: 15.0),
+                          child: Text(
+                            "Enviar",
+                            style: TextStyle(
+                                color: Colors.black.withOpacity(0.7),
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     )
@@ -905,9 +913,9 @@ class NuevoPage extends StatelessWidget {
                             EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                         child: Text('REGISTRARSE'),
                       ),
-                      disabledColor: Colors.red[400],
-                      color: Colors.red,
-                      disabledTextColor: Colors.white,
+                      disabledColor: Theme.of(context).primaryColorLight,
+                      color: Theme.of(context).primaryColorLight,
+                      disabledTextColor: Colors.black.withOpacity(0.8),
                       textColor: Colors.white,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8)),

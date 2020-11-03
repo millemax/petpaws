@@ -3,9 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petpaws/page_administrador/menu.dart';
 import 'package:petpaws/providers/ubicacion.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+
 
 
 
@@ -57,6 +60,8 @@ TextEditingController admincontrasenaCtrl = new TextEditingController();
   File  _logo;
 
   final picker = ImagePicker();
+
+  ProgressDialog progressDialog;
 
 
   @override
@@ -697,10 +702,11 @@ TextEditingController admincontrasenaCtrl = new TextEditingController();
                   child: Card(
                         elevation: 10,
                         child: Container(
+                          width: MediaQuery.of(context).size.width * 0.85,
                           padding: EdgeInsets.all(20),
-                          child: _logo == null
-                              ? Image.asset('assets/images/icomarker.png', height: 50)
-                              : Image.file(_image, height: 100),
+                          child: ubicacioninfo.direccion.length == 0
+                               ? Image.asset('assets/images/icomarker.png', height: 50)
+                              : Text(ubicacioninfo.direccion),  
                         ),
                       ),
                   
@@ -840,8 +846,10 @@ TextEditingController admincontrasenaCtrl = new TextEditingController();
                         child: RaisedButton(
                           onPressed: () {
                           if (_alertKey.currentState.validate()) {
-                                 main(ubicacioninfo);
                                  Navigator.pop(context);
+                                 main(ubicacioninfo);
+                                
+                                 
                             
                           }
                             //restablecerContrasena(context);
@@ -869,6 +877,11 @@ TextEditingController admincontrasenaCtrl = new TextEditingController();
 
 
   main(ubicacioninfo) async{
+    print('creando......');
+
+    progressDialog = ProgressDialog(context,type: ProgressDialogType.Normal);
+    progressDialog.style(message: 'Creando..');
+    progressDialog.show();
 
     var ubicacion= new GeoPoint(ubicacioninfo.latitud,ubicacioninfo.longitud);
 
@@ -879,6 +892,9 @@ TextEditingController admincontrasenaCtrl = new TextEditingController();
       var idUser= await createUser();
       await createVeterinaria(image, logo,idUser, ubicacion);
       await autologuearse(correo, idUser);
+
+     
+
       
       
     } catch (e) {
@@ -980,6 +996,12 @@ autologuearse(String correo, String iduser) async {
   // el iduser es el id del usuario que se creo
   try {
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: correo, password: admincontrasenaCtrl.text);
+    progressDialog.hide();
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => MenuAdministrador()),
+  );
+    
   } catch (e) {
 
     

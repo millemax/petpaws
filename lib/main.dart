@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
+
 import 'package:petpaws/page_administrador/localizacion.dart';
-import 'package:petpaws/pages/calendar_reservation_page.dart';
+
 import 'package:petpaws/pages/misReservas.dart';
 import 'package:petpaws/pages/perfilVeterinarias_page.dart';
 import 'package:petpaws/pages/reservaService_page.dart';
@@ -14,11 +15,9 @@ import 'package:petpaws/providers/ubicacion.dart';
 import 'package:petpaws/screens/inicio.dart';
 import 'package:provider/provider.dart';
 
-
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:intl/date_symbol_data_local.dart';
-
 
 import 'pages/homeVeterinarias_page.dart';
 
@@ -46,6 +45,11 @@ class MyApp extends StatelessWidget {
             child: MaterialApp(
             theme: ThemeData(
               primaryColor: Color(0xFF6600FF),
+              primaryColorLight: Color(0xff80ced7),
+              accentColor: Color(0xFF0100ca),
+              canvasColor: Color(0xffb3ffff),
+              cardColor: Colors.grey[300],
+              fontFamily: 'McLaren',
               //fontFamily: 'McLaren',
             ),
             title: 'login iu',
@@ -60,7 +64,7 @@ class MyApp extends StatelessWidget {
               'HomeVeterinarias': (context) => HomeVeterinariasPage(),
               'crearservico': (context) =>
                   CreateServices(), //este es la pagina en el perfil de veterninarias
-              'CalendarPage': (context) => CalendarPage(),
+              
               'horariosatencion': (context) => HorarioAtencion(),
               'ReservaService': (context) =>
                   ReservaService(), //la pagina donde se llena el formulario para reservar cita

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:petpaws/page_administrador/menu.dart';
+
 import 'package:petpaws/providers/ubicacion.dart';
 import 'package:provider/provider.dart';
 
@@ -177,8 +177,14 @@ void initState() {
 
           if (_formKey.currentState.validate()) {
 
-            ubicacioninfo.latitud=_latitud;
-            ubicacioninfo.longitud=_longitud;
+            
+            
+              ubicacioninfo.latitud=_latitud;
+              ubicacioninfo.longitud=_longitud;
+              ubicacioninfo.direccion= direccionCtrl.text;
+              
+            
+            
             
 
             print('la latitud y longitud button ... : ');
@@ -187,6 +193,8 @@ void initState() {
             print('la direccion'+ direccionCtrl.text );
 
             Navigator.pop(context);
+
+            
                   
           }
 
