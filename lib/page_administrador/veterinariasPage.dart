@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:petpaws/page_administrador/actualizar-veterinaria.dart';
+import 'package:petpaws/providers/ubicacion.dart';
+import 'package:provider/provider.dart';
 
 class VeterinariasList extends StatefulWidget {
   VeterinariasList({Key key}) : super(key: key);
@@ -22,6 +25,8 @@ class _VeterinariasListState extends State<VeterinariasList> {
   }
 
   Widget listas() {
+    
+    
     return StreamBuilder(
         stream:
             FirebaseFirestore.instance.collection('veterinarias').snapshots(),
@@ -66,6 +71,8 @@ class _VeterinariasListState extends State<VeterinariasList> {
   }
 
   Widget cards(data) {
+    final ubicacioninfo= Provider.of<Ubicacioninfo>(context);
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: Card(
@@ -129,7 +136,11 @@ class _VeterinariasListState extends State<VeterinariasList> {
                       // boton para actualizar una veterinaria
                       GestureDetector(
                         onTap: () {
-                          print("actualizar");
+                          ubicacioninfo.direccion='';
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ActualizarVeterinaria(data.id)),
+                          );
                         },
                         child: Container(
                           padding:
@@ -333,7 +344,7 @@ class _VeterinariasListState extends State<VeterinariasList> {
 // funcion para eliminar la veterinaria
   deleteVeterinaria(String idveterinaria) {
    FirebaseFirestore.instance.collection('veterinarias').doc(idveterinaria).delete().then((value) {
-        FirebaseFirestore.instance.collection('users').doc(idveterinaria).update({'estado': false}).then((resp){
+        FirebaseFirestore.instance.collection('users').doc(idveterinaria).delete().then((resp){
              _showMaterialDialog('Eliminado','La veterinaria ha sido eliminado correctamente');
 
         });

@@ -215,12 +215,13 @@ class _ReservasPageState extends State<ReservasPage> {
                               style: TextStyle(
                                   color: Colors.black,
                                   fontSize: MediaQuery.of(context).size.height *
-                                      0.019,
+                                      0.018,
                                   fontWeight: FontWeight.bold)),
                         ),
 
                         Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
+
+                          padding: const EdgeInsets.only(top: 8.0, bottom:10.0),
                           child: Image.network(
                             data.data()['icono'],
                             width: MediaQuery.of(context).size.width * 0.15,

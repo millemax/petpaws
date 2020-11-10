@@ -31,7 +31,6 @@ class Ubicacioninfo with ChangeNotifier{
   }
 
   set direccion(String direc){
-
     
     this._direcccion = direc;
     notifyListeners();

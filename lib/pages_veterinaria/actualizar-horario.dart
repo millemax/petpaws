@@ -229,8 +229,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Lunes', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 100),
+                          Text('Lunes', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 88),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -494,8 +494,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Martes', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 90),
+                          Text('Martes', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 77),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -759,8 +759,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Miercoles', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 67),
+                          Text('Miercoles', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 57),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -1023,8 +1023,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Jueves', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 92),
+                          Text('Jueves', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 80),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -1288,8 +1288,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Viernes', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 90),
+                          Text('Viernes', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 75),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -1552,8 +1552,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Sabado', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 90),
+                          Text('Sabado', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 78),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),
@@ -1816,8 +1816,8 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             },
                             activeColor: Color(0xffFE5F55),
                           ),
-                          Text('Domingo', style: TextStyle(fontSize: 20)),
-                          SizedBox(width: 78),
+                          Text('Domingo', style: TextStyle(fontSize: 17)),
+                          SizedBox(width: 70),
                           Container(
                             decoration: BoxDecoration(
                               border: Border.all(color: Colors.black),

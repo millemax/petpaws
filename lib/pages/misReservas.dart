@@ -185,7 +185,7 @@ class _MisReservasState extends State<MisReservas> {
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).accentColor,
-                              fontSize: 13,
+                              fontSize: 12,
                               letterSpacing: 1),
                         ),
                       ),
