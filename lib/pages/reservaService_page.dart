@@ -8,7 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import 'package:petpaws/pages/push_provider.dart';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class ReservaService extends StatefulWidget {
