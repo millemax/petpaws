@@ -1,0 +1,10 @@
+[Unit]
+Description=Mi Servicio para Firebase Messaging
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/sanmarcosanimales/backend.py
+
+[Install]
+WantedBy=multi-user.target

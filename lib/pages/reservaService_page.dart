@@ -8,6 +8,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
+import 'package:petpaws/pages/push_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class ReservaService extends StatefulWidget {
   ReservaService({Key key}) : super(key: key);
@@ -17,6 +19,7 @@ class ReservaService extends StatefulWidget {
 }
 
 class _ReservaServiceState extends State<ReservaService> {
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 //---------wavess-------
   _buildCard({
     Config config,
@@ -38,9 +41,21 @@ class _ReservaServiceState extends State<ReservaService> {
   var correo;
   var nombres;
   var celular;
+  String tokenDevice;
   void initState() {
-    getData();
     super.initState();
+    getData();
+    token();
+  }
+
+//et_5SR9cSy6gvlXKueDsem:APA91bFnkHswhPSw03hT3z-Oc9t5agsZf7jv2iYoiv-CrdLIupC2Hi3Ku688vuNg6Uklaaarb9_NY_p0_-mzo9_ZRnWeq9oczbEv4I-W1rFJb9uxK6KYTKozjGVeP5e8cws7_yIV2zKq
+  token() {
+    _firebaseMessaging.getToken().then((value) {
+      setState(() {
+        tokenDevice = value;
+        print(tokenDevice);
+      });
+    });
   }
 
   //----------variables importantes para reserva
@@ -138,7 +153,8 @@ class _ReservaServiceState extends State<ReservaService> {
   @override
   Widget build(BuildContext context) {
     //-----
-
+    print('este es el token ');
+    print(tokenDevice);
     //--funcion recibir datos enviados de perfilveterinarai veterinaria
     final List prodData = ModalRoute.of(context).settings.arguments;
     nombreServicio = prodData[0];
@@ -460,6 +476,7 @@ class _ReservaServiceState extends State<ReservaService> {
         'nombreservicio': nombreServicio,
         'precio': precio,
         'nombreveterinaria': nombreveterinaria,
+        'tokenDevice': tokenDevice,
       }).then((resp) => {
             FirebaseFirestore.instance
                 .collection('reservas')

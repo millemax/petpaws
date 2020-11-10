@@ -67,6 +67,9 @@ dependencies:
   google_fonts: ^1.1.1
   geocoder: ^0.2.1
   progress_dialog: ^1.2.4
+  #cloud functions
+  firebase_messaging: ^7.0.3
+  cloud_functions: ^0.7.0
   
 
 

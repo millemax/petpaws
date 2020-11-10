@@ -75,8 +75,10 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     //-----inicializar el controlador para usar el calendario--
     super.initState();
-
     _controller = CalendarController();
+    setState(() {
+      getHoras();
+    });
   }
 
   void dispose() {
@@ -89,8 +91,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    getHoras();
-
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       body: SafeArea(
