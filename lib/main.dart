@@ -21,6 +21,7 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'pages/homeVeterinarias_page.dart';
 
+import 'pages/push_provider.dart';
 import 'postergarReservaPage/calendar_postergacion_Page.dart';
 import 'postergarReservaPage/reserva_postergacion_page.dart';
 
@@ -33,16 +34,34 @@ void main() async {
   initializeDateFormatting().then((_) => runApp(MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+  @override
+  void initState() {
+    super.initState();
+    final pushProvider = new PushNotification();
+    pushProvider.initNotificaions();
+    pushProvider.mensajes.listen((event) {
+      //Navigator.push(context, route)
+      print('push argumento');
+      print(event);
+      navigatorKey.currentState.pushNamed('MisReservas');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Provider(
       create: (context) => LoginBloc(),
       child: ChangeNotifierProvider(
-          create:(_)=>Ubicacioninfo(),
-            child: MaterialApp(
+        create: (_) => Ubicacioninfo(),
+        child: MaterialApp(
             theme: ThemeData(
               primaryColor: Color(0xFF6600FF),
               primaryColorLight: Color(0xff80ced7),
@@ -52,6 +71,7 @@ class MyApp extends StatelessWidget {
               fontFamily: 'McLaren',
               //fontFamily: 'McLaren',
             ),
+            navigatorKey: navigatorKey,
             title: 'login iu',
             debugShowCheckedModeBanner: false,
             //home: LoginScreen(),
@@ -64,7 +84,7 @@ class MyApp extends StatelessWidget {
               'HomeVeterinarias': (context) => HomeVeterinariasPage(),
               'crearservico': (context) =>
                   CreateServices(), //este es la pagina en el perfil de veterninarias
-              
+
               'horariosatencion': (context) => HorarioAtencion(),
               'ReservaService': (context) =>
                   ReservaService(), //la pagina donde se llena el formulario para reservar cita
