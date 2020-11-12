@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:petpaws/bloc/login_bloc.dart';
 
 import 'package:petpaws/page_administrador/localizacion.dart';
@@ -47,10 +48,12 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     final pushProvider = new PushNotification();
     pushProvider.initNotificaions();
+
     pushProvider.mensajes.listen((event) {
       //Navigator.push(context, route)
       print('push argumento');
       print(event);
+
       navigatorKey.currentState.pushNamed('MisReservas');
     });
   }
