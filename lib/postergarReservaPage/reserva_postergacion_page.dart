@@ -464,7 +464,7 @@ class _ReservaPostergacionState extends State<ReservaPostergacion> {
               title: 'Felicidades',
               btnOkOnPress: () {
                 //------remplazar todas la rutas e ir a perfil usuario
-                Navigator.pushReplacementNamed(context, 'HomeVeterinarias');
+                Navigator.pushReplacementNamed(context, 'MisReservas');
               },
             )..show()
           });

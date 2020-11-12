@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
 //---------------------botones existente y nuevo-------
   Widget menuBar() {
     return Container(
-      width: 300.0,
+      width: MediaQuery.of(context).size.width * 0.83,
       height: 50.0,
       decoration: BoxDecoration(
         color: Color(0x552B2B2B),
@@ -292,97 +292,93 @@ class _ExistentePageState extends State<ExistentePage> {
 
   Widget campologin(LoginBloc bloc) {
     return Stack(
-      children: [
-        login(bloc),
-        botonlogin(bloc),
-      ],
+      children: [login(bloc), botonlogin(bloc)],
     );
   }
 
   Widget login(LoginBloc bloc) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
-      padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 55),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          StreamBuilder<Object>(
-              stream: bloc.emailStream,
-              builder: (context, snapshot) {
-                return TextField(
-                  onChanged: bloc.changeEmail,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    prefixIcon: Icon(Icons.email),
-                    labelText: "Email",
-                    hintText: "Email",
-                    errorText: snapshot.error,
-                  ),
-                );
-              }),
-          SizedBox(height: 10),
-          StreamBuilder<Object>(
-              stream: bloc.passwordStream,
-              builder: (context, snapshot) {
-                return TextField(
-                  onChanged: bloc.changePassword,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(40)),
-                      prefixIcon: Icon(Icons.lock),
-                      labelText: "Contraseña",
-                      hintText: "Contraseña",
-                      errorText: snapshot.error),
-                );
-              }),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.83,
+          padding: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 55),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              StreamBuilder<Object>(
+                  stream: bloc.emailStream,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      onChanged: bloc.changeEmail,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(40),
+                        ),
+                        prefixIcon: Icon(Icons.email),
+                        labelText: "Email",
+                        hintText: "Email",
+                        errorText: snapshot.error,
+                      ),
+                    );
+                  }),
+              SizedBox(height: 10),
+              StreamBuilder<Object>(
+                  stream: bloc.passwordStream,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      onChanged: bloc.changePassword,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(40)),
+                          prefixIcon: Icon(Icons.lock),
+                          labelText: "Contraseña",
+                          hintText: "Contraseña",
+                          errorText: snapshot.error),
+                    );
+                  }),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
   Widget botonlogin(LoginBloc bloc) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      mainAxisSize: MainAxisSize.max,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 170,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder<bool>(
-                stream: bloc.formValidStream,
-                builder: (context, snapshot) {
-                  return RaisedButton(
-                      splashColor: Theme.of(context).primaryColor,
-                      child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                        child: Text(
-                          'INICIAR SESIÓN',
-                        ),
+        StreamBuilder<bool>(
+            stream: bloc.formValidStream,
+            builder: (context, snapshot) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 180.0),
+                child: RaisedButton(
+                    splashColor: Theme.of(context).primaryColor,
+                    child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                      child: Text(
+                        'INICIAR SESIÓN',
                       ),
-                      disabledColor: Theme.of(context).primaryColorLight,
-                      color: Theme.of(context).primaryColorLight,
-                      disabledTextColor: Colors.black.withOpacity(0.8),
-                      textColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8)),
-                      onPressed: snapshot.hasData
-                          ? () => _loguear(bloc, context)
-                          : null);
-                }),
-          ],
-        ),
+                    ),
+                    disabledColor: Theme.of(context).primaryColorLight,
+                    color: Theme.of(context).primaryColorLight,
+                    disabledTextColor: Colors.black.withOpacity(0.8),
+                    textColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8)),
+                    onPressed: snapshot.hasData
+                        ? () => _loguear(bloc, context)
+                        : null),
+              );
+            }),
       ],
     );
   }
@@ -506,9 +502,6 @@ class _ExistentePageState extends State<ExistentePage> {
                     )
                   ],
                 );
-
-
-                
               },
             );
             //---------------
@@ -557,7 +550,6 @@ class _ExistentePageState extends State<ExistentePage> {
 
   Widget iconlogin() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.6,
       child: SignInButton(
         Buttons.Google,
         text: "Iniciar con Google",
@@ -577,7 +569,11 @@ class _ExistentePageState extends State<ExistentePage> {
             });
           });
         },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 10.0,
+        padding: EdgeInsets.symmetric(
+            vertical: 6.00,
+            horizontal: MediaQuery.of(context).size.width * 0.09),
       ),
     );
   }
@@ -796,8 +792,8 @@ class NuevoPage extends StatelessWidget {
 
   registro(LoginBloc bloc) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50, vertical: 2),
-      padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 55),
+      margin: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+      padding: EdgeInsets.only(top: 15, left: 10, right: 10, bottom: 55),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),

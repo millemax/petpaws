@@ -236,6 +236,7 @@ class _ActualizarServiceState extends State<ActualizarService> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
+                      dropdownColor: Colors.white,
                       iconSize: 40,
                       value: _value,
                       items: [
@@ -277,6 +278,7 @@ class _ActualizarServiceState extends State<ActualizarService> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
+                      dropdownColor: Colors.white,
                       iconSize: 40,
                       value: _value1,
                       items: [
@@ -326,6 +328,7 @@ class _ActualizarServiceState extends State<ActualizarService> {
                   child: Padding(
                     padding: const EdgeInsets.only(left: 10),
                     child: DropdownButton(
+                      dropdownColor: Colors.white,
                       iconSize: 40,
                       value: _aforo,
                       items: [

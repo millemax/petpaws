@@ -94,7 +94,7 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
 //----------------------------------------lunes--------------------------------------------------------
                       Row(
                         children: [
-                          Checkbox(  
+                          Checkbox(
                             value: _lunes,
                             onChanged: (bool resp) {
                               setState(() {
@@ -2006,15 +2006,24 @@ class _HorarioAtencionState extends State<HorarioAtencion> {
               content:
                   new Text("El nuevo servicio a sido creado correctamente"),
               actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(color: Color(0xffFE5F55)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: RaisedButton(
+                    splashColor: Theme.of(context).primaryColor,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 152.0, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.greenAccent[200],
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'reservasveterinario');
+                    },
+                    child: Text('OK',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 17)),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'reservasveterinario');
-                  },
-                )
+                ),
               ],
             ));
   }

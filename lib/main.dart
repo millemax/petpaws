@@ -72,6 +72,7 @@ class _MyAppState extends State<MyApp> {
               canvasColor: Color(0xffb3ffff),
               cardColor: Colors.grey[300],
               fontFamily: 'McLaren',
+
               //fontFamily: 'McLaren',
             ),
             navigatorKey: navigatorKey,
