@@ -12,9 +12,7 @@ class VeterinariasList extends StatefulWidget {
 }
 
 class _VeterinariasListState extends State<VeterinariasList> {
-
-  bool estadocolor=true;
-
+  bool estadocolor = true;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +23,6 @@ class _VeterinariasListState extends State<VeterinariasList> {
   }
 
   Widget listas() {
-    
-    
     return StreamBuilder(
         stream:
             FirebaseFirestore.instance.collection('veterinarias').snapshots(),
@@ -71,7 +67,7 @@ class _VeterinariasListState extends State<VeterinariasList> {
   }
 
   Widget cards(data) {
-    final ubicacioninfo= Provider.of<Ubicacioninfo>(context);
+    final ubicacioninfo = Provider.of<Ubicacioninfo>(context);
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
@@ -107,7 +103,6 @@ class _VeterinariasListState extends State<VeterinariasList> {
 
                       GestureDetector(
                         onTap: () {
-                          
                           suspenderUser(data.id);
                         },
                         child: Container(
@@ -118,7 +113,9 @@ class _VeterinariasListState extends State<VeterinariasList> {
                             borderRadius: BorderRadius.circular(10),
                             boxShadow: [
                               BoxShadow(
-                                color: data.data()['estado']==true ? Colors.green : Colors.red,
+                                color: data.data()['estado'] == true
+                                    ? Colors.green
+                                    : Colors.red,
                                 blurRadius: 2.0,
                                 spreadRadius: 0.0,
                                 offset: Offset(
@@ -136,10 +133,12 @@ class _VeterinariasListState extends State<VeterinariasList> {
                       // boton para actualizar una veterinaria
                       GestureDetector(
                         onTap: () {
-                          ubicacioninfo.direccion='';
+                          ubicacioninfo.direccion = '';
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ActualizarVeterinaria(data.id)),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    ActualizarVeterinaria(data.id)),
                           );
                         },
                         child: Container(
@@ -221,11 +220,11 @@ class _VeterinariasListState extends State<VeterinariasList> {
               content: new Text(contenido),
               actions: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(right: 12.5),
+                  padding: const EdgeInsets.only(right: 12.0),
                   child: RaisedButton(
                     splashColor: Theme.of(context).primaryColor,
                     padding:
-                        EdgeInsets.symmetric(horizontal: 120.0, vertical: 8),
+                        EdgeInsets.symmetric(horizontal: 143.0, vertical: 8),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     color: Colors.greenAccent[200],
@@ -302,37 +301,25 @@ class _VeterinariasListState extends State<VeterinariasList> {
 //es la funcion para actualizar es estado del usuario
   suspenderUser(String id) {
     var user = FirebaseFirestore.instance.collection('users').doc(id);
-    var veterinaria= FirebaseFirestore.instance.collection('veterinarias').doc(id);
+    var veterinaria =
+        FirebaseFirestore.instance.collection('veterinarias').doc(id);
     user.get().then((value) {
       var estado = value.data()['estado'];
 
       if (estado == true) {
         user.update({'estado': false}).then((value) {
-
-           veterinaria.update({
-             'estado':false
-           }).then((resp){
-              _showMaterialDialog('Usuario Suspendido', 'La cuenta asociada a sido suspendida');
-           });
-          
-
-
+          veterinaria.update({'estado': false}).then((resp) {
+            _showMaterialDialog(
+                'Usuario Suspendido', 'La cuenta asociada a sido suspendida');
+          });
         }).catchError((err) {});
       } else {
         if (estado == false) {
-
           user.update({'estado': true}).then((value) {
-
-            veterinaria.update({
-              'estado':true
-              }).then((resp){
-
-               _showMaterialDialog('Usuario Activado', 'La cuenta asociada a sido activado');
-
+            veterinaria.update({'estado': true}).then((resp) {
+              _showMaterialDialog(
+                  'Usuario Activado', 'La cuenta asociada a sido activado');
             });
-
-           
-
           }).catchError((err) {});
         }
       }
@@ -343,19 +330,21 @@ class _VeterinariasListState extends State<VeterinariasList> {
 
 // funcion para eliminar la veterinaria
   deleteVeterinaria(String idveterinaria) {
-   FirebaseFirestore.instance.collection('veterinarias').doc(idveterinaria).delete().then((value) {
-        FirebaseFirestore.instance.collection('users').doc(idveterinaria).delete().then((resp){
-             _showMaterialDialog('Eliminado','La veterinaria ha sido eliminado correctamente');
-
-        });
-    
-    
-
-  }).catchError((err){
-
-    _showMaterialDialog('Error', 'No podemos ejecutar esta accion');
-
-
-  });  
+    FirebaseFirestore.instance
+        .collection('veterinarias')
+        .doc(idveterinaria)
+        .delete()
+        .then((value) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(idveterinaria)
+          .delete()
+          .then((resp) {
+        _showMaterialDialog(
+            'Eliminado', 'La veterinaria ha sido eliminado correctamente');
+      });
+    }).catchError((err) {
+      _showMaterialDialog('Error', 'No podemos ejecutar esta accion');
+    });
   }
 }

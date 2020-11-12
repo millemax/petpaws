@@ -114,13 +114,11 @@ class _MisReservasState extends State<MisReservas> {
 
   //------------contenedor de la parte superior---
   Widget _containerTop(data) {
-    print(data['nombreveterinaria']);
     var precioservicio = data['precio'].toString();
     return Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Color(0xffffffff), width: 0.8),
         ),
         child: Stack(
           children: [
@@ -137,7 +135,7 @@ class _MisReservasState extends State<MisReservas> {
                       Text(
                         "S/.",
                         style: TextStyle(
-                          fontSize: 15.0,
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
                           color: Color(0xffFE5F55),
                         ),
                       ),
@@ -146,7 +144,7 @@ class _MisReservasState extends State<MisReservas> {
                         /*  data.data()['precio'], */
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
                           color: Color(0xffFE5F55),
                         ),
                       ),
@@ -164,8 +162,7 @@ class _MisReservasState extends State<MisReservas> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(100.0),
-                    bottomRight: Radius.circular(20.0),
+                    topRight: Radius.circular(50.0),
                   ),
                   color: Theme.of(context).cardColor,
                 ),
@@ -176,16 +173,17 @@ class _MisReservasState extends State<MisReservas> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.15,
+                      width: MediaQuery.of(context).size.width * 0.19,
                       child: Padding(
                         padding: const EdgeInsets.only(left: 1.5),
                         child: Text(
                           data['fechainicioreserva'].toUpperCase(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context).accentColor,
-                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.025,
                               letterSpacing: 1),
                         ),
                       ),
@@ -215,7 +213,7 @@ class _MisReservasState extends State<MisReservas> {
                                 letterSpacing: 1),
                           ),
                           subtitle: Padding(
-                            padding: const EdgeInsets.only(left: 90.0),
+                            padding: const EdgeInsets.only(left: 30.0),
                             child: Text(
                               data['nombredueno'],
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -228,9 +226,34 @@ class _MisReservasState extends State<MisReservas> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.only(left: 150.0, top: 10.0),
+                  padding: const EdgeInsets.only(left: 120.0, top: 1.0),
                   child: Column(
                     children: [
+                      //--------------nombre servicio--------------
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Servicio:",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 15),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.43,
+                            child: Text(
+                              data['nombreservicio'],
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: Colors.black,
+                                  letterSpacing: 1),
+                            ),
+                          ),
+                        ],
+                      ),
                       //--------------inicio reserva--------------
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -253,28 +276,7 @@ class _MisReservasState extends State<MisReservas> {
                           ),
                         ],
                       ),
-                      //--------------nombre servicio--------------
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Servicio:",
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 15),
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            data['nombreservicio'],
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                                color: Colors.black,
-                                letterSpacing: 1),
-                          ),
-                        ],
-                      ),
+
                       //--------------nombre mascota-------------
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,

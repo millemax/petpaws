@@ -110,9 +110,11 @@ class _ReservasPageState extends State<ReservasPage> {
         backgroundColor: Color(0xffffffff),
         /* appBar: AppBar(title: Text('Reservas')), */
         body: _estado == false
-            ? Container(
-                alignment: Alignment.center,
-                child: CircularProgressIndicator(),
+            ? Center(
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  child: Image.asset("assets/images/perrito.gif"),
+                ),
               )
             : Stack(
                 children: [
@@ -189,6 +191,7 @@ class _ReservasPageState extends State<ReservasPage> {
           children: [
             Stack(
               children: [
+                //--------------badge---
                 Padding(
                   padding: const EdgeInsets.only(top: 0.5, right: 5),
                   child: Row(
@@ -209,7 +212,7 @@ class _ReservasPageState extends State<ReservasPage> {
                     child: Column(
                       children: [
                         Container(
-                          width: MediaQuery.of(context).size.width * 0.38,
+                          width: MediaQuery.of(context).size.width * 0.35,
                           child: Text(data.data()['nombre'],
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -220,8 +223,7 @@ class _ReservasPageState extends State<ReservasPage> {
                         ),
 
                         Padding(
-
-                          padding: const EdgeInsets.only(top: 8.0, bottom:10.0),
+                          padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                           child: Image.network(
                             data.data()['icono'],
                             width: MediaQuery.of(context).size.width * 0.15,
@@ -233,68 +235,74 @@ class _ReservasPageState extends State<ReservasPage> {
                     ),
                   ),
                 ),
-              ],
-            ),
-            Row(
-              children: [
-                PopupMenuButton<int>(
-                  color: Colors.white,
-                  icon: Icon(Icons.more_vert, color: Color(0xffFE5F55)),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                  elevation: 10,
-                  onSelected: (value) {
-                    print("es el valor " + value.toString());
-                    switch (value) {
-                      case 1:
-                        {
-                          print('Actualizar');
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      ActualizarService(data.id)));
-                        }
-                        break;
-                      case 2:
-                        {
-                          //con esta funcion se va eliminar servicio de base de datos
+                //......----------------------------Popupmenu
+                Padding(
+                  padding: const EdgeInsets.only(top: 130.0),
+                  child: Row(
+                    children: [
+                      PopupMenuButton<int>(
+                        color: Colors.white,
+                        icon: Icon(Icons.more_vert, color: Color(0xffFE5F55)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 10,
+                        onSelected: (value) {
+                          print("es el valor " + value.toString());
+                          switch (value) {
+                            case 1:
+                              {
+                                print('Actualizar');
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            ActualizarService(data.id)));
+                              }
+                              break;
+                            case 2:
+                              {
+                                //con esta funcion se va eliminar servicio de base de datos
 
-                          final String iud = data.id;
-                          deleteservice(iud);
-                        }
-                        break;
+                                final String iud = data.id;
+                                deleteservice(iud);
+                              }
+                              break;
 
-                      default:
-                        {
-                          print('no coonozco este numero');
-                        }
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: 1,
-                      child: Text(
-                        "Actualizar",
-                        style: TextStyle(
-                          color: Theme.of(context).accentColor.withGreen(180),
-                        ),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      value: 2,
-                      child: Text(
-                        "Eliminar",
-                        style: TextStyle(
-                          color: Color(0xffFE5F55),
-                        ),
-                      ),
-                    ),
-                  ],
+                            default:
+                              {
+                                print('no coonozco este numero');
+                              }
+                              break;
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          PopupMenuItem(
+                            value: 1,
+                            child: Text(
+                              "Actualizar",
+                              style: TextStyle(
+                                color: Theme.of(context)
+                                    .accentColor
+                                    .withGreen(180),
+                              ),
+                            ),
+                          ),
+                          PopupMenuItem(
+                            value: 2,
+                            child: Text(
+                              "Eliminar",
+                              style: TextStyle(
+                                color: Color(0xffFE5F55),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
-            )
+            ),
           ],
         ),
       ),

@@ -239,6 +239,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value1,
                                 items: [
@@ -357,6 +358,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value2,
                                 items: [
@@ -504,6 +506,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value3,
                                 items: [
@@ -622,6 +625,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value4,
                                 items: [
@@ -769,6 +773,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value5,
                                 items: [
@@ -887,6 +892,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value6,
                                 items: [
@@ -1033,6 +1039,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value7,
                                 items: [
@@ -1151,6 +1158,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value8,
                                 items: [
@@ -1298,6 +1306,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value9,
                                 items: [
@@ -1416,6 +1425,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value10,
                                 items: [
@@ -1562,6 +1572,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value11,
                                 items: [
@@ -1680,6 +1691,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value12,
                                 items: [
@@ -1826,6 +1838,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value13,
                                 items: [
@@ -1944,6 +1957,7 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
                             child: Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: DropdownButton(
+                                dropdownColor: Colors.white,
                                 iconSize: 40,
                                 value: _value14,
                                 items: [
@@ -2111,15 +2125,24 @@ class _ActualizarHorarioState extends State<ActualizarHorario> {
               content:
                   new Text("los datos han sido actualizados correctamente"),
               actions: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'OK',
-                    style: TextStyle(color: Color(0xffFE5F55)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: RaisedButton(
+                    splashColor: Theme.of(context).primaryColor,
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 152.0, vertical: 8),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    color: Colors.greenAccent[200],
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'reservasveterinario');
+                    },
+                    child: Text('OK',
+                        style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                            fontSize: 17)),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, 'reservasveterinario');
-                  },
-                )
+                ),
               ],
             ));
   }
