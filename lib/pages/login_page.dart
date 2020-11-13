@@ -343,8 +343,8 @@ class _ExistentePageState extends State<ExistentePage> {
                           prefixIcon: Icon(Icons.lock),
                           suffixIcon: IconButton(
                               icon: Icon(_obscureText
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
                               onPressed: () {
                                 setState(() {
                                   _obscureText = !_obscureText;
@@ -870,8 +870,8 @@ class _NuevoPageState extends State<NuevoPage> {
                       prefixIcon: Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                           icon: Icon(_obscureText
-                              ? Icons.visibility
-                              : Icons.visibility_off),
+                              ? Icons.visibility_off
+                              : Icons.visibility),
                           onPressed: () {
                             setState(() {
                               _obscureText = !_obscureText;
