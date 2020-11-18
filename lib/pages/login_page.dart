@@ -257,6 +257,9 @@ class _ExistentePageState extends State<ExistentePage> {
 
   final _formKey = GlobalKey<FormState>();
 
+//-----------------------------crea  identificador de contraseña---------------
+  bool _obscureText = true;
+//----------------------------fin identificador de contraseña--------
   bool _autovalidate = false;
 
   String correoValidator(String value) {
@@ -333,11 +336,20 @@ class _ExistentePageState extends State<ExistentePage> {
                   builder: (context, snapshot) {
                     return TextField(
                       onChanged: bloc.changePassword,
-                      obscureText: true,
+                      obscureText: _obscureText,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(40)),
                           prefixIcon: Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                              icon: Icon(_obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText;
+                                });
+                              }),
                           labelText: "Contraseña",
                           hintText: "Contraseña",
                           errorText: snapshot.error),
@@ -765,7 +777,17 @@ class PaintLinea extends CustomPainter {
 }
 
 //---------------------creamoa la pagina registro de nuevo usuario----------------------------------
-class NuevoPage extends StatelessWidget {
+class NuevoPage extends StatefulWidget {
+  @override
+  _NuevoPageState createState() => _NuevoPageState();
+}
+
+class _NuevoPageState extends State<NuevoPage> {
+  //-----------------------------crea  identificador de contraseña---------------
+  bool _obscureText = true;
+  bool _obscureTexti = true;
+//----------------------------fin identificador de contraseña--------
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<LoginBloc>(context);
@@ -840,12 +862,21 @@ class NuevoPage extends StatelessWidget {
               builder: (context, snapshot) {
                 return TextField(
                   onChanged: bloc.changePassword,
-                  obscureText: true,
+                  obscureText: _obscureText,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(40),
                       ),
                       prefixIcon: Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                          icon: Icon(_obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          }),
                       labelText: "Contraseña",
                       hintText: "Contraseña",
                       errorText: snapshot.error),
@@ -857,7 +888,7 @@ class NuevoPage extends StatelessWidget {
               builder: (context, snapshot) {
                 return TextField(
                   onChanged: bloc.changeConfirmPassword,
-                  obscureText: true,
+                  obscureText: _obscureTexti,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(40)),
@@ -895,7 +926,7 @@ class NuevoPage extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       children: [
         SizedBox(
-          height: 380,
+          height: 395,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -925,7 +956,6 @@ class NuevoPage extends StatelessWidget {
     );
   }
 
-  //esta funcion es para la creacion del usuario
   _createuser(LoginBloc bloc, BuildContext context) {
     FirebaseAuth.instance
         .createUserWithEmailAndPassword(
