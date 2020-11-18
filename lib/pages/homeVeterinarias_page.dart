@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:petpaws/screens/inicio.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:map_launcher/map_launcher.dart';
@@ -13,9 +14,15 @@ class HomeVeterinariasPage extends StatefulWidget {
 }
 
 class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
-  //varibles para recibir datos latitud y longitud
-  double _latitud;
-  double _longitud;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  
+ //...variables para recuperar datos el usuarios
+ String _correoUser='';
+ String _nombreUser='';
+ bool _estadouser= false;
+
+ 
   //---------wavess-------
   _buildCard({
     Config config,
@@ -55,7 +62,25 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
     });
 
     getData();
+    getUser();
   }
+
+
+  getUser(){
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('users').doc(id).get().then((value) {
+      setState(() {
+         _correoUser= value.data()['correo'];
+         _nombreUser = value.data()['nombre'];
+         _estadouser= true;
+
+      });
+     
+
+
+    });
+
+  } 
 
   //-----------
   //------------------------
@@ -63,7 +88,9 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.white,
+      drawer: _estadouser==false? Container(): _drawer(context),
       body: Stack(
         children: [
           titulo(),
@@ -73,7 +100,59 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
           ),
         ],
       ),
+     
+
+
     ));
+  }
+
+
+  Drawer _drawer(BuildContext context) {
+    return Drawer(       
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+          // Important: Remove any padding from the ListView.
+        
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+                  accountName: Text(_nombreUser),
+                  accountEmail: Text(_correoUser),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? Colors.blue
+                            : Colors.white,
+                    child: Text(
+                      _nombreUser[0].toUpperCase(),
+                      style: TextStyle(fontSize: 40.0),
+                    ),
+                  ),
+                ),
+            ListTile(
+              title: Text('Cerrar sesion'),
+              trailing: Icon(Icons.exit_to_app),
+              onTap: () {
+                FirebaseAuth.instance.signOut().then((value) =>{
+                   Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Inicio()),
+                   )
+
+                });
+                
+               
+
+              },
+            ),
+            
+          ],
+        ),
+
+
+        ),
+
+    );
   }
 
   Widget listas() {
@@ -295,6 +374,17 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                IconButton(
+                  color: Colors.white,
+                  icon: Icon(Icons.menu),
+                   onPressed: (){
+                    
+                    _scaffoldKey.currentState.openDrawer();
+                    
+
+                   },
+                  ),
+
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 1.0,
@@ -303,14 +393,13 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     "VETERINARIAS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 17.0,
-                        /*fontWeight: FontWeight.bold, */
+                        fontSize: 17.0,                        
                         fontFamily: 'Pumpkin-Soup',
                         letterSpacing: 2),
                   ),
                 ),
 
-                //----campo de busqueda-a
+                
                 Wrap(
                   direction: Axis.vertical,
                   alignment: WrapAlignment.center,
@@ -420,4 +509,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       print(e);
     }
   }
+
+
+
 }

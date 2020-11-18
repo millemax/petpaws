@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
 import 'package:petpaws/page_administrador/crearVeterinaria.dart';
 import 'package:petpaws/page_administrador/usuariosPage.dart';
 import 'package:petpaws/page_administrador/veterinariasPage.dart';
+import 'package:petpaws/screens/inicio.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 
@@ -14,6 +17,20 @@ class MenuAdministrador extends StatefulWidget {
 }
 
 class _MenuAdministradorState extends State<MenuAdministrador> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+   //...variables para recuperar datos el usuarios
+ String _correoUser='';
+ String _nombreUser='';
+ bool _estadouser= false;
+
+ @override
+ void initState() { 
+   super.initState();
+   getUser();
+   
+ }
+
   //---------waves-------
   _buildCard({
     Config config,
@@ -33,10 +50,29 @@ class _MenuAdministradorState extends State<MenuAdministrador> {
   //-----------------------
   int currentPage = 0;
 
+   getUser(){
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('users').doc(id).get().then((value) {
+      setState(() {
+         _correoUser= value.data()['correo'];
+         _nombreUser = value.data()['nombre'];
+         _estadouser= true;
+
+      });
+     
+
+
+    });
+
+  } 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       key: _scaffoldKey,
       backgroundColor: Colors.white,
+      drawer: _estadouser==false? Container(): _drawer(context),
       body: SafeArea(
         child: Stack(
           children: [
@@ -61,7 +97,15 @@ class _MenuAdministradorState extends State<MenuAdministrador> {
                       padding: const EdgeInsets.only(top: 20, left: 10),
                       child: Row(
                         children: [
-                          Icon(Icons.menu, color: Colors.white),
+                          GestureDetector(
+                            onTap: () {
+                              _scaffoldKey.currentState.openDrawer();
+                            },
+                              child: Icon(
+                              Icons.menu, 
+                              color: Colors.white,                             
+                              ),
+                          ),
                           
                           
                           Padding(
@@ -98,6 +142,54 @@ class _MenuAdministradorState extends State<MenuAdministrador> {
           });
         },
       ),
+    );
+  }
+
+   Drawer _drawer(BuildContext context) {
+    return Drawer(       
+        child: Container(
+          color: Colors.white,
+          child: ListView(
+          // Important: Remove any padding from the ListView.
+        
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+                  accountName: Text(_nombreUser),
+                  accountEmail: Text(_correoUser),
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor:
+                        Theme.of(context).platform == TargetPlatform.iOS
+                            ? Colors.blue
+                            : Colors.white,
+                    child: Text(
+                      _nombreUser[0].toUpperCase(),
+                      style: TextStyle(fontSize: 40.0),
+                    ),
+                  ),
+                ),
+            ListTile(
+              title: Text('Cerrar sesion'),
+              trailing: Icon(Icons.exit_to_app),
+              onTap: () {
+                FirebaseAuth.instance.signOut().then((value) =>{
+                   Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Inicio()),
+                   )
+
+                });
+                
+               
+
+              },
+            ),
+            
+          ],
+        ),
+
+
+        ),
+
     );
   }
 

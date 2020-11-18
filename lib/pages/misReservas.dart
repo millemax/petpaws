@@ -384,7 +384,7 @@ class _MisReservasState extends State<MisReservas> {
                         color: Colors.white,
                       ),
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushNamed(context,'HomeVeterinarias');
                       },
                     ),
                   ),
@@ -471,7 +471,7 @@ class _MisReservasState extends State<MisReservas> {
                   borderRadius: BorderRadius.circular(10)),
               color: Colors.greenAccent[200],
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context,'HomeVeterinarias');
               },
               child: Text('Volver',
                   style: TextStyle(
