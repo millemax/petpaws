@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
 //---------------------botones existente y nuevo-------
   Widget menuBar() {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.83,
+      width: MediaQuery.of(context).size.width * 0.71,
       height: 50.0,
       decoration: BoxDecoration(
         color: Color(0x552B2B2B),
