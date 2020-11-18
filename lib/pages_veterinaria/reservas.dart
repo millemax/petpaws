@@ -17,7 +17,14 @@ class ReservasPage extends StatefulWidget {
 }
 
 class _ReservasPageState extends State<ReservasPage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
   bool _estado = false;
+
+  //-------sidebar----
+  bool _value = false;
+  String _correoUser, _nombreUser;
+  //-------fin sidebar----
 
   //el objeto que contiene cuanto tiene cada servicio
   var cantReservas = {};
@@ -40,6 +47,7 @@ class _ReservasPageState extends State<ReservasPage> {
     obtenerservicios();
 
     super.initState();
+    getUser();
   }
 
   //funcion para obtener los servicios
@@ -86,6 +94,19 @@ class _ReservasPageState extends State<ReservasPage> {
     });
   }
 
+//------------obtener nombre y correo de usuario para el sidebar-------------
+  getUser() {
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    FirebaseFirestore.instance.collection('users').doc(id).get().then((value) {
+      setState(() {
+        _correoUser = value.data()['correo'];
+        _nombreUser = value.data()['nombre'];
+        _value = true;
+      });
+    });
+  }
+
+//----fin---------------------------------------------
   //---------wavess-------
   _buildCard({
     Config config,
@@ -107,6 +128,8 @@ class _ReservasPageState extends State<ReservasPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: _drawer(),
         backgroundColor: Color(0xffffffff),
         /* appBar: AppBar(title: Text('Reservas')), */
         body: _estado == false
@@ -351,13 +374,20 @@ class _ReservasPageState extends State<ReservasPage> {
             backgroundColor: Theme.of(context).primaryColor,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    print('hola');
+                    _scaffoldKey.currentState.openDrawer();
+                  }),
               //----TITULO DE LA SECCION---
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 15.0,
-                ),
+                padding: const EdgeInsets.only(top: 15.0, right: 150),
                 child: Text(
                   "Reservas",
                   style: TextStyle(
@@ -371,6 +401,52 @@ class _ReservasPageState extends State<ReservasPage> {
           ),
         ],
       ),
+    );
+  }
+
+//-------------------sidebar info user-------
+  Drawer _drawer() {
+    print('datos user');
+    print(_nombreUser);
+    print(_correoUser);
+    return Drawer(
+      child: _value == false
+          ? Container(
+              alignment: Alignment.center,
+              child: CircularProgressIndicator(),
+            )
+          : Container(
+              color: Colors.white,
+              child: ListView(
+                children: [
+                  UserAccountsDrawerHeader(
+                    currentAccountPicture: CircleAvatar(
+                        backgroundColor: Colors.blueAccent,
+                        child: Text(
+                          _nombreUser[0].toUpperCase(),
+                          style: TextStyle(fontSize: 40, color: Colors.white),
+                        )),
+                    accountName: Text(_nombreUser),
+                    accountEmail: Text(_correoUser),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.exit_to_app,
+                        color: Theme.of(context).primaryColor),
+                    title: Text("Cerrar Sesión"),
+                    trailing: Icon(Icons.arrow_forward),
+                    onTap: () {
+                      //Navigator.pop(context);
+                      FirebaseAuth.instance.signOut().then((value) {
+                        Navigator.pushNamed(context, '/');
+                        //SystemNavigator.pop();
+                      }).catchError((value) {
+                        print('error en cerrar sesion');
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
     );
   }
 }
