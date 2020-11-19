@@ -129,7 +129,10 @@ class _ReservasPageState extends State<ReservasPage> {
     return SafeArea(
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: _drawer(),
+        drawer: ClipPath(
+          clipper: _ContainerCurvoPainter(),
+          child: _drawer(context),
+        ),
         backgroundColor: Color(0xffffffff),
         /* appBar: AppBar(title: Text('Reservas')), */
         body: _estado == false
@@ -141,10 +144,10 @@ class _ReservasPageState extends State<ReservasPage> {
               )
             : Stack(
                 children: [
-                  titulo(),
+                  titulo(context),
                   Padding(
                     padding: EdgeInsets.only(top: 80.0),
-                    child: cards(),
+                    child: cards(context),
                   )
                 ],
               ),
@@ -163,7 +166,7 @@ class _ReservasPageState extends State<ReservasPage> {
   }
 
 //recuperamos los servicios de la base de datos de firebase
-  Widget cards() {
+  Widget cards(context) {
     final String id = FirebaseAuth.instance.currentUser.uid;
     print('el id : ' + id);
 
@@ -195,7 +198,7 @@ class _ReservasPageState extends State<ReservasPage> {
                   itemCount: snapshot.data.docs.length,
                   itemBuilder: (BuildContext context, int index) {
                     DocumentSnapshot data = snapshot.data.documents[index];
-                    return card(data);
+                    return card(data, context);
                   },
                 ),
               ),
@@ -205,7 +208,7 @@ class _ReservasPageState extends State<ReservasPage> {
   }
 
   //es le card que se genera de acuerdo a los servicios que tenga
-  Widget card(DocumentSnapshot data) {
+  Widget card(DocumentSnapshot data, context) {
     return GestureDetector(
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -260,7 +263,7 @@ class _ReservasPageState extends State<ReservasPage> {
                 ),
                 //......----------------------------Popupmenu
                 Padding(
-                  padding: const EdgeInsets.only(top: 130.0),
+                  padding: const EdgeInsets.only(top: 120.0),
                   child: Row(
                     children: [
                       PopupMenuButton<int>(
@@ -356,7 +359,7 @@ class _ReservasPageState extends State<ReservasPage> {
   }
 
   //----encabezado de la pagina ---
-  Widget titulo() {
+  Widget titulo(context) {
     return Container(
       child: Stack(
         children: [
@@ -405,7 +408,7 @@ class _ReservasPageState extends State<ReservasPage> {
   }
 
 //-------------------sidebar info user-------
-  Drawer _drawer() {
+  Drawer _drawer(context) {
     print('datos user');
     print(_nombreUser);
     print(_correoUser);
@@ -416,37 +419,80 @@ class _ReservasPageState extends State<ReservasPage> {
               child: CircularProgressIndicator(),
             )
           : Container(
+              height: double.infinity,
               color: Colors.white,
               child: ListView(
                 children: [
                   UserAccountsDrawerHeader(
                     currentAccountPicture: CircleAvatar(
-                        backgroundColor: Colors.blueAccent,
+                        backgroundColor: Colors.white,
                         child: Text(
                           _nombreUser[0].toUpperCase(),
-                          style: TextStyle(fontSize: 40, color: Colors.white),
+                          style: TextStyle(
+                              fontSize: 40,
+                              color: Theme.of(context).primaryColor),
                         )),
                     accountName: Text(_nombreUser),
                     accountEmail: Text(_correoUser),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.exit_to_app,
-                        color: Theme.of(context).primaryColor),
-                    title: Text("Cerrar Sesión"),
-                    trailing: Icon(Icons.arrow_forward),
-                    onTap: () {
-                      //Navigator.pop(context);
-                      FirebaseAuth.instance.signOut().then((value) {
-                        Navigator.pushNamed(context, '/');
-                        //SystemNavigator.pop();
-                      }).catchError((value) {
-                        print('error en cerrar sesion');
-                      });
-                    },
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.73,
+                    /* color: Colors.red, */
+
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              border: Border(
+                            top: BorderSide(
+                                width: 1,
+                                color: Theme.of(context).primaryColor),
+                          )),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListTile(
+                              title: Text("Cerrar Sesión"),
+                              trailing: Icon(Icons.exit_to_app),
+                              onTap: () {
+                                //Navigator.pop(context);
+                                FirebaseAuth.instance.signOut().then((value) {
+                                  Navigator.pushNamed(context, '/');
+                                  //SystemNavigator.pop();
+                                }).catchError((value) {
+                                  print('error en cerrar sesion');
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
     );
   }
+}
+
+//-----bibujar el curvo del container sidebar---------
+class _ContainerCurvoPainter extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = new Path();
+
+    path.moveTo(0, 0);
+    path.lineTo(size.width * 0.95, 0);
+    path.quadraticBezierTo(
+        size.width, size.height / 4, size.width, size.height / 2);
+    path.quadraticBezierTo(
+        size.width, size.height / 1.5, size.width * 0.92, size.height);
+
+    path.lineTo(0, size.height);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }
