@@ -475,14 +475,6 @@ class _ReservasPageState extends State<ReservasPage> {
                                 } catch (error) {
                                   print(error);
                                 }
-
-/*                                 //Navigator.pop(context);
-                                FirebaseAuth.instance.signOut().then((value) {
-                                  Navigator.pushNamed(context, '/');
-                                  //SystemNavigator.pop();
-                                }).catchError((value) {
-                                  print('error en cerrar sesion');
-                                }); */
                               },
                             ),
                           ),
