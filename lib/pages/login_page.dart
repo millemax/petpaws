@@ -230,11 +230,11 @@ class _ExistentePageState extends State<ExistentePage> {
   var email;
 
   GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-  Future<void> _GoogleSignIn() async {
+  Future<void> _goglesignIn() async {
     GoogleSignInAccount signInAccount = await _googleSignIn.signIn();
     GoogleSignInAuthentication signInAuthentication =
         await signInAccount.authentication;
-    AuthCredential credential = await GoogleAuthProvider.credential(
+    AuthCredential credential = GoogleAuthProvider.credential(
         idToken: signInAuthentication.idToken,
         accessToken: signInAuthentication.accessToken);
     User user = (await auth.signInWithCredential(credential)).user;
@@ -566,7 +566,7 @@ class _ExistentePageState extends State<ExistentePage> {
         Buttons.Google,
         text: "Iniciar con Google",
         onPressed: () async {
-          _GoogleSignIn().then((value) {
+          _goglesignIn().then((value) {
             FirebaseFirestore.instance
                 .collection('users')
                 .where('correo', isEqualTo: email)
