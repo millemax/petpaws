@@ -84,7 +84,12 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         child: Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      drawer: _estadouser == false ? Container() : _drawer(context),
+      drawer: _estadouser == false
+          ? Container()
+          : ClipPath(
+              clipper: _ContainerCurvoPainter(),
+              child: _drawer(context),
+            ),
       body: Stack(
         children: [
           titulo(),
@@ -119,24 +124,34 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                 ),
               ),
             ),
-            ListTile(
-              title: Text('Cerrar sesion'),
-              trailing: Icon(Icons.exit_to_app),
-              onTap: () async {
-                try {
-                  await googleSignIn.signOut();
-                  print('sign with google');
-                  FirebaseAuth.instance.signOut().then((value) => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Inicio()),
-                        )
-                      });
-                  setState(() {});
-                } catch (error) {
-                  print(error);
-                }
-              },
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                top:
+                    BorderSide(width: 1, color: Theme.of(context).primaryColor),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text('Cerrar sesion'),
+                  trailing: Icon(Icons.exit_to_app),
+                  onTap: () async {
+                    try {
+                      await googleSignIn.signOut();
+                      print('sign with google');
+                      FirebaseAuth.instance.signOut().then((value) => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Inicio()),
+                            )
+                          });
+                      setState(() {});
+                    } catch (error) {
+                      print(error);
+                    }
+                  },
+                ),
+              ),
             ),
           ],
         ),
@@ -492,4 +507,25 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       print(e);
     }
   }
+}
+
+//-----bibujar el curvo del container sidebar---------
+class _ContainerCurvoPainter extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = new Path();
+
+    path.moveTo(0, 0);
+    path.lineTo(size.width * 0.95, 0);
+    path.quadraticBezierTo(
+        size.width, size.height / 4, size.width, size.height / 2);
+    path.quadraticBezierTo(
+        size.width, size.height / 1.5, size.width * 0.92, size.height);
+
+    path.lineTo(0, size.height);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

@@ -439,47 +439,33 @@ class _ReservasPageState extends State<ReservasPage> {
                     accountEmail: Text(_correoUser),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.73,
-                    /* color: Colors.red, */
-
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                            top: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).primaryColor),
-                          )),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              title: Text("Cerrar Sesión"),
-                              trailing: Icon(Icons.exit_to_app),
-                              onTap: () async {
-                                try {
-                                  await googleSignIn.signOut();
-                                  print('sign with google');
-                                  FirebaseAuth.instance
-                                      .signOut()
-                                      .then((value) => {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Inicio()),
-                                            )
-                                          });
-                                  setState(() {});
-                                } catch (error) {
-                                  print(error);
-                                }
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                    decoration: BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                          width: 1, color: Theme.of(context).primaryColor),
+                    )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text("Cerrar Sesión"),
+                        trailing: Icon(Icons.exit_to_app),
+                        onTap: () async {
+                          try {
+                            await googleSignIn.signOut();
+                            print('sign with google');
+                            FirebaseAuth.instance.signOut().then((value) => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Inicio()),
+                                  )
+                                });
+                            setState(() {});
+                          } catch (error) {
+                            print(error);
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ],
