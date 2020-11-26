@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:intl/intl.dart';
 import 'package:petpaws/screens/inicio.dart';
 import 'package:wave/config.dart';
@@ -14,15 +15,14 @@ class HomeVeterinariasPage extends StatefulWidget {
 }
 
 class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
-
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-  
- //...variables para recuperar datos el usuarios
- String _correoUser='';
- String _nombreUser='';
- bool _estadouser= false;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
- 
+  //...variables para recuperar datos el usuarios
+  String _correoUser = '';
+  String _nombreUser = '';
+  bool _estadouser = false;
+
   //---------wavess-------
   _buildCard({
     Config config,
@@ -65,22 +65,16 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
     getUser();
   }
 
-
-  getUser(){
+  getUser() {
     final String id = FirebaseAuth.instance.currentUser.uid;
     FirebaseFirestore.instance.collection('users').doc(id).get().then((value) {
       setState(() {
-         _correoUser= value.data()['correo'];
-         _nombreUser = value.data()['nombre'];
-         _estadouser= true;
-
+        _correoUser = value.data()['correo'];
+        _nombreUser = value.data()['nombre'];
+        _estadouser = true;
       });
-     
-
-
     });
-
-  } 
+  }
 
   //-----------
   //------------------------
@@ -90,7 +84,12 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
         child: Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      drawer: _estadouser==false? Container(): _drawer(context),
+      drawer: _estadouser == false
+          ? Container()
+          : ClipPath(
+              clipper: _ContainerCurvoPainter(),
+              child: _drawer(context),
+            ),
       body: Stack(
         children: [
           titulo(),
@@ -100,58 +99,63 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
           ),
         ],
       ),
-     
-
-
     ));
   }
 
-
   Drawer _drawer(BuildContext context) {
-    return Drawer(       
-        child: Container(
-          color: Colors.white,
-          child: ListView(
+    return Drawer(
+      child: Container(
+        color: Colors.white,
+        child: ListView(
           // Important: Remove any padding from the ListView.
-        
+
           children: <Widget>[
             UserAccountsDrawerHeader(
-                  accountName: Text(_nombreUser),
-                  accountEmail: Text(_correoUser),
-                  currentAccountPicture: CircleAvatar(
-                    backgroundColor:
-                        Theme.of(context).platform == TargetPlatform.iOS
-                            ? Colors.blue
-                            : Colors.white,
-                    child: Text(
-                      _nombreUser[0].toUpperCase(),
-                      style: TextStyle(fontSize: 40.0),
-                    ),
-                  ),
+              accountName: Text(_nombreUser),
+              accountEmail: Text(_correoUser),
+              currentAccountPicture: CircleAvatar(
+                backgroundColor:
+                    Theme.of(context).platform == TargetPlatform.iOS
+                        ? Colors.blue
+                        : Colors.white,
+                child: Text(
+                  _nombreUser[0].toUpperCase(),
+                  style: TextStyle(fontSize: 40.0),
                 ),
-            ListTile(
-              title: Text('Cerrar sesion'),
-              trailing: Icon(Icons.exit_to_app),
-              onTap: () {
-                FirebaseAuth.instance.signOut().then((value) =>{
-                   Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => Inicio()),
-                   )
-
-                });
-                
-               
-
-              },
+              ),
             ),
-            
+            Container(
+              decoration: BoxDecoration(
+                  border: Border(
+                top:
+                    BorderSide(width: 1, color: Theme.of(context).primaryColor),
+              )),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListTile(
+                  title: Text('Cerrar sesion'),
+                  trailing: Icon(Icons.exit_to_app),
+                  onTap: () async {
+                    try {
+                      await googleSignIn.signOut();
+                      print('sign with google');
+                      FirebaseAuth.instance.signOut().then((value) => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Inicio()),
+                            )
+                          });
+                      setState(() {});
+                    } catch (error) {
+                      print(error);
+                    }
+                  },
+                ),
+              ),
+            ),
           ],
         ),
-
-
-        ),
-
+      ),
     );
   }
 
@@ -377,14 +381,10 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                 IconButton(
                   color: Colors.white,
                   icon: Icon(Icons.menu),
-                   onPressed: (){
-                    
+                  onPressed: () {
                     _scaffoldKey.currentState.openDrawer();
-                    
-
-                   },
-                  ),
-
+                  },
+                ),
                 Padding(
                   padding: const EdgeInsets.only(
                     top: 1.0,
@@ -393,13 +393,11 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
                     "VETERINARIAS",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 17.0,                        
+                        fontSize: 17.0,
                         fontFamily: 'Pumpkin-Soup',
                         letterSpacing: 2),
                   ),
                 ),
-
-                
                 Wrap(
                   direction: Axis.vertical,
                   alignment: WrapAlignment.center,
@@ -509,7 +507,25 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
       print(e);
     }
   }
+}
 
+//-----bibujar el curvo del container sidebar---------
+class _ContainerCurvoPainter extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = new Path();
 
+    path.moveTo(0, 0);
+    path.lineTo(size.width * 0.95, 0);
+    path.quadraticBezierTo(
+        size.width, size.height / 4, size.width, size.height / 2);
+    path.quadraticBezierTo(
+        size.width, size.height / 1.5, size.width * 0.92, size.height);
 
+    path.lineTo(0, size.height);
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

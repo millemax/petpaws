@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:petpaws/pages_veterinaria/actualizar-service.dart';
 import 'package:petpaws/pages_veterinaria/calendar-events.dart';
+import 'package:petpaws/screens/inicio.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
 import 'package:badges/badges.dart';
@@ -18,6 +20,7 @@ class ReservasPage extends StatefulWidget {
 
 class _ReservasPageState extends State<ReservasPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GoogleSignIn googleSignIn = GoogleSignIn();
 
   bool _estado = false;
 
@@ -436,37 +439,33 @@ class _ReservasPageState extends State<ReservasPage> {
                     accountEmail: Text(_correoUser),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.73,
-                    /* color: Colors.red, */
-
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                            top: BorderSide(
-                                width: 1,
-                                color: Theme.of(context).primaryColor),
-                          )),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: ListTile(
-                              title: Text("Cerrar Sesión"),
-                              trailing: Icon(Icons.exit_to_app),
-                              onTap: () {
-                                //Navigator.pop(context);
-                                FirebaseAuth.instance.signOut().then((value) {
-                                  Navigator.pushNamed(context, '/');
-                                  //SystemNavigator.pop();
-                                }).catchError((value) {
-                                  print('error en cerrar sesion');
+                    decoration: BoxDecoration(
+                        border: Border(
+                      top: BorderSide(
+                          width: 1, color: Theme.of(context).primaryColor),
+                    )),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        title: Text("Cerrar Sesión"),
+                        trailing: Icon(Icons.exit_to_app),
+                        onTap: () async {
+                          try {
+                            await googleSignIn.signOut();
+                            print('sign with google');
+                            FirebaseAuth.instance.signOut().then((value) => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Inicio()),
+                                  )
                                 });
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                            setState(() {});
+                          } catch (error) {
+                            print(error);
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ],

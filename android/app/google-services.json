@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "379057175865-nvkft71maklt33butf72t24rmg397h7m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.petpaws",
+            "certificate_hash": "083658e0e8c784ee0fab98553f0b4058d747ad69"
+          }
+        },
+        {
           "client_id": "379057175865-0apmpfm6a4t0qab1sl1h7sd9caene5ii.apps.googleusercontent.com",
           "client_type": 3
         }
