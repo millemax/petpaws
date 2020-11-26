@@ -17,6 +17,7 @@ class Ubicacioninfo with ChangeNotifier{
     return _direcccion;
 
   }
+  
 
   set latitud(double lat){
     this._latitud = lat;    
