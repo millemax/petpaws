@@ -22,6 +22,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   String _correoUser = '';
   String _nombreUser = '';
   bool _estadouser = false;
+  var pruebass = 5677;
 
   //---------wavess-------
   _buildCard({
@@ -80,6 +81,7 @@ class _HomeVeterinariasPageState extends State<HomeVeterinariasPage> {
   //------------------------
   @override
   Widget build(BuildContext context) {
+    print(pruebass);
     return SafeArea(
         child: Scaffold(
       key: _scaffoldKey,
@@ -529,3 +531,26 @@ class _ContainerCurvoPainter extends CustomClipper<Path> {
   @override
   bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }
+
+/*   getData() async {
+    print('*******************************');
+    print(_timeunix);
+
+    final String id = FirebaseAuth.instance.currentUser.uid;
+    await FirebaseFirestore.instance
+        .collection('reservas')
+        .where("usuario", isEqualTo: id)
+        .where('fechareservaunix', isGreaterThanOrEqualTo: _timeunix)
+        .get()
+        .then((value) {
+      value.docs.forEach((element) {
+        reservasRecuperado.add(element.data());
+        print(reservasRecuperado);
+      });
+      setState(() {
+        numReserva = reservasRecuperado.length;
+      });
+      print('CONTADOOOOOORRRRRRRRRRRRRRRRRRRRRRRRRRRRRRRR');
+      print(reservasRecuperado.length);
+    });
+  } */
